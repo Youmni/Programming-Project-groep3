@@ -80,4 +80,5 @@ public class Gebruiker {
     public void setTitel(String titel) {
         this.titel = titel;
     }
+
 }
