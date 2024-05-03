@@ -45,15 +45,14 @@ public class Reservatie {
 
     protected Reservatie(){}
 
-    public Reservatie(int reservatieNr, Gebruiker gebruiker, LocalDate afhaalDatum, LocalDate retourDatum, LocalDate boekingDatum, String reden, String opmerking, String status) {
-        this.reservatieNr = reservatieNr;
-        this.gebruiker = gebruiker;
+    public Reservatie(LocalDate afhaalDatum, LocalDate retourDatum, LocalDate boekingDatum, String reden, String opmerking, String status, Gebruiker gebruiker) {
         this.afhaalDatum = afhaalDatum;
         this.retourDatum = retourDatum;
         this.boekingDatum = boekingDatum;
         this.reden = reden;
         this.opmerking = opmerking;
         this.status = status;
+        this.gebruiker = gebruiker;
     }
 
 

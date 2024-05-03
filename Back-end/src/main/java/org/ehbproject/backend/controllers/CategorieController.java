@@ -3,7 +3,10 @@ package org.ehbproject.backend.controllers;
 import org.ehbproject.backend.dao.CategorieCrudRepository;
 import org.ehbproject.backend.modellen.Categorie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +25,17 @@ public class CategorieController {
         ArrayList<Categorie> categorieMandje = new ArrayList<>();
         repo.findAll().forEach(categorieMandje::add);
         return categorieMandje;
+    }
+    
+    @CrossOrigin
+    @PostMapping("/toevoegen")
+    public ResponseEntity<String> toevoegenCategorie(@Validated @RequestBody Categorie categorie) {
+        try {
+            repo.save(categorie);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Categorie succesvol toegevoegd");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Er is een fout opgetreden bij het toevoegen van de categorie: " + e.getMessage());
+        }
     }
 
     @CrossOrigin

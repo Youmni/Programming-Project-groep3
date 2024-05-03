@@ -4,6 +4,9 @@ package org.ehbproject.backend.controllers;
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.modellen.Gebruiker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,7 +29,16 @@ public class GebruikerController {
         return gebruikerMandje;
     }
 
-
+    @CrossOrigin
+    @PostMapping("/toevoegen")
+    public ResponseEntity<String> toevoegenGebruiker(@Validated @RequestBody Gebruiker gebruiker) {
+        try {
+            repo.save(gebruiker);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Gebruiker succesvol toegevoegd");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Er is een fout opgetreden bij het toevoegen van de gebruiker: " + e.getMessage());
+        }
+    }
 
     @CrossOrigin
     @GetMapping(value = "/email={email}")
