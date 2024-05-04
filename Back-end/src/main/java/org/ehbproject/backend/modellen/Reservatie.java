@@ -64,14 +64,6 @@ public class Reservatie {
         this.reservatieNr = reservatieNr;
     }
 
-    public Gebruiker getGebruikerID() {
-        return gebruiker;
-    }
-
-    public void setGebruikerID(Gebruiker gebruiker) {
-        this.gebruiker = gebruiker;
-    }
-
     public LocalDate getAfhaalDatum() {
         return afhaalDatum;
     }
@@ -94,5 +86,37 @@ public class Reservatie {
 
     public void setBoekingDatum(LocalDate boekingDatum) {
         this.boekingDatum = boekingDatum;
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
+    }
+
+    public String getReden() {
+        return reden;
+    }
+
+    public void setReden(String reden) {
+        this.reden = reden;
+    }
+
+    public String getOpmerking() {
+        return opmerking;
+    }
+
+    public void setOpmerking(String opmerking) {
+        this.opmerking = opmerking;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

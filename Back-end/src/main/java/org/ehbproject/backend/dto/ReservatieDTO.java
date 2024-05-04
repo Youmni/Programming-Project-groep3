@@ -1,17 +1,19 @@
 package org.ehbproject.backend.dto;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.time.LocalDate;
 
 public class ReservatieDTO {
+    private int gebruikerId;
     private LocalDate afhaalDatum;
     private LocalDate retourDatum;
     private LocalDate boekingDatum;
     private String reden;
     private String opmerking;
     private String status;
-    private int gebruikerId;
 
-    public ReservatieDTO(int gebruikerId, LocalDate afhaalDatum, LocalDate retourDatum, LocalDate boekingDatum, String reden, String opmerking, String status) {
+    public ReservatieDTO(LocalDate afhaalDatum, LocalDate retourDatum, LocalDate boekingDatum, String reden, String opmerking, String status, int gebruikerId) {
         this.afhaalDatum = afhaalDatum;
         this.retourDatum = retourDatum;
         this.boekingDatum = boekingDatum;

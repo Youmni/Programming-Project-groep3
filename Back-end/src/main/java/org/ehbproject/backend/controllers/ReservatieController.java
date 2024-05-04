@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,6 @@ public class ReservatieController {
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
-    GebruikerCrudRepository repoGebruiker;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -35,14 +35,13 @@ public class ReservatieController {
 
     @CrossOrigin
     @PostMapping(value="/toevoegen")
-    public ResponseEntity<String> addReservatie(@Validated @RequestBody ReservatieDTO reservatieDTO) {
+    public ResponseEntity<String> addReservatie( @RequestBody ReservatieDTO reservatieDTO) {
         try {
-            Gebruiker gebruiker = (Gebruiker) repoGebruiker.findByGebruikerID(reservatieDTO.getGebruikerId());
+            Gebruiker gebruiker = (Gebruiker) repoReservatie.findByGebruiker_GebruikerID(reservatieDTO.getGebruikerId());
 
             if (gebruiker == null) {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
-
             Reservatie reservatie = new Reservatie(
                     reservatieDTO.getAfhaalDatum(),
                     reservatieDTO.getRetourDatum(),
@@ -60,6 +59,48 @@ public class ReservatieController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getMessage());
         }
     }
+
+    @CrossOrigin
+    @PutMapping("/{id}/opmerking")
+    public ResponseEntity<String> updateOpmerking(@PathVariable int id, @RequestParam String opmerking) {
+        List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
+
+        if(!reservaties.isEmpty()){
+            Reservatie reservatie = reservaties.getFirst();
+            reservatie.setOpmerking(opmerking);
+            repoReservatie.save(reservatie);
+
+            return ResponseEntity.ok("Opmerking van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + opmerking);
+
+        } else{
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID " + id + " niet gevonden");
+    }
+    }
+    @CrossOrigin
+    @PutMapping("/{id}/status")
+    public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
+        List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
+        String[] statussen = {"Beschikbaar", "Te laat", "Bezig", "Onvolledig", "In orde"};
+
+        if (!reservaties.isEmpty()) {
+            boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
+
+            if (geldigeStatus) {
+                Reservatie reservatie = reservaties.getFirst();
+                reservatie.setStatus(newStatus);
+                repoReservatie.save(reservatie);
+                return ResponseEntity.ok("Status van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + newStatus);
+            } else {
+                return ResponseEntity.badRequest().body("Ongeldige status: " + newStatus);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservatie met ID " + id + " niet gevonden");
+        }
+    }
+
+
+
+
     @CrossOrigin
     @GetMapping(value = "/id={id}")
     public List<Reservatie> getAllProductenByReservatieId(@PathVariable(name = "id") int id) {
