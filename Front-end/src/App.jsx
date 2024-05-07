@@ -11,6 +11,7 @@ import Product_toevoegen from "./pages/admin/product_toevoegen";
 import Leningen from "./pages/admin/leningen";
 import Login from "./pages/login";
 import Inventaris from "./pages/user/inventaris";
+import Footer from "./pages/footer";
 
 const App = () => {
  const location = useLocation();
@@ -18,12 +19,13 @@ const App = () => {
   if(location.pathname === "/") return <Login />
 
   return (
-    <div className="flex">
+    <div className="flex flex-col min-h-screen">
       <Routes>
         <Route path="/*" element={<UserRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer />
     </div>
   );
 };

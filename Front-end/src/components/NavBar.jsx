@@ -70,9 +70,7 @@ const NavBar = () => {
                   <li className="hover:bg-blue-500 hover:text-white">Video</li>
                   <li className="hover:bg-blue-500 hover:text-white">XR</li>
                   <li className="hover:bg-blue-500 hover:text-white">Tools</li>
-                  <li className="hover:bg-blue-500 hover:text-white">
-                    Belichting
-                  </li>
+                  <li className="hover:bg-blue-500 hover:text-white">Belichting</li>
                   <li className="hover:bg-blue-500 hover:text-white">Varia</li>
                 </ul>
               </div>
