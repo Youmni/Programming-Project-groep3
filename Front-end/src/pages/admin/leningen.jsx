@@ -57,7 +57,7 @@ const Leningen = () => {
             Leningen
           </h1>
         </div>
-        <div className="flex items-center gap-2 mt-10 ml-5 w-auto border justify-between">
+        <div className="flex items-center gap-2 mt-10 ml-5 w-auto  justify-between">
           <breadcrumb className="flex items-center gap-2">
             <RxDashboard className="text-rood" />
             <breadcrumb-item>Leningen</breadcrumb-item>
@@ -139,7 +139,7 @@ const Leningen = () => {
               {reservaties.map((reservatie) => (
                 <tr
                   key={reservatie.reservatieNr}
-                  className="h-20 text-black font-semibold hover:bg-gray-200"
+                  className="h-20 text-black font-semibold hover:bg-gray-200 "
                 >
                   <td className="text-center h-full ">
                     {reservatie.reservatieNr}
@@ -162,12 +162,12 @@ const Leningen = () => {
                   <td className="">
                     <h2 className="text-lg">{`${reservatie.aantal}`}</h2>
                   </td>
-                  <td className="">{reservatie.gebruikerID.email}</td>
+                  <td className="">{reservatie.gebruikerID}</td>
                   <td className="">{reservatie.boekingDatum}</td>
                   <td className="">{reservatie.retourDatum}</td>
-                  <td className="">Uitgeleend{reservatie.status}</td>
+                  <td className="">{reservatie.status}</td>
                   <td className="">
-                    <div className="flex justify-end items-center gap-2">
+                    <div className="flex justify-end items-center ">
                       <Link
                         to={`/admin/inventaris/wijzigen/${reservatie.productreservatieNr}`}
                         className="bg-cyan-600 text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-cyan-900"
