@@ -13,7 +13,10 @@ import Login from "./pages/login";
 import Inventaris from "./pages/user/inventaris";
 
 const App = () => {
-  
+ const location = useLocation();
+
+  if(location.pathname === "/") return <Login />
+
   return (
     <div className="flex">
       <Routes>

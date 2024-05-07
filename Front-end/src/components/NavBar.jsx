@@ -41,7 +41,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="border flex items-center h-auto gap-7 flex-grow">
+      <nav className="border flex items-center h-auto gap-7 w-screen">
         <a href="/home">
           <header className="flex w-full h-20 gap-x-3 items-center ">
             <img
