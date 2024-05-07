@@ -2,8 +2,12 @@ package org.ehbproject.backend.controllers;
 
 
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
+import org.ehbproject.backend.dao.ProductCrudRepository;
+import org.ehbproject.backend.dao.ProductReservatieCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.modellen.Gebruiker;
+import org.ehbproject.backend.modellen.Product;
+import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,12 @@ public class ReservatieController {
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
+    @Autowired
+    GebruikerCrudRepository repoGebruiker;
+    @Autowired
+    ProductCrudRepository repoProduct;
+    @Autowired
+    ProductReservatieCrudRepository repoProductReservatie;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -35,13 +45,14 @@ public class ReservatieController {
 
     @CrossOrigin
     @PostMapping(value="/toevoegen")
-    public ResponseEntity<String> addReservatie( @RequestBody ReservatieDTO reservatieDTO) {
+    public ResponseEntity<String> addReservatie(@Validated @RequestBody ReservatieDTO reservatieDTO) {
         try {
-            Gebruiker gebruiker = (Gebruiker) repoReservatie.findByGebruiker_GebruikerID(reservatieDTO.getGebruikerId());
-
-            if (gebruiker == null) {
+            List<Gebruiker> gebruikers = repoGebruiker.findByGebruikerID(reservatieDTO.getGebruikerId());
+            if (gebruikers.isEmpty()) {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
+            Gebruiker gebruiker = gebruikers.getFirst();
+
             Reservatie reservatie = new Reservatie(
                     reservatieDTO.getAfhaalDatum(),
                     reservatieDTO.getRetourDatum(),
@@ -54,11 +65,21 @@ public class ReservatieController {
 
             repoReservatie.save(reservatie);
 
+            List<Reservatie> reservatieObject = repoReservatie.findByReservatieNr(reservatie.getReservatieNr());
+            Reservatie reservatieObjectResult = reservatieObject.getFirst();
+            for(int product: reservatieDTO.getProducten()){
+                List<Product> productObject = repoProduct.findByProductID(product);
+                Product productObjectResult = productObject.getFirst();
+                ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
+                repoProductReservatie.save(productReservatie);
+            }
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie succesvol toegevoegd");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getMessage());
         }
     }
+
 
     @CrossOrigin
     @PutMapping("/{id}/opmerking")

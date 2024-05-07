@@ -2,7 +2,12 @@ package org.ehbproject.backend.controllers;
 
 
 import org.ehbproject.backend.dao.ProductCrudRepository;
+import org.ehbproject.backend.dao.ProductModelCrudRepository;
+import org.ehbproject.backend.dto.ProductDTO;
+import org.ehbproject.backend.dto.ReservatieDTO;
+import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.Product;
+import org.ehbproject.backend.modellen.ProductModel;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +28,9 @@ public class ProductController {
         @Autowired
         ProductCrudRepository repo;
 
+        @Autowired
+        ProductModelCrudRepository repoModel;
+
         @CrossOrigin
         @RequestMapping(method = RequestMethod.GET)
         public List<Product> getAllProducts(){
@@ -31,8 +39,32 @@ public class ProductController {
             return productMandje;
         }
 
+    @CrossOrigin
+    @PostMapping(value="/toevoegen")
+    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
+        try {
+            List <ProductModel> productModelen = repoModel.findByProductModelNr(productDTO.getProductModelNr());
+
+            if (productModelen.isEmpty()) {
+                throw new RuntimeException("ProductModel met nummer " + productDTO.getProductModelNr() + " niet gevonden.");
+            }
+            ProductModel productModel = productModelen.getFirst();
+            Product product = new Product(
+                    productModel,
+                    productDTO.getProductNaam(),
+                    productDTO.getStatus()
+            );
+
+
+           repo.save(product);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Product succesvol toegevoegd");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van product: " + e.getMessage());
+        }
+    }
         @CrossOrigin
-        @PutMapping("/{id}/status")
+        @PutMapping("/{id}/bewerk-status")
         public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
             List<Product> reservaties = repo.findByProductID(id);
             String[] statussen = {"Beschikbaar", "Niet beschikbaar", "Gepauseerd"};
@@ -44,16 +76,55 @@ public class ProductController {
                     Product status = reservaties.getFirst();
                     status.setStatus(newStatus);
                     repo.save(status);
-                    return ResponseEntity.ok("Status van het product met ID " + id + " is succesvol bijgewerkt naar " + newStatus);
+                    return ResponseEntity.ok("Status van het product met ID " + id + " is succesvol bijgewerkt naar '" + newStatus+"'");
                 } else {
                     return ResponseEntity.badRequest().body("Ongeldige status: " + newStatus);
                 }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservatie met ID " + id + " niet gevonden");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product met ID " + id + " niet gevonden");
             }
         }
+
+    @CrossOrigin
+    @PutMapping("/{id}/bewerk-naam-status")
+    public ResponseEntity<String> updateNaamAndStatus(@PathVariable int id, @RequestParam String newNaam, @RequestParam String newStatus) {
+        List<Product> reservaties = repo.findByProductID(id);
+        String[] statussen = {"Beschikbaar", "Niet beschikbaar", "Gepauseerd"};
+
+        if (!reservaties.isEmpty()) {
+            boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
+
+            if (geldigeStatus) {
+                Product status = reservaties.getFirst();
+                status.setStatus(newStatus);
+                status.setProductNaam(newNaam);
+                repo.save(status);
+                return ResponseEntity.ok("Status en naam van het product met ID " + id + " is succesvol bijgewerkt naar '" + newNaam+"'" + " & '"+newStatus+"'");
+            } else {
+                return ResponseEntity.badRequest().body("Ongeldige status: " + newStatus);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product met ID " + id + " niet gevonden");
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping("/{id}/bewerk-naam")
+    public ResponseEntity<String> updateNaam(@PathVariable int id, @RequestParam String newNaam) {
+        List<Product> reservaties = repo.findByProductID(id);
+
+        if (!reservaties.isEmpty()) {
+
+            Product status = reservaties.getFirst();
+                status.setProductNaam(newNaam);
+                repo.save(status);
+                return ResponseEntity.ok("Naam van het product met ID " + id + " is succesvol bijgewerkt naar '" + newNaam+"'");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product met ID " + id + " niet gevonden");
+        }
+    }
         @CrossOrigin
-        @DeleteMapping("/delete/{id}")
+        @DeleteMapping("/{id}/delete")
         public ResponseEntity<String> deleteProduct(@PathVariable int id) {
             List<Product> product = repo.findByProductID(id);
             if (!product.isEmpty()) {

@@ -4,6 +4,7 @@ package org.ehbproject.backend.modellen;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,14 +30,14 @@ public class Product {
     private Set<ProductReservatie> productreservaties = new HashSet<>();
 
 
-    public Product(int productID, ProductModel productModel, String productNaam, String status) {
-        this.productID = productID;
+    public Product(ProductModel productModel, String productNaam, String status) {
         this.productModel = productModel;
         this.productNaam = productNaam;
         this.status = status;
     }
 
     protected Product() {}
+
 
 
     public int getProductID() {

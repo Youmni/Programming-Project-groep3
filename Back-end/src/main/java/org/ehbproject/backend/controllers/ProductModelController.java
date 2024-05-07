@@ -1,8 +1,12 @@
 package org.ehbproject.backend.controllers;
 
 
+import org.ehbproject.backend.dao.CategorieCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductModelCrudRepository;
+import org.ehbproject.backend.dto.ProductDTO;
+import org.ehbproject.backend.dto.ProductModelDTO;
+import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +24,10 @@ public class ProductModelController {
 
     @Autowired
     ProductModelCrudRepository repoModellen;
+    @Autowired
     ProductCrudRepository repoProducten;
+    @Autowired
+    CategorieCrudRepository repoCategorie;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -28,6 +35,33 @@ public class ProductModelController {
         List<ProductModel> productModelMandje = new ArrayList<>();
         repoModellen.findAll().forEach(productModelMandje::add);
         return productModelMandje;
+    }
+
+    @CrossOrigin
+    @PostMapping(value="/toevoegen")
+    public ResponseEntity<String> addProductModel(@RequestBody ProductModelDTO productModelDTO) {
+        try {
+            List <Categorie> categories = repoCategorie.findByCategorieNr(productModelDTO.getCategorieNr());
+
+            if (categories.isEmpty()) {
+                throw new RuntimeException("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
+            }
+            Categorie categorie = categories.getFirst();
+            ProductModel productModel = new ProductModel(
+                    categorie,
+                    productModelDTO.getProductModelNaam(),
+                    productModelDTO.getProductModelMerk(),
+                    productModelDTO.getProductModelFoto(),
+                    productModelDTO.getProductModelBeschrijving()
+            );
+
+
+            repoModellen.save(productModel);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("ProductModel succesvol toegevoegd");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van productModel: " + e.getMessage());
+        }
     }
 
     @CrossOrigin
@@ -64,6 +98,7 @@ public class ProductModelController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductModel met ID " + id + " niet gevonden");
         }
     }
+
     @CrossOrigin
     @GetMapping(value = "/id={id}")
     public List<ProductModel> getAllProductenById(@PathVariable(name = "id") int id) {

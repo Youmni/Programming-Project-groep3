@@ -3,6 +3,8 @@ package org.ehbproject.backend.dto;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReservatieDTO {
     private int gebruikerId;
@@ -12,8 +14,9 @@ public class ReservatieDTO {
     private String reden;
     private String opmerking;
     private String status;
+    private int[] producten;
 
-    public ReservatieDTO(LocalDate afhaalDatum, LocalDate retourDatum, LocalDate boekingDatum, String reden, String opmerking, String status, int gebruikerId) {
+    public ReservatieDTO(LocalDate afhaalDatum, LocalDate retourDatum, LocalDate boekingDatum, String reden, String opmerking, String status, int gebruikerId, int[] producten) {
         this.afhaalDatum = afhaalDatum;
         this.retourDatum = retourDatum;
         this.boekingDatum = boekingDatum;
@@ -21,7 +24,10 @@ public class ReservatieDTO {
         this.opmerking = opmerking;
         this.status = status;
         this.gebruikerId = gebruikerId;
+        this.producten = producten;
     }
+
+
 
     public LocalDate getAfhaalDatum() {
         return afhaalDatum;
@@ -77,5 +83,13 @@ public class ReservatieDTO {
 
     public void setGebruikerId(int gebruikerId) {
         this.gebruikerId = gebruikerId;
+    }
+
+    public int[] getProducten() {
+        return producten;
+    }
+
+    public void setProducten(int[] producten) {
+        this.producten = producten;
     }
 }

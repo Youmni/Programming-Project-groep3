@@ -34,8 +34,7 @@ public class ProductModel {
     @OneToMany(mappedBy = "productModel")
     private Set<Product> producten = new HashSet<>();
 
-    public ProductModel(int productModelNr, Categorie categorie, String productModelNaam, String productModelMerk, String productModelFoto, String productModelBeschrijving) {
-        this.productModelNr = productModelNr;
+    public ProductModel(Categorie categorie, String productModelNaam, String productModelMerk, String productModelFoto, String productModelBeschrijving) {
         this.categorie = categorie;
         this.productModelNaam = productModelNaam;
         this.productModelMerk = productModelMerk;
