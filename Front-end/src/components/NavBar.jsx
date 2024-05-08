@@ -43,14 +43,14 @@ const NavBar = () => {
     <>
       <nav className="border flex items-center h-auto gap-7 w-screen shadow-lg">
         <a href="/home">
-          <header className="flex w-full h-20 gap-x-3 items-center ">
+          <header className="flex w-full h-20 gap-x-3 items-center">
             <img
               src={ehbLogo}
               alt="ehb Logo"
               className="h-full ml-2 items-center object-cover flex"
             />
-            <div className="flex border h-12 border-red-500"></div>
-            <h1 className="flex flex-col -space-y-8">
+            <div className="lg:block hidden border h-12 border-red-500"></div>
+            <h1 className="lg:block hidden flex-col -space-y-8 p-1 m-1">
               <span className="text-2xl text-red-500">Medialab</span>
               <br />
               <span className="text-xs text-Lichtgrijs}">Uitleendienst</span>
@@ -59,11 +59,11 @@ const NavBar = () => {
         </a>
 
         {/* Categorie button + pop up */}
-        <div className="ml-4 w-auto " ref={node}>
+        <div className="relative" ref={node}>
           <button onClick={handleButtonClick}>
-            <IoIosMenu className="flex h-full size-12 text-black hover:bg-gray-200 p-2" />
+            <IoIosMenu className="flex h-full size-12 text-Grijs hover:bg-gray-200 p-2" />
             {clicked && (
-              <div className="origin-top-right absolute -right-1/2 transform translate-x-1/2 mt-4 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
+              <div className="origin-top-right absolute left-0 mt-4 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
                 <h3 className="text-lg">Categoriën</h3>
                 <ul>
                   <li className="hover:bg-blue-500 hover:text-white">Audio</li>
@@ -89,9 +89,9 @@ const NavBar = () => {
               className="h-full w-full  rounded-lg border-Lichtgrijs p-2"
             />
           </div>
-          <div className="flex h-full w-auto ml-20 items-center justify-start gap-20">
+          <div className="flex h-full w-auto sm:ml-5 md:ml-10 lg:ml-20 items-center justify-start sm:gap-5 md:gap-10 lg:gap-20">
             <FaUser className="flex h-full size-14  text-Grijs hover:bg-gray-200 p-2 " />
-            <FaShoppingCart className="flex h-full size-10 text-Grijs hover:bg-gray-200 mr-20" />
+            <FaShoppingCart className="flex h-full size-14 text-Grijs hover:bg-gray-200 sm:mr-5 md:mr-10 lg:mr-20 p-2" />
           </div>
         </div>
       </nav>

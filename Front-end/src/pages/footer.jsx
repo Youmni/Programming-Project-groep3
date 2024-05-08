@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <>
         <footer className="p-4 h-20 bg-black text-white rounded-md text-center mt-auto">
-            <a href="https://www.erasmushogeschool.be/nl"><p className='hover:underline'>©copyright erasmus hogeschool Brussel</p></a>
+            <a href="https://www.erasmushogeschool.be/nl" target='blank'><p className='hover:underline'>©copyright erasmus hogeschool Brussel</p></a>
         </footer>
         <div className='flex justify-center p-1 space-x-4 text-lg'>
             <a href="https://www.facebook.com/erasmushogeschool/?locale=nl_BE" target='blank'>
