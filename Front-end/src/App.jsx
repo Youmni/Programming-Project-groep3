@@ -12,6 +12,7 @@ import Leningen from "./pages/admin/leningen";
 import Login from "./pages/login";
 import Inventaris from "./pages/user/inventaris";
 import Footer from "./pages/footer";
+import FAQ from "./pages/user/FAQ";
 
 const App = () => {
  const location = useLocation();
@@ -21,9 +22,9 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Routes>
-        <Route path="/*" element={<UserRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/*" element={<UserRoutes />} />
       </Routes>
       <Footer />
     </div>
@@ -55,6 +56,7 @@ const UserRoutes = () => {
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/inventaris" element={<InventarisRoutes />} />
+        <Route path="/FAQ" element={<FAQ />}/>
       </Routes>
     </div>
   );

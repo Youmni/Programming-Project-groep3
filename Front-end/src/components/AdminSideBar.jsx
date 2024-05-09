@@ -34,7 +34,7 @@ const AdminSideBar = () => {
               onClick={toggleNav}
               className="flex bg-red-500 w-8 absolute h-8 rounded-full top-20 left-56 items-center justify-center"
             >
-              <IoIosArrowForward className="text-white size-5 rotate-180  " />
+              <IoIosArrowForward className="text-white size-5 rotate-180 " />
             </button>
             <ul className="flex flex-col w-full gap-5">
               <h2 className="text-l p-3 text-Lichtgrijs ml-2 ">Menu</h2>
