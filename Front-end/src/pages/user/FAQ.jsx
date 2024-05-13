@@ -27,7 +27,7 @@ const FAQ = () => {
   };
 
   return (
-    <div className="p-6">
+    <main className="p-6">
       <h1 className="text-4xl font-bold mb-4 text-center">FAQs</h1>
       {faqs.map((faq, index) => (
         <div key={index} className="mb-2 mx-auto text-center max-w-prose border-2 border-black rounded-lg shadow-md">
@@ -38,7 +38,7 @@ const FAQ = () => {
           {activeIndex === index && <p className="px-4 pb-2">{faq.answer}</p>}
         </div>
       ))}
-    </div>
+    </main>
   );
 };
 

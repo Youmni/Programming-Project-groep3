@@ -13,6 +13,7 @@ import Login from "./pages/login";
 import Inventaris from "./pages/user/inventaris";
 import Footer from "./pages/footer";
 import FAQ from "./pages/user/FAQ";
+import UserLeningen from "./pages/user/leningen";
 
 const App = () => {
  const location = useLocation();
@@ -57,6 +58,7 @@ const UserRoutes = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/inventaris" element={<InventarisRoutes />} />
         <Route path="/FAQ" element={<FAQ />}/>
+        <Route path="/leningen" element={<UserLeningen />} />
       </Routes>
     </div>
   );

@@ -9,7 +9,7 @@ const Footer = () => {
 
     return (
     <>
-        <footer className="flex justify-between p-4 h-20 bg-black rounded-md mt-auto w-full">
+        <footer className="flex justify-between p-4 h-20 bg-black rounded-md mt-40 w-full">
             <Link to="/FAQ">
                 <div className='bg-white rounded-full p-3 flex items-center justify-center 
                 transform transition-transform duration-250 hover:scale-110'>

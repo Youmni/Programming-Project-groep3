@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
 import { IoIosMenu } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
@@ -86,8 +87,11 @@ const NavBar = () => {
             />
           </div>
           <div className="flex h-full w-auto sm:ml-5 md:ml-10 lg:ml-20 items-center justify-start sm:gap-5 md:gap-10 lg:gap-20">
-            <FaUser className="flex h-full size-14  text-Grijs p-2 
-            transform transition-transform duration-250 hover:scale-110" />
+            <Link to={"/leningen"}>
+              <FaUser className="flex h-full size-14  text-Grijs p-2 
+                transform transition-transform duration-250 hover:scale-110" />
+            </Link>
+            
             <FaShoppingCart className="flex h-full size-14 text-Grijs sm:mr-5 md:mr-10 lg:mr-20 p-2 
             transform transition-transform duration-250 hover:scale-110" />
           </div>
