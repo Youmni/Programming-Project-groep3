@@ -2,7 +2,6 @@ package org.ehbproject.backend.dao;
 
 import org.ehbproject.backend.modellen.Product;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 

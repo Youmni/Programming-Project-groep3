@@ -10,6 +10,9 @@ import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
+import org.ehbproject.backend.services.exceptions.ProductNietBeschikbaar;
+import org.ehbproject.backend.services.verificatie.IsProductGereserveerd;
+import org.ehbproject.backend.services.verificatie.StudentReservatieLimiet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +20,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "/reservatie")
@@ -34,6 +39,11 @@ public class ReservatieController {
     ProductCrudRepository repoProduct;
     @Autowired
     ProductReservatieCrudRepository repoProductReservatie;
+    @Autowired
+    private StudentReservatieLimiet studentLimiet;
+    @Autowired
+    private IsProductGereserveerd beschikbaar;
+
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -52,30 +62,49 @@ public class ReservatieController {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
             Gebruiker gebruiker = gebruikers.getFirst();
+            int aantalProductenDezeWeek = studentLimiet.checkAantalReservatiesDezeWeek(reservatieDTO.getGebruikerId());
 
-            Reservatie reservatie = new Reservatie(
-                    reservatieDTO.getAfhaalDatum(),
-                    reservatieDTO.getRetourDatum(),
-                    reservatieDTO.getBoekingDatum(),
-                    reservatieDTO.getReden(),
-                    reservatieDTO.getOpmerking(),
-                    reservatieDTO.getStatus(),
-                    gebruiker
-            );
+            WeekFields weekFields = WeekFields.of(Locale.getDefault());
+            int weekAfhaalDatum = reservatieDTO.getAfhaalDatum().get(weekFields.weekOfWeekBasedYear());
+            int weekRetourDatum = reservatieDTO.getAfhaalDatum().get(weekFields.weekOfWeekBasedYear());
 
-            repoReservatie.save(reservatie);
+            int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
-            List<Reservatie> reservatieObject = repoReservatie.findByReservatieNr(reservatie.getReservatieNr());
-            Reservatie reservatieObjectResult = reservatieObject.getFirst();
-            for(int product: reservatieDTO.getProducten()){
-                List<Product> productObject = repoProduct.findByProductID(product);
-                Product productObjectResult = productObject.getFirst();
-                ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
-                repoProductReservatie.save(productReservatie);
+            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),wekenTussen,reservatieDTO.getProducten());
+            if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getBlacklist().equalsIgnoreCase("nee")){
+            if(beschikbaarheidsControle){
+                throw new ProductNietBeschikbaar("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
+            }
+                Reservatie reservatie = new Reservatie(
+                        reservatieDTO.getAfhaalDatum(),
+                        reservatieDTO.getRetourDatum(),
+                        reservatieDTO.getBoekingDatum(),
+                        reservatieDTO.getReden(),
+                        reservatieDTO.getOpmerking(),
+                        reservatieDTO.getStatus(),
+                        gebruiker
+                );
+
+                repoReservatie.save(reservatie);
+
+                List<Reservatie> reservatieObject = repoReservatie.findByReservatieNr(reservatie.getReservatieNr());
+                Reservatie reservatieObjectResult = reservatieObject.getFirst();
+                for(int product: reservatieDTO.getProducten()){
+                    List<Product> productObject = repoProduct.findByProductID(product);
+                    Product productObjectResult = productObject.getFirst();
+                    ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
+                    repoProductReservatie.save(productReservatie);
+                }
+                return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie succesvol toegevoegd"+aantalProductenDezeWeek);
+            }
+            else{
+                return ResponseEntity.status((HttpStatus.FORBIDDEN)).body("De student is of op de zwarte lijst of heeft deze week al meer dan vijf reserveringen gemaakt.");
             }
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie succesvol toegevoegd");
-        } catch (Exception e) {
+        } catch (ProductNietBeschikbaar e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getTekst());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getMessage());
         }
     }
@@ -101,7 +130,7 @@ public class ReservatieController {
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
         List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
-        String[] statussen = {"Beschikbaar", "Te laat", "Bezig", "Onvolledig", "In orde"};
+        String[] statussen = {"Te laat", "Bezig", "Onvolledig", "In orde"};
 
         if (!reservaties.isEmpty()) {
             boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
@@ -130,8 +159,10 @@ public class ReservatieController {
 
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}")
-    public List<Reservatie> getAllReservatiesByGebruikerId(@PathVariable(name = "id") Gebruiker gebruiker) {
-        return repoReservatie.findByGebruiker(gebruiker);
+    public List<Reservatie> getAllReservatiesByGebruikerId(@PathVariable(name = "id") int id) {
+        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        Gebruiker gebruikerObject = gebruiker.getFirst();
+        return repoReservatie.findByGebruiker(gebruikerObject);
     }
 
     @CrossOrigin

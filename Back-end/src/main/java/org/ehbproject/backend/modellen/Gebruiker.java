@@ -31,18 +31,20 @@ public class Gebruiker {
     @Column(name="Blacklistreden")
     private String blacklistReden;
 
+    @Column(name="Overtredingen")
+    private int overtredingen;
+
 
 
     @OneToMany(mappedBy = "gebruiker")
     private Set<Reservatie> reservaties= new HashSet<>();
 
-    public Gebruiker(int gebruikerID, String email, String wachtwoord, String titel, String blacklist, String blacklistReden) {
-        this.gebruikerID = gebruikerID;
+    public Gebruiker(String email, String wachtwoord, String titel, String blacklist) {
         this.email = email;
         this.wachtwoord = wachtwoord;
         this.titel = titel;
         this.blacklist = blacklist;
-        this.blacklistReden = blacklistReden;
+        this.overtredingen = 0;
     }
 
     protected Gebruiker() {
@@ -79,5 +81,29 @@ public class Gebruiker {
 
     public void setTitel(String titel) {
         this.titel = titel;
+    }
+
+    public String getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(String blacklist) {
+        this.blacklist = blacklist;
+    }
+
+    public String getBlacklistReden() {
+        return blacklistReden;
+    }
+
+    public void setBlacklistReden(String blacklistReden) {
+        this.blacklistReden = blacklistReden;
+    }
+
+    public int getOvertredingen() {
+        return overtredingen;
+    }
+
+    public void setOvertredingen(int overtredingen) {
+        this.overtredingen = overtredingen;
     }
 }

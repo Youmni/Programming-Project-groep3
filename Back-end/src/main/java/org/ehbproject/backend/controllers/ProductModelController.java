@@ -4,7 +4,6 @@ package org.ehbproject.backend.controllers;
 import org.ehbproject.backend.dao.CategorieCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductModelCrudRepository;
-import org.ehbproject.backend.dto.ProductDTO;
 import org.ehbproject.backend.dto.ProductModelDTO;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -98,6 +96,7 @@ public class ProductModelController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductModel met ID " + id + " niet gevonden");
         }
     }
+
 
     @CrossOrigin
     @GetMapping(value = "/id={id}")

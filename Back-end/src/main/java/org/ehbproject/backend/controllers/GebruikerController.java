@@ -2,6 +2,7 @@ package org.ehbproject.backend.controllers;
 
 
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
+import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Gebruiker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,18 @@ public class GebruikerController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Gebruiker succesvol toegevoegd");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Er is een fout opgetreden bij het toevoegen van de gebruiker: " + e.getMessage());
+        }
+    }
+    @CrossOrigin
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<String> deleteGebruiker(@PathVariable int id) {
+        List<Gebruiker> gebruiker = repo.findByGebruikerID(id);
+        if (!gebruiker.isEmpty()) {
+            repo.deleteById(id);
+            return ResponseEntity.ok("Gebruiker met ID " + id + " is succesvol verwijderd");
+
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Gebruiker met ID " + id + " niet gevonden");
         }
     }
 
