@@ -22,11 +22,13 @@ const App = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Routes>
-        <Route path="/admin/*" element={<AdminRoutes />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/*" element={<UserRoutes />} />
-      </Routes>
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/admin/*" element={<AdminRoutes />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/*" element={<UserRoutes />} />
+        </Routes>
+      </main>
       <Footer />
     </div>
   );

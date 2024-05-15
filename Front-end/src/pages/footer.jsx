@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin} from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { FaInstagram } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
 
     return (
     <>
-        <footer className="flex justify-between p-4 h-20 bg-black rounded-md mt-40 w-full">
+        <div className="flex justify-between p-4 h-20 bg-black rounded-md mt-20 w-full">
             <Link to="/FAQ">
                 <div className='bg-white rounded-full p-3 flex items-center justify-center 
                 transform transition-transform duration-250 hover:scale-110'>
@@ -21,7 +19,7 @@ const Footer = () => {
                     <p className='hover:underline text-white'>©copyright erasmus hogeschool Brussel</p>
                 </a>
             </div>
-        </footer>
+        </div>
         <div className='flex items-center justify-center p-1 space-x-6 text-lg'>
             <a href="https://www.facebook.com/erasmushogeschool/?locale=nl_BE" target='blank'>
                 <FaFacebook className=' transform transition-transform duration-250 hover:scale-110' />
