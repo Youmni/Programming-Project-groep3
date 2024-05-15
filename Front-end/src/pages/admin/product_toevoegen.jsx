@@ -86,7 +86,7 @@ const ProductToevoegen = () => {
 
   return (
     <content className="top-0 flex-grow">
-      <main className="flex-grow p-10">
+      <main className="flex-grow p-10 bg-slate-100">
         <div className="flex justify-between items-center">
           <h1 className=" flex text-3xl font-bold w-40 border-b justify-center">
             Inventaris
@@ -121,7 +121,7 @@ const ProductToevoegen = () => {
                 <input
                   type="text"
                   placeholder="Voer naam in."
-                  className=" h-10 pl-4 rounded-xl bg-red-50"
+                  className=" h-10 pl-4 rounded-xl bg-red-100"
                   required
                   value={formData.productModelNaam}
                   
@@ -132,7 +132,7 @@ const ProductToevoegen = () => {
                 <input
                   type="text"
                   placeholder="Voer merk in."
-                  className=" h-10 pl-4   rounded-xl bg-red-50"
+                  className=" h-10 pl-4   rounded-xl bg-red-100"
                   required
                   value={formData.productModelMerk}
                   onChange
@@ -141,7 +141,7 @@ const ProductToevoegen = () => {
               <div className="flex flex-col w-3/4 text-Grijs">
                 <label htmlFor="">Product Categorie</label>
                 <select
-                  className=" h-10 pl-4 rounded-xl bg-red-50"
+                  className=" h-10 pl-4 rounded-xl bg-red-100"
                   required
                   value={formData.categorieNaam}
                   onChange={handleSelectChange}
@@ -163,7 +163,7 @@ const ProductToevoegen = () => {
                 <input
                   type="number"
                   placeholder="Voer aantal in."
-                  className=" h-10 pl-4 rounded-xl bg-red-50"
+                  className=" h-10 pl-4 rounded-xl bg-red-100"
                   required
                   value={formData.aantal}
                   onChange
@@ -174,14 +174,14 @@ const ProductToevoegen = () => {
                 <textarea
                   type="text"
                   placeholder="Voer een beschrijving in."
-                  className=" h-24 p-3 rounded-xl bg-red-50"
+                  className=" h-24 p-3 rounded-xl bg-red-100"
                   value={formData.productModelBeschrijving}
                   onChange
                 />
               </div>
             </div>
-            <div className="flex flex-col w-1/2 border">
-              <div className="flex flex-col w-ful gap-2">
+            <div className="flex flex-col w-1/2 border ">
+              <div className="flex flex-col w-ful gap-2 mt-5 ml-8 ">
                 <label htmlFor="">Foto Toevoegen</label>
                 <input
                   type="file"

@@ -1,50 +1,48 @@
-import React from 'react'  
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from 'axios';
+import React from 'react'
+import { useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
-import { enqueueSnackbar } from 'notistack'
 import { IoSearchOutline } from 'react-icons/io5'
 import { FaFilter } from 'react-icons/fa6'
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import { FaShoppingBag } from "react-icons/fa";
+import { enqueueSnackbar } from 'notistack';
+
+const inventarisCategorie = () => {
+    const {categorie} = useParams();
+    console.log(categorie)
+    const [products, setProducts] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    useEffect(() => {
+        axios
+        .get(`http://localhost:8080/products?category=${categorie}`)
+        .then((response) => {
+            setProducts(response.data);
+            enqueueSnackbar('Producten opgehaald', {variant: 'success'})
+        
+        })
+        .catch((error) => {
+            console.error('Error fetching data: ', error);
+            enqueueSnackbar('Error', {variant: 'error'})
+        });
+    }, []);
 
 
-const Inventaris = () =>{
+    const handleSearch = (event) => {
+        setSearchQuery(event.target.value);
+      };
+    
+      const filteredProducten = products.filter((model) =>
+        model.productNaam.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
-
-const [Inventaris, setInventaris] = useState([])
-const [searchQuery, setSearchQuery] = useState("");
-
-
-
-useEffect(() => {
-    axios
-    .get(`http://localhost:8080/product`)
-    .then((res) => {
-        setInventaris(res.data)
-        enqueueSnackbar('Inventaris opgehaald', {variant: 'success'})
-    })
-    .catch((error) => {
-        console.log(error)
-        enqueueSnackbar('Error', {variant: 'error'})
-});
- }, [])
-
- const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const filteredProducten = Inventaris.filter((model) =>
-    model.productNaam.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-
-    return (
-      <main className="flex px-10 pt-5 w-screen flex-col bg-slate-50">
+  return (
+    <main className="flex px-10 pt-5 w-screen flex-col bg-slate-50">
         <header className="flex justify-between w-full ">
           <h1 className="font-semibold text-3xl">Inventaris</h1>
           <div className='flex gap-5'>
-              <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs bg-white">
+              <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs">
                 <IoSearchOutline className="ml-2 size-6" />
                 <input
                   type="search"
@@ -82,7 +80,7 @@ useEffect(() => {
           
         </content>
       </main>
-    );
+  )
 }
 
-export default Inventaris;
+export default inventarisCategorie

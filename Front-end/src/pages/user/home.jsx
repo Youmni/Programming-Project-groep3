@@ -28,12 +28,12 @@ const Home = () => {
   return (
     <main className="flex p-12 ml-4 w-screen">
       <div className="flex w-full flex-col h-auto gap-7">
-        <h1 className="flex h-auto  text-4xl font-medium">Categorieen</h1>
+        <h1 className="h-auto  text-4xl font-medium">Onze Categorieen</h1>
         <div className="flex flex-wrap h-auto gap-6 w-full">
           {categories.map((categorie) => (
             <Link
               to={`/inventaris/${categorie.categorieNaam}`}
-              className="flex flex-col h-[170px] w-[130px] border-2 rounded-xl items-center justify-center gap-6 hover:bg-gray-100 "
+              className="flex flex-col h-[170px] w-[130px] border-2 rounded-xl items-center justify-center gap-6 hover:bg-gray-100  transform transition-transform duration-250 hover:scale-110"
               key={categorie.categorieNr}
             >
               <SiAudioboom className="size-14"/>

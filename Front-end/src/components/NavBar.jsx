@@ -4,7 +4,8 @@ import ehbLogo from "../assets/ehb-logo.jpg";
 import { IoIosMenu } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
+import { BiShoppingBag } from "react-icons/bi";
+
 
 const NavBar = () => {
   // For clicking inside and outside of the box --->>
@@ -41,7 +42,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="border flex items-center h-auto gap-7 w-full shadow-lg">
+      <nav className="border flex items-center h-auto gap-7 w-full shadow-lg sticky">
         <a href="/home">
           <header className="flex w-full h-20 gap-x-3 items-center">
             <img
@@ -76,14 +77,14 @@ const NavBar = () => {
         </div>
 
         <div className="flex w-full h-full items-center justify-between">
-          <div className="flex flex-grow h-12  border items-center rounded-lg gap-1 mr-5">
+          <div className="flex flex-grow h-12  border-2 items-center rounded-lg gap-1 mr-5">
             <IoSearchOutline className="size-7 text-Grijs ml-2 transform transition-transform duration-250 hover:scale-110" />
             <input
               type="search"
               name="search-bar"
               id=""
               placeholder="Zoek hier..."
-              className="h-full w-full  rounded-lg border-Lichtgrijs p-2"
+              className="h-full w-full  rounded-lg border-Lichtgrijs p-2 b"
             />
           </div>
           <div className="flex h-full w-auto sm:ml-5 md:ml-10 lg:ml-20 items-center justify-start sm:gap-5 md:gap-10 lg:gap-20">
@@ -92,8 +93,14 @@ const NavBar = () => {
                 transform transition-transform duration-250 hover:scale-110" />
             </Link>
             
-            <FaShoppingCart className="flex h-full size-14 text-Grijs sm:mr-5 md:mr-10 lg:mr-20 p-2 
-            transform transition-transform duration-250 hover:scale-110" />
+
+
+            <div className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 mr-10">
+              <BiShoppingBag className="text-5xl text-Grijs" />
+              <div className="absolute w-5 h-5 rounded-full z-10 right-[-3px] bottom-[-3px] flex items-center justify-center text-[10px] bg-red-500 text-white">
+                1
+              </div>
+            </div>
           </div>
         </div>
       </nav>

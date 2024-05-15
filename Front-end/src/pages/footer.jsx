@@ -7,7 +7,7 @@ const Footer = () => {
 
     return (
     <>
-        <div className="flex justify-between p-4 h-20 bg-black rounded-md mt-20 w-full">
+        <footer className="flex justify-between p-4 h-20 bg-black rounded-md mt-40 w-full">
             <Link to="/FAQ">
                 <div className='bg-white rounded-full p-3 flex items-center justify-center 
                 transform transition-transform duration-250 hover:scale-110'>
@@ -34,8 +34,8 @@ const Footer = () => {
                 <FaLinkedin className=' transform transition-transform duration-250 hover:scale-110' />
             </a>
         </div>
-    </>
-  );
+    </div>
+  );    
 };
 
 export default Footer;

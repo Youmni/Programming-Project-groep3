@@ -3,14 +3,13 @@ import { RxDashboard } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
 import { Link, json } from "react-router-dom";
-import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
 import { data } from "autoprefixer";
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
-import { HiMiniPencilSquare } from "react-icons/hi2";
-import { FaCircleInfo } from "react-icons/fa6";
+import { PiKeyReturnFill } from "react-icons/pi";
+
 
 const Leningen = () => {
   const [reservaties, setReservaties] = useState([]);
@@ -36,18 +35,18 @@ const Leningen = () => {
     setSearchQuery(event.target.value);
   };
 
-  // const filteredReservaties = reservaties.filter(
-  //   (reservatie) =>
-  //     reservatie.gebruikerId.email
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase()) ||
-  //     reservatie.gebruikerID.titel
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase()) ||
-  //     String(reservatie.productreservatieNr)
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase())
-  // );
+  const filteredReservaties = reservaties.filter(
+    (reservatie) =>
+      reservatie.gebruiker.email
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      reservatie.gebruiker.titel
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      String(reservatie.reservatieNr)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+  );
 
   return (
     <content className="top-0 flex-grow">
@@ -120,13 +119,13 @@ const Leningen = () => {
                 </th>
                 <th scope="col" className="text-left ">
                 <div className="flex items-center">
-                    Uitgeleend op
+                    Uitgeleend tot
                     <IoMdArrowDropdown className="size-4 text-Grijs" />
                   </div>
                 </th>
                 <th scope="col" className="text-left ">
                 <div className="flex items-center">
-                    Uitgeleend op
+                    status
                     <IoMdArrowDropdown className="size-4 text-Grijs" />
                   </div>
                 </th>
@@ -136,7 +135,7 @@ const Leningen = () => {
               </tr>
             </thead>
             <tbody>
-              {reservaties.map((reservatie) => (
+              {filteredReservaties.map((reservatie) => (
                 <tr
                   key={reservatie.reservatieNr}
                   className="h-20 text-black font-semibold hover:bg-gray-200 "
@@ -162,7 +161,7 @@ const Leningen = () => {
                   <td className="">
                     <h2 className="text-lg">{`${reservatie.aantal}`}</h2>
                   </td>
-                  <td className="">{reservatie.gebruikerID}</td>
+                  <td className="">{reservatie.gebruiker.email}</td>
                   <td className="">{reservatie.boekingDatum}</td>
                   <td className="">{reservatie.retourDatum}</td>
                   <td className="">{reservatie.status}</td>
@@ -170,9 +169,9 @@ const Leningen = () => {
                     <div className="flex justify-end items-center ">
                       <Link
                         to={`/admin/inventaris/wijzigen/${reservatie.productreservatieNr}`}
-                        className="bg-cyan-600 text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-cyan-900"
+                        className="bg-gray-600 text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"
                       >
-                        <HiMiniPencilSquare className="size-6" />
+                        <PiKeyReturnFill className="size-6" />
                       </Link>
                     </div>
                   </td>
