@@ -115,10 +115,11 @@ public class ProductModelController {
     public List<ProductModel> getAllProductenByMerk(@PathVariable(name = "merk") String merk) {
         return repoModellen.findByProductModelMerkContainingIgnoreCase(merk);
     }
-
     @CrossOrigin
-    @GetMapping("/categorie={categorienr}")
-    public List<ProductModel> getAllProductenByCategorie(@PathVariable(name = "categorienr") Categorie categorie) {
+    @GetMapping("/categorienr={categorienr}")
+    public List<ProductModel> getAllProductenByCategorieNr(@PathVariable(name = "categorienr") int categorienr) {
+        List<Categorie> categories = repoCategorie.findByCategorieNr(categorienr);
+        Categorie categorie = categories.getFirst();
         return repoModellen.findByCategorie(categorie);
     }
 }
