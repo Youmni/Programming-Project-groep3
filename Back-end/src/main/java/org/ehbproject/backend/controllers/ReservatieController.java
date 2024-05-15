@@ -10,6 +10,7 @@ import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
+import org.ehbproject.backend.services.emailservice.EmailService;
 import org.ehbproject.backend.services.exceptions.ProductNietBeschikbaar;
 import org.ehbproject.backend.services.verificatie.IsProductGereserveerd;
 import org.ehbproject.backend.services.verificatie.StudentReservatieLimiet;
@@ -44,6 +45,7 @@ public class ReservatieController {
     @Autowired
     private IsProductGereserveerd beschikbaar;
 
+    private EmailService emailService;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -146,6 +148,9 @@ public class ReservatieController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservatie met ID " + id + " niet gevonden");
         }
+
+
+
     }
 
 
@@ -204,5 +209,11 @@ public class ReservatieController {
         }
         return aantal;
     }
+
+
+
+
+
+
 
 }

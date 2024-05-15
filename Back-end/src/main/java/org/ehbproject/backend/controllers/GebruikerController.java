@@ -2,8 +2,11 @@ package org.ehbproject.backend.controllers;
 
 
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
+import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Gebruiker;
+import org.ehbproject.backend.modellen.Reservatie;
+import org.ehbproject.backend.services.emailservice.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,8 @@ public class GebruikerController {
 
     @Autowired
     GebruikerCrudRepository repo;
+    @Autowired
+    ReservatieCrudRepository reservatierepo;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -127,4 +132,5 @@ public class GebruikerController {
 
         return repo.findByGebruikerID(id);
     }
+
 }

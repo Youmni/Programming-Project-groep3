@@ -1,5 +1,6 @@
 package org.ehbproject.backend.services.emailservice;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -15,14 +16,17 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     @Async
-    public void SendMail(String to, String subject, String body){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+    public void SendMail(String to, String subject, String body) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(body);
 
-        mailSender.send(message);
+            mailSender.send(message);
+        }
+        catch (Exception e){
+            LoggerFactory.getLogger(EmailService.class).error("Error sending email", e);}
     }
-
 
 }

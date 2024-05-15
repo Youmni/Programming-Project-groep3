@@ -1,6 +1,7 @@
 package org.ehbproject.backend.dao;
 
 import org.ehbproject.backend.modellen.Gebruiker;
+import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
