@@ -9,7 +9,6 @@ import java.util.List;
 public interface ProductCrudRepository extends CrudRepository<Product, Integer> {
 
     public List<Product> findByProductID(int productID);
-    public List<Product> findByProductModel (ProductModel productModel);
     public List<Product> findByProductNaamContainingIgnoreCase(String productNaam);
     public List<Product> findByStatusIgnoreCase(String status);
     public List<Product> findByProductNaamContainingIgnoreCaseAndStatusContainingIgnoreCase (String naam, String status);

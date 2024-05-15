@@ -54,6 +54,7 @@ Get-requests:
     -Om te zoeken op id en op status: "http://localhost:8080/product/id={VulIn}/status={VulIn}"
     -Om te zoeken op categorienr: "http://localhost:8080/product/categorienr={id}"
 
+
 Post-requests:
     -Om producten toe te voegen: "http://localhost:8080/product/toevoegen"
             bv:{"productModelNr": 1,

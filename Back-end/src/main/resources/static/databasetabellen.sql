@@ -34,18 +34,8 @@
 -- Email VARCHAR2(70) NOT NULL,
 -- Wachtwoord VARCHAR2(64) NOT NULL,
 -- Titel VARCHAR2(15) NOT NULL,
--- Overtredingen NUMBER(3),
 -- CONSTRAINT pk_gebruikers_gebruikerid PRIMARY KEY (Gebruikerid)
 -- );
-
-    CREATE TABLE BLACKLISTS (
-    BlacklistId NUMBER(5),
-    GebruikerId NUMBER(6),
-    Blacklistdatum DATE,
-    BlacklistReden VARCHAR2(40),
-    CONSTRAINT pk_blacklists_blacklistid PRIMARY KEY (BlacklistId),
-    CONSTRAINT fk_blacklists_gebruikers_gebruikerid FOREIGN KEY (GebruikerId) REFERENCES GEBRUIKERS
-    )
 
 -- CREATE TABLE RESERVATIES
 -- (
