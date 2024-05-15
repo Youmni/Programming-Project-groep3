@@ -4,8 +4,11 @@ package org.ehbproject.backend.controllers;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductModelCrudRepository;
 import org.ehbproject.backend.dto.ProductDTO;
+import org.ehbproject.backend.dto.ReservatieDTO;
+import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
+import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -167,5 +170,6 @@ public class ProductController {
 
             return repo.findByProductIDAndStatusContainingIgnoreCase(id, status);
         }
+
     }
 
