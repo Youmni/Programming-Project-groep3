@@ -52,6 +52,7 @@ Get-requests:
     -Om te zoeken op status: "http://localhost:8080/product/status={VulIn}"
     -Om te zoeken op naam en op status: "http://localhost:8080/product/naam={VulIn}/status={VulIn}"
     -Om te zoeken op id en op status: "http://localhost:8080/product/id={VulIn}/status={VulIn}"
+    -Om te zoeken op categorienr: "http://localhost:8080/product/categorienr={id}"
 
 Post-requests:
     -Om producten toe te voegen: "http://localhost:8080/product/toevoegen"
@@ -74,6 +75,7 @@ Get-requests:
     -Om te zoeken op productModel ID: "http://localhost:8080/productmodel/id={VulIn}"
     -Om te zoeken op productModel naam: "http://localhost:8080/productmodel/naam={VulIn}"
     -Om te zoeken op merk: "http://localhost:8080/productmodel/merk={VulIn}"
+    -Om te zoeken op categorienr: "http://localhost:8080/productmodel/categorienr={id}"
 
 Post-request:
     -Om productmodellen toe te voegen: "http://localhost:8080/productmodel/toevoegen"

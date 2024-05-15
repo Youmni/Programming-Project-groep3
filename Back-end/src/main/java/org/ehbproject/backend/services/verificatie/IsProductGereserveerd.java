@@ -35,7 +35,6 @@ public class IsProductGereserveerd {
 
         LocalDate eindDatum = datum.plusWeeks(aantalWeken);
 
-
         for(int product : products){
             List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductID(product);
             logger.info(product+": "+"komt tot hier");
