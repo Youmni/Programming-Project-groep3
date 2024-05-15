@@ -2,7 +2,7 @@ import React from 'react'
 
 const winkelmandje = () => {
   return (
-    <div>winkelmandje</div>
+    <div></div>
   )
 }
 

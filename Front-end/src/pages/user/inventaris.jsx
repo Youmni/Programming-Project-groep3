@@ -7,6 +7,7 @@ import { IoSearchOutline } from 'react-icons/io5'
 import { FaFilter } from 'react-icons/fa6'
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import { FaShoppingBag } from "react-icons/fa";
+import ReserveringForm from './reserveringform';
 
 
 const Inventaris = () =>{
@@ -14,6 +15,7 @@ const Inventaris = () =>{
 
 const [Inventaris, setInventaris] = useState([])
 const [searchQuery, setSearchQuery] = useState("");
+const [showModal, setShowModal] = useState(false);
 
 
 
@@ -37,6 +39,15 @@ useEffect(() => {
   const filteredProducten = Inventaris.filter((model) =>
     model.productNaam.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
 
     return (
@@ -64,8 +75,8 @@ useEffect(() => {
         </header>
         <content className="flex flex-wrap mt-5 gap-10 justify-center">
             {filteredProducten.map((product) => (
-                <figure className='border h-[200px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md'>
-                    <img src={canonFoto} alt="" className='w-full h-24 object-contain'/>
+                <figure className='border h-max-[200px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md'>
+                    <img src={canonFoto} alt="" className='w-full h-16 object-contain'/>
                     <div className='flex flex-col flex-wrap '>
                         <h1 className='text-2xl font-semibold overflow-hidden'>{product.productNaam}</h1>
                         <div className='flex flex-col w-3/5 flex-wrap'>
@@ -73,7 +84,7 @@ useEffect(() => {
                             <p className='text-sm'>Dit is de beschrijving</p>
                         </div>
                     </div>
-                    <button className='h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950'>
+                    <button className='h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950' onClick={openModal}>
                         <FaShoppingBag className='size-6 text-white' />
                     </button>
                 </figure>
@@ -81,6 +92,7 @@ useEffect(() => {
             ))}
           
         </content>
+        {showModal && <ReserveringForm closeModal={closeModal} />}
       </main>
     );
 }

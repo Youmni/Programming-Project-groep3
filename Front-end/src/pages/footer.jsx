@@ -19,7 +19,7 @@ const Footer = () => {
                     <p className='hover:underline text-white'>©copyright erasmus hogeschool Brussel</p>
                 </a>
             </div>
-        </div>
+        </footer>
         <div className='flex items-center justify-center p-1 space-x-6 text-lg'>
             <a href="https://www.facebook.com/erasmushogeschool/?locale=nl_BE" target='blank'>
                 <FaFacebook className=' transform transition-transform duration-250 hover:scale-110' />
@@ -34,7 +34,7 @@ const Footer = () => {
                 <FaLinkedin className=' transform transition-transform duration-250 hover:scale-110' />
             </a>
         </div>
-    </div>
+    </>
   );    
 };
 
