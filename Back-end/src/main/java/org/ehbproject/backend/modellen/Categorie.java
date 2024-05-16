@@ -14,6 +14,7 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Categorienr")
     private int categorieNr;
+
     @OneToMany(mappedBy = "categorie")
     private Set<ProductModel> productModellen = new HashSet<>();
 
@@ -43,11 +44,5 @@ public class Categorie {
         this.categorieNaam = categorieNaam;
     }
 
-    public Set<ProductModel> getProductModellen() {
-        return productModellen;
-    }
 
-    public void setProductModellen(Set<ProductModel> productModellen) {
-        this.productModellen = productModellen;
-    }
 }

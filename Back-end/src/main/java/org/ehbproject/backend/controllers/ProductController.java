@@ -1,9 +1,11 @@
 package org.ehbproject.backend.controllers;
 
 
+import org.ehbproject.backend.dao.CategorieCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductModelCrudRepository;
 import org.ehbproject.backend.dto.ProductDTO;
+import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,10 @@ public class ProductController {
 
         @Autowired
         ProductModelCrudRepository repoModel;
+
+        @Autowired
+        CategorieCrudRepository repoCategorie;
+
 
         @CrossOrigin
         @RequestMapping(method = RequestMethod.GET)
@@ -167,5 +173,19 @@ public class ProductController {
 
             return repo.findByProductIDAndStatusContainingIgnoreCase(id, status);
         }
+
+    @CrossOrigin
+    @GetMapping("/categorie={categorienr}")
+    public List<Product> getAllProductenByCategorie(@PathVariable(name = "categorienr") Categorie categorieNr) {
+        List<ProductModel> productModellen = repoModel.findByCategorie(categorieNr);
+
+        List<Product> products = new ArrayList<>();
+        for (ProductModel productModel : productModellen) {
+            products.addAll(repo.findByProductModel(productModel));
+        }
+
+        return products;
+    }
+
     }
 

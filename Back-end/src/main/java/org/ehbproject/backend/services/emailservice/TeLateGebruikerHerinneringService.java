@@ -1,7 +1,6 @@
-package org.ehbproject.backend.services.TeLateGebruikersService;
+package org.ehbproject.backend.services.emailservice;
 
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
-import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.services.emailservice.EmailService;
 import org.ehbproject.backend.services.verificatie.IsProductGereserveerd;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 @Service
-public class TeLateGebruikerService {
+public class TeLateGebruikerHerinneringService {
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -25,7 +24,6 @@ public class TeLateGebruikerService {
         List<Reservatie> reservaties = repoReservatie.findByStatus("te laat");
         List<String> TeLateGebruikers = new ArrayList<>();
         for (Reservatie reservatie : reservaties) {
-//            Gebruiker gebruiker = reservatie.getGebruiker();
             TeLateGebruikers.add(reservatie.getGebruiker().getEmail());
             logger.info(TeLateGebruikers.getFirst());
         }

@@ -25,13 +25,13 @@ public class Gebruiker {
     @Column(name="Titel")
     private String titel;
 
-    @Column(name="Blacklist")
+    @Column(name= "ISGEBLACKLIST")
     private String blacklist;
 
     @Column(name="Blacklistreden")
     private String blacklistReden;
 
-    @Column(name="Overtredingen")
+    @Column(name= "OVERTREDING")
     private int overtredingen;
 
 
