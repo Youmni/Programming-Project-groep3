@@ -132,7 +132,7 @@ public class ReservatieController {
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
         List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
-        String[] statussen = {"Te laat", "Bezig", "Onvolledig", "In orde"};
+        String[] statussen = {"Te laat", "Bezig", "Onvolledig", "In orde", "Voorboeking"};
 
         if (!reservaties.isEmpty()) {
             boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);

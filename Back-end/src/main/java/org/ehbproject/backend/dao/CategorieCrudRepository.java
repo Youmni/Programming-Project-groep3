@@ -9,5 +9,4 @@ public interface CategorieCrudRepository extends CrudRepository<Categorie, Integ
 
     public List<Categorie> findByCategorieNr(int categorieNr);
     public List<Categorie> findByCategorieNaam(String categorieNaam);
-
 }

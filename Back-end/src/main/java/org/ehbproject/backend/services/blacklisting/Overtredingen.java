@@ -20,12 +20,12 @@ public class Overtredingen {
     ReservatieCrudRepository repoReservatie;
 
     @Scheduled(cron = "0 0 0 * * TUE")
-    public void overtredingen(){
+    public void overtreding(){
         List<Reservatie> reservaties = repoReservatie.findByStatus("te laat");
         for(Reservatie reservatie : reservaties){
             Gebruiker gebruiker = reservatie.getGebruiker();
-            int aantalOvertredingen = gebruiker.getOvertredingen();
-            gebruiker.setOvertredingen(aantalOvertredingen+1);
+            int aantalOvertredingen = gebruiker.getOvertreding();
+            gebruiker.setOvertreding(aantalOvertredingen+1);
             repoGebruiker.save(gebruiker);
         }
     }

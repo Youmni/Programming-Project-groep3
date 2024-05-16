@@ -1,7 +1,6 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,10 +18,11 @@ public class Categorie {
 
     @Column(name= "Categorienaam")
     private String categorieNaam;
+
     protected Categorie(){}
 
-    public Categorie(String categorieNaam) {
-
+    public Categorie(int categorieNr, String categorieNaam) {
+        this.categorieNr = categorieNr;
         this.categorieNaam = categorieNaam;
     }
 
@@ -41,13 +41,5 @@ public class Categorie {
 
     public void setCategorieNaam(String categorieNaam) {
         this.categorieNaam = categorieNaam;
-    }
-
-    public Set<ProductModel> getProductModellen() {
-        return productModellen;
-    }
-
-    public void setProductModellen(Set<ProductModel> productModellen) {
-        this.productModellen = productModellen;
     }
 }
