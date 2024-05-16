@@ -10,7 +10,6 @@ import { data } from "autoprefixer";
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import { FaCircleInfo } from "react-icons/fa6";
 import Popup from '../../components/Popup';
 
 
@@ -181,7 +180,7 @@ const Inventaris = () => {
                       >
                         <HiMiniPencilSquare className="size-6" />
                       </Link>
-                      <Popup />
+                      <Popup model={model} />
                     </div>
                   </td>
                 </tr>
