@@ -2,14 +2,11 @@ import React from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { TbClockExclamation } from "react-icons/tb";
 import { FaArrowsSpin } from "react-icons/fa6";
-import { FaCheckCircle } from "react-icons/fa";
-import { FaRegCalendarAlt } from "react-icons/fa";
-
+import { FaCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
 
 const figuresData = [
     {
       Icon: TbClockExclamation,
-      
       color: "text-red-600",
       bg: "bg-red-200",
       title: "Te laat",
@@ -39,14 +36,16 @@ const figuresData = [
   ];
   
   const Figure = ({ Icon, color, bg, title, count }) => (
-    <figure className={`flex h-full w-[120px] border rounded-lg items-start border-gray-300 ${bg} flex-col justify-center gap-4`}>
-      <Icon className={`size-16 ml-4 ${color}`} />
-      <h1 className="flex flex-col -space-y-7 ml-4">
-        <span className="text-base text-Grijs font-nm text-">{title}</span>
-        <br />
-        <span className="text-2xl text-black font-semibold">{count}</span>
-      </h1>
-    </figure>
+    <button onClick={() => { /*code for the click*/ }}>
+        <figure className={`flex h-full w-[120px] border rounded-lg items-start border-gray-300 ${bg} flex-col justify-center gap-4 transform transition-transform duration-250 hover:scale-110`}>
+        <Icon className={`size-16 ml-4 ${color}`} />
+        <h1 className="flex flex-col -space-y-7 ml-4">
+            <span className="text-base text-Grijs font-nm text-">{title}</span>
+            <br />
+            <span className="text-2xl text-black font-semibold">{count}</span>
+        </h1>
+        </figure>
+    </button>
   );
 
 const UserLeningen = () => {
