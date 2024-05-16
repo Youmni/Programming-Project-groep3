@@ -12,6 +12,7 @@ export default {
         Grijs: '#474747',
         Lichtgrijs: '#BDBDBD',
         Groen:'#E5FFAE',
+        Bruin:'#964B00'
       }
     },
   },

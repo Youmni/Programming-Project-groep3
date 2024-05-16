@@ -14,7 +14,7 @@ import { CiSearch } from "react-icons/ci";
 
 
 
-const Popup = () => {
+const Popup = ({model}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openPopup = () => {
@@ -38,10 +38,10 @@ const Popup = () => {
                 alt="Product foto"
               />
               <div>
-                <h2 className="font-bold text-2xl">Canon EOS 200D</h2>
+                <h2 className="font-bold text-2xl">{model.productModelNaam}</h2>
                 <div className="flex items-center gap-4">
                   <div className="bg-gray-300 px-3 py-1 rounded-lg text-black text-sm">
-                    Video
+                  {model.categorie.categorieNaam}
                   </div>
                   <p className="font-semibold">5x</p>
                 </div>
@@ -72,10 +72,7 @@ const Popup = () => {
             <section className="mt-4">
               <h2 className="font-bold mb-2 text-gray-500">Beschrijving</h2>
               <p className="text-gray-600">
-                De Arduino Mega is een geavanceerd microcontroller-board met
-                meer rekenkracht, geheugen en I/O-poorten dan de standaard
-                Arduino Uno of Nano. Het is ideaal voor complexe elektronische
-                projecten.
+                {model.productModelBeschrijving}
               </p>
             </section>
             <h2 className="font-bold mt-4 text-gray-500">Overzicht</h2>
@@ -119,7 +116,7 @@ const Popup = () => {
                       <button className="bg-blue-500 text-white p-2 rounded-lg">
                       <FaPause />
                       </button>
-                      <button className="bg-brown text-white p-2 rounded-lg">
+                      <button className="bg-Bruin text-white p-2 rounded-lg">
                       <GiBrokenBone />
                       </button>
                       <button className="bg-red-500 text-white p-2 rounded-lg">
