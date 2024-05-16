@@ -11,6 +11,8 @@ import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import { FaCircleInfo } from "react-icons/fa6";
+import Popup from '../../components/Popup';
+
 
 const Inventaris = () => {
   const [productModellen, setProductModellen] = useState([]);
@@ -179,13 +181,7 @@ const Inventaris = () => {
                       >
                         <HiMiniPencilSquare className="size-6" />
                       </Link>
-                      <Link
-                        to={`/admin/inventaris/info/${model.productModelNr}`}
-                        className="bg-Grijs text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"
-                        title="Edit"
-                      >
-                        <FaCircleInfo className="size-6" />
-                      </Link>
+                      <Popup />
                     </div>
                   </td>
                 </tr>
