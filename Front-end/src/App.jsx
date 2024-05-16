@@ -54,15 +54,17 @@ const AdminRoutes = () => {
 
 const UserRoutes = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <NavBar />
         <Winkelmandje />
-      <Routes>  
-        <Route path="/home" element={<Home />} />
-        <Route path="/inventaris/*" element={<InventarisRoutes />} />
-        <Route path="/FAQ" element={<FAQ />}/>
-        <Route path="/leningen" element={<UserLeningen />} />
-      </Routes>
+      <div className="flex-grow">
+        <Routes>  
+          <Route path="/home" element={<Home />} />
+          <Route path="/inventaris/*" element={<InventarisRoutes />} />
+          <Route path="/FAQ" element={<FAQ />}/>
+          <Route path="/leningen" element={<UserLeningen />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );
