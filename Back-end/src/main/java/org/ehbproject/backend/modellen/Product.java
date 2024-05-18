@@ -4,6 +4,7 @@ package org.ehbproject.backend.modellen;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,6 +28,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private Set<ProductReservatie> productreservaties = new HashSet<>();
+
+    @ManyToMany(mappedBy = "producten")
+    private List<Reservatie> reservaties;
 
 
     public Product(ProductModel productModel, String productNaam, String status) {
@@ -70,4 +74,6 @@ public class Product {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
 }

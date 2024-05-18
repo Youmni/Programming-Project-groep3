@@ -21,7 +21,7 @@ public class Overtredingen {
 
     @Scheduled(cron = "0 0 0 * * TUE")
     public void overtreding(){
-        List<Reservatie> reservaties = repoReservatie.findByStatus("te laat");
+        List<Reservatie> reservaties = repoReservatie.findByStatus("Te laat");
         for(Reservatie reservatie : reservaties){
             Gebruiker gebruiker = reservatie.getGebruiker();
             int aantalOvertredingen = gebruiker.getOvertreding();

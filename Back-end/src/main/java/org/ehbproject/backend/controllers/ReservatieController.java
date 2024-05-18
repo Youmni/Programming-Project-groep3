@@ -11,6 +11,7 @@ import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
 import org.ehbproject.backend.services.emailservice.EmailService;
+import org.ehbproject.backend.services.exceptions.OngeldigeStatusException;
 import org.ehbproject.backend.services.exceptions.ProductNietBeschikbaar;
 import org.ehbproject.backend.services.verificatie.IsProductGereserveerd;
 import org.ehbproject.backend.services.verificatie.StudentReservatieLimiet;
@@ -60,10 +61,14 @@ public class ReservatieController {
     public ResponseEntity<String> addReservatie(@Validated @RequestBody ReservatieDTO reservatieDTO) {
         try {
             List<Gebruiker> gebruikers = repoGebruiker.findByGebruikerID(reservatieDTO.getGebruikerId());
+            String[] statussen = {"Bezig", "Voorboeking"};
             if (gebruikers.isEmpty()) {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
-            Gebruiker gebruiker = gebruikers.getFirst();
+            if (Arrays.asList(statussen).contains(reservatieDTO.getStatus())) {
+                throw new OngeldigeStatusException("De status die u ingaf is ongeldig. Het moet een van de volgende zijn: 'Voorboeking' of 'Bezig'");
+            }
+        Gebruiker gebruiker = gebruikers.getFirst();
             int aantalProductenDezeWeek = studentLimiet.checkAantalReservatiesDezeWeek(reservatieDTO.getGebruikerId());
 
             WeekFields weekFields = WeekFields.of(Locale.getDefault());
@@ -73,7 +78,7 @@ public class ReservatieController {
             int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
             boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),wekenTussen,reservatieDTO.getProducten());
-            if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getBlacklist().equalsIgnoreCase("nee")){
+            if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getIsGeblacklist().equalsIgnoreCase("False")){
             if(beschikbaarheidsControle){
                 throw new ProductNietBeschikbaar("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
             }
@@ -105,6 +110,8 @@ public class ReservatieController {
 
         } catch (ProductNietBeschikbaar e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getTekst());
+        }catch (OngeldigeStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getMessage());
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getMessage());
@@ -170,6 +177,21 @@ public class ReservatieController {
         return repoReservatie.findByGebruiker(gebruikerObject);
     }
 
+    @GetMapping(value = "/gebruikerId={id}/status={status}")
+    public List<Reservatie> getAllReservatiesByGebruikerId(@PathVariable(name = "id") int id, @PathVariable(name = "status") String status) {
+        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        Gebruiker gebruikerObject = gebruiker.getFirst();
+        return repoReservatie.findByGebruikerAndStatus(gebruikerObject, status);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/gebruikerId={id}/actief")
+    public List<Reservatie> getAllReservatiesByGebruikerIdAndActief(@PathVariable(name = "id") int id) {
+        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        Gebruiker gebruikerObject = gebruiker.getFirst();
+        return repoReservatie.findByGebruikerAndStatusIn(gebruikerObject, List.of(new String[]{"Te laat", "Bezig", "Onvolledig", "Voorboeking"}));
+    }
+
     @CrossOrigin
     @GetMapping(value = "/afhaaldatum={date}")
     public List<Reservatie> getAllProductenByAfhaalDatum(@PathVariable(name = "date") LocalDate date) {
@@ -187,6 +209,7 @@ public class ReservatieController {
     public List<Reservatie> getAllReservatieByBoekingDatum(@PathVariable(name = "date") LocalDate date) {
         return repoReservatie.findByBoekingDatum(date);
     }
+
 
     @CrossOrigin
     @GetMapping(value = "/in-orde")

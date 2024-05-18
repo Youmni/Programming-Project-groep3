@@ -175,7 +175,7 @@ public class ProductController {
         }
 
     @CrossOrigin
-    @GetMapping("/categorie={categorienr}")
+    @GetMapping("/categorienr={categorienr}")
     public List<Product> getAllProductenByCategorie(@PathVariable(name = "categorienr") Categorie categorieNr) {
         List<ProductModel> productModellen = repoModel.findByCategorie(categorieNr);
 

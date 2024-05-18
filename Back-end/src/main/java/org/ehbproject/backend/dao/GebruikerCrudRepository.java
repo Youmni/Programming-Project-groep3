@@ -13,8 +13,8 @@ public interface GebruikerCrudRepository extends CrudRepository<Gebruiker, Integ
     public List<Gebruiker> findByEmail(String email);
     public List<Gebruiker> findByEmailContainingIgnoreCase(String email);
     public List<Gebruiker> findByTitel(String titel);
-    public List<Gebruiker> findByOvertredingen(int aantal);
-    public List<Gebruiker> findByBlacklist(String Blacklist);
+    public List<Gebruiker> findByOvertreding(int aantal);
+    public List<Gebruiker> findByIsGeblacklist(String Blacklist);
 
 
 }

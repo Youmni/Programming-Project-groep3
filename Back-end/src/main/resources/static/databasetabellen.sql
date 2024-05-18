@@ -44,7 +44,8 @@
 -- Blacklistid NUMBER(4),
 -- Gebruikerid NUMBER(6),
 -- Blacklistdatum date,
--- Blacklistreden VARCHAR2(40),
+-- Blacklistreden VARCHAR2(255),
+-- Status VARCHAR2(20),
 -- CONSTRAINT pk_blacklist_blacklistid PRIMARY KEY (Blacklistid),
 -- CONSTRAINT fk_blacklist_gebruikers_gebruikerid FOREIGN KEY (Gebruikerid) REFERENCES GEBRUIKERS
 -- );

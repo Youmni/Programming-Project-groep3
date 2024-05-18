@@ -10,6 +10,7 @@ Hieronder kunnen alle URL's terug gevonden worden die nodig zijn voor het ophale
 4. ProductModellen
 5. ProductReservaties
 6. Reservaties
+7. Blacklists
 
 ## Categorieën
 
@@ -35,6 +36,9 @@ Get-requests:
     -Om te zoeken op achternaam: "http://localhost:8080/gebruiker/achternaam={VulIn}"
     -Om te zoeken op naam: "http://localhost:8080/gebruiker/naam={VulIn}"
     -Om te zoeken op titel: "http://localhost:8080/gebruiker/titel={VulIn}"
+    -Om te zoeken hoeveel studenten er zijn: "http://localhost:8080/gebruiker/studentaantal"
+    -Om te zoeken hoeveel docenten er zijn: "http://localhost:8080/gebruiker/docentaantal"
+    -Om te zoeken hoeveel gebruikers er zijn: "http://localhost:8080/gebruiker/gebruikersaantal"
 
 Post-requests:
     -Om Gebruikers toe te voegen: "http://localhost:8080/gebruiker/toevoegen"
@@ -42,6 +46,9 @@ Post-requests:
             "wachtwoord": "veiligWachtwoord123",
             "titel": "Student",
             "blacklist": "nee"}
+
+Delete-requests: 
+    -Om een gebruiker te verwijderen: "http://localhost:8080/gebruiker/{id}/delete"
 
 
 ## Producten
@@ -128,3 +135,9 @@ Put-requests:
     -Om de opmerking van een reservatie bij te werken: "http://localhost:8080/reservatie/{id}/opmerking"
     -Om de status van een reservatie bij te werken: "http://localhost:8080/reservatie/{id}/status"
 
+
+## Blacklists
+Get-requests:
+    -Om alle blacklists te zien: "http://localhost:8080/blacklist"
+    -Om blacklists te zoeken op gebruikersId: "http://localhost:8080/blacklist/gebruikerId={VulIn}"
+    -Om blacklists te zoeken op blacklistDatum: "http://localhost:8080/blacklist/blacklistDatum={VulIn}"

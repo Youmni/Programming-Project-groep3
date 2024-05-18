@@ -14,6 +14,8 @@ public interface ReservatieCrudRepository extends CrudRepository<Reservatie, Int
     public List<Reservatie> findByRetourDatum(LocalDate retourDatum);
     public List<Reservatie> findByGebruiker(Gebruiker gebruiker);
     public List<Reservatie> findByStatus(String status);
+    List<Reservatie> findByGebruikerAndStatusIn(Gebruiker gebruiker, List<String> status);
+    List<Reservatie> findByGebruikerAndStatus(Gebruiker gebruiker, String status);
     public List<Reservatie> findByOpmerking(String opmerking);
     public List<Reservatie> findByRedenContainingIgnoreCase(String reden);
 

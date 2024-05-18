@@ -4,6 +4,7 @@ package org.ehbproject.backend.modellen;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -39,8 +40,12 @@ public class Reservatie {
     @Column(name="Status")
     private String status;
 
-    @OneToMany(mappedBy = "reservatie")
-    private Set<ProductReservatie> productreservaties = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "PRODUCTRESERVATIES",
+            joinColumns = @JoinColumn(name = "reservatienr"),
+            inverseJoinColumns = @JoinColumn(name = "productid"))
+    private Set<Product> producten;
 
     protected Reservatie(){}
 
@@ -117,5 +122,13 @@ public class Reservatie {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<Product> getProducten() {
+        return producten;
+    }
+
+    public void setProducten(Set<Product> producten) {
+        this.producten = producten;
     }
 }
