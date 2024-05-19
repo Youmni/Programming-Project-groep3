@@ -54,12 +54,12 @@ const Gebruikers = () => {
 
   return (
     <content className="top-0 flex-grow">
-      <main className="flex-grow p-10">
-        <h1 className=" flex text-3xl font-bold w-40 border-b justify-center">
+      <main className="p-10">
+        <h1 className="text-3xl font-bold w-40 border-b justify-center">
           Gebruikers
         </h1>
 
-        <div className="flex items-center gap-2 mt-10 ml-5  justify-between">
+        <div className="flex mt-10 justify-between">
           <breadcrumb className="flex items-center gap-2">
             <FaUsers className="text-rood" />
             <breadcrumb-item>Gebruikers</breadcrumb-item>

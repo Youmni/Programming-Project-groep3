@@ -42,7 +42,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="border flex items-center h-auto gap-7 w-full shadow-lg sticky">
+      <nav className="border flex items-center h-auto gap-7 w-full shadow-lg">
         <a href="/home">
           <header className="flex w-full h-20 gap-x-3 items-center">
             <img
@@ -60,7 +60,7 @@ const NavBar = () => {
         </a>
 
         {/* Category button + pop up */}
-        <div className="relative" ref={node}>
+        <div className="relative z-50" ref={node}>
           <button onClick={handleButtonClick}>
             <IoIosMenu className="flex h-full size-12 text-Grijs p-1 ml-1 transform transition-transform duration-250 hover:scale-110" />
             {clicked && (
@@ -84,7 +84,7 @@ const NavBar = () => {
               name="search-bar"
               id=""
               placeholder="Zoek hier..."
-              className="h-full w-full  rounded-lg border-Lichtgrijs p-2 b"
+              className="h-full w-full  rounded-lg border-Lichtgrijs p-2 "
             />
           </div>
           <div className="flex h-full w-auto sm:ml-5 md:ml-10 lg:ml-20 items-center justify-start sm:gap-5 md:gap-10 lg:gap-20">

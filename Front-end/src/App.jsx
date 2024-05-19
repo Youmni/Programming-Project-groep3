@@ -23,8 +23,8 @@ const App = () => {
   if(location.pathname === "/") return <Login />
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Routes>
+    <div>
+      <Routes className="w-screen">
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<UserRoutes />} />
@@ -35,11 +35,11 @@ const App = () => {
 
 const AdminRoutes = () => {
   return (
-    <div className="flex w-screen">
+    <div className="flex">
       <AdminSideBar />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route  path="/" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/inventaris" element={<AdminInventaris />} />
         <Route path="/gebruikers" element={<Gebruikers />} />
         <Route
@@ -76,7 +76,7 @@ const InventarisRoutes = () => {
     <div>
       <Routes>
         <Route path="/" element={<Inventaris />} />
-        <Route path="/:categorie" element={<InventarisCategorie />} />
+        <Route path="/:categorieNr" element={<InventarisCategorie />} />
       </Routes>
     </div>
   );

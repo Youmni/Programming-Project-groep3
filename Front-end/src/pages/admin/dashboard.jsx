@@ -13,8 +13,7 @@ const Dashboard = () => {
   
 
   return (
-    <content className="top-0 flex-grow">
-      <main className="w-full p-10 flex flex-col">
+      <main className=" p-10 w-">
         <h1 className=" flex text-4xl font-bold w-40 border-b justify-center">
           Dashboard
         </h1>
@@ -25,7 +24,7 @@ const Dashboard = () => {
             <breadcrumb-item>Dashboard</breadcrumb-item>
           </breadcrumb>
         </div>
-        <div className="flex  mt-8 justify-center  ml-8">
+        <div className="flex  mt-8 justify-center border  ml-8">
           <ul className="flex justify-center h-auto ">
             <li className="flex w-80 h-full items-center border-r gap-4 justify-center">
               <FaBoxes className="size-10 text-yellow-300" />
@@ -70,10 +69,10 @@ const Dashboard = () => {
           </ul>
         </div>
 
-        <div className="flex w-full flex-wrap gap-20 mt-10 ml-8">
-          <div className="flex w-1/2 flex-col gap-1">
+        <div className="flex w-full  gap-20 mt-10 ml-8">
+          <div className="flex w-1/2  flex-col gap-1">
             <h1 className="flex text-xl font-semibold">Inventaris Overzicht</h1>
-            <div className="flex  gap-8 h-44 mt-6">
+            <div className="flex  gap-8 h-44 mt-6  justify-end">
               <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4">
                 <FaCheckCircle className="size-16 ml-4 text-green-700" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
@@ -175,7 +174,6 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
-    </content>
   );
 };
 

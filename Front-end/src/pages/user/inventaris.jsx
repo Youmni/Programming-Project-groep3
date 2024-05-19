@@ -16,6 +16,7 @@ const Inventaris = () =>{
 const [Inventaris, setInventaris] = useState([])
 const [searchQuery, setSearchQuery] = useState("");
 const [showModal, setShowModal] = useState(false);
+const [selectedProduct, setSelectedProduct] = useState(null);
 
 
 
@@ -41,7 +42,8 @@ useEffect(() => {
   );
 
 
-  const openModal = () => {
+  const openModal = (product) => {
+    setSelectedProduct(product);
     setShowModal(true);
   };
 
@@ -51,12 +53,12 @@ useEffect(() => {
 
 
     return (
-      <main className="flex px-10 pt-5 w-screen flex-col bg-slate-50">
+      <main className="flex p-12 w-full flex-col bg-slate-50">
         <header className="flex justify-between w-full ">
           <h1 className="font-semibold text-3xl">Inventaris</h1>
           <div className='flex gap-5'>
               <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs bg-white">
-                <IoSearchOutline className="ml-2 size-6" />
+                <IoSearchOutline className="size-6" />
                 <input
                   type="search"
                   name=""
@@ -75,7 +77,7 @@ useEffect(() => {
         </header>
         <content className="flex flex-wrap mt-5 gap-10 justify-center">
             {filteredProducten.map((product) => (
-                <figure className='border h-max-[200px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md'>
+                <figure key={product.productnr} className='border h-max-[200px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md'>
                     <img src={canonFoto} alt="" className='w-full h-16 object-contain'/>
                     <div className='flex flex-col flex-wrap '>
                         <h1 className='text-2xl font-semibold overflow-hidden'>{product.productNaam}</h1>
@@ -84,7 +86,7 @@ useEffect(() => {
                             <p className='text-sm'>Dit is de beschrijving</p>
                         </div>
                     </div>
-                    <button className='h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950' onClick={openModal}>
+                    <button className='h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950' onClick={() => openModal(product)}>
                         <FaShoppingBag className='size-6 text-white' />
                     </button>
                 </figure>
@@ -92,7 +94,7 @@ useEffect(() => {
             ))}
           
         </content>
-        {showModal && <ReserveringForm closeModal={closeModal} />}
+        {showModal && <ReserveringForm closeModal={closeModal} product={selectedProduct} />}
       </main>
     );
 }

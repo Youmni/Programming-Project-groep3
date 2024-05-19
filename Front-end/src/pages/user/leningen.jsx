@@ -50,7 +50,7 @@ const figuresData = [
 
 const UserLeningen = () => {
     return(
-        <main className="flex flex-col w-full flex-wrap gap-20 mt-10 ml-8">
+        <main className="flex flex-col p-12 w-full flex-wrap gap-20">
             <h1 className="flex h-auto text-4xl font-medium">
                 <span className="border-b">Leningen</span>
             </h1>
