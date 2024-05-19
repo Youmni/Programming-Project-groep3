@@ -1,8 +1,10 @@
 package org.ehbproject.backend.controllers;
 
 
+import org.ehbproject.backend.config.JwtUtil;
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
+import org.ehbproject.backend.dto.AuthRequestDTO;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.Reservatie;
@@ -26,6 +28,8 @@ public class GebruikerController {
     GebruikerCrudRepository repo;
     @Autowired
     ReservatieCrudRepository reservatierepo;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -34,7 +38,29 @@ public class GebruikerController {
         repo.findAll().forEach(gebruikerMandje::add);
         return gebruikerMandje;
     }
+    @PostMapping("/login")
+    public ResponseEntity<String> createAuthenticationToken(@RequestBody AuthRequestDTO authRequest) {
+        try {
+            List<Gebruiker> gebruiker = repo.findByEmail(authRequest.getEmail());
+            if (gebruiker.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
+            }
+            Gebruiker gebruikerObject = gebruiker.getFirst();
+            if(gebruikerObject.getWachtwoord().equals(authRequest.getWachtwoord())){
+                int gebruikerID = gebruikerObject.getGebruikerID();
+                String email = gebruikerObject.getEmail();
+                String titel = gebruikerObject.getTitel();
 
+                final String jwt = jwtUtil.generateToken(email, gebruikerID,titel);
+                return ResponseEntity.ok(jwt);
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email or password");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email or password");
+        }
+    }
     @CrossOrigin
     @PostMapping("/toevoegen")
     public ResponseEntity<String> toevoegenGebruiker(@Validated @RequestBody Gebruiker gebruiker) {

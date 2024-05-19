@@ -24,6 +24,12 @@ dependencies {
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.23'
+	implementation 'org.springframework.security:spring-security-config'
+	implementation 'org.springframework.security:spring-security-web'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
 }
 
 tasks.named('test') {
