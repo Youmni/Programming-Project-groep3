@@ -27,7 +27,7 @@ const Home = () => {
 
 
   return (
-    <main className="flex p-12 w-screen">
+    <main className="flex p-12">
       <div className="flex w-full flex-col h-auto gap-7">
         <h1 className="h-auto  text-4xl font-medium">Onze Categorieen</h1>
         <div className="flex flex-wrap h-auto flex-grow justify-evenly ">

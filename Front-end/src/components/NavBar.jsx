@@ -5,11 +5,13 @@ import { IoIosMenu } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { BiShoppingBag } from "react-icons/bi";
+import WinkelMandje from "../pages/user/winkelmandje";
 
 
 const NavBar = () => {
   // For clicking inside and outside of the box --->>
   const [clicked, setClicked] = useState(false);
+  const [winkelMandje, setWinkelMandje] = useState(false);
   const node = useRef();
 
   const handleClickOutside = (e) => {
@@ -36,6 +38,13 @@ const NavBar = () => {
     setClicked(!clicked);
   };
   //<<--
+  const openWinkelMandje = () => {
+    setWinkelMandje(true);
+  };
+
+  const closeWinkelMandje = () => {
+    setWinkelMandje(false);
+  };
 
   // Define categories
   const categories = ['Audio', 'Video', 'XR', 'Tools', 'Belichting', 'Varia'];
@@ -95,15 +104,15 @@ const NavBar = () => {
             
 
 
-            <div className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 mr-10">
+            <button className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 mr-10" onClick={openWinkelMandje}>
               <BiShoppingBag className="text-5xl text-Grijs" />
               <div className="absolute w-5 h-5 rounded-full z-10 right-[-3px] bottom-[-3px] flex items-center justify-center text-[10px] bg-red-500 text-white">
-                1
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </nav>
+      {winkelMandje && <WinkelMandje closeWinkelMandje={closeWinkelMandje}/>}
     </>
   );
 };

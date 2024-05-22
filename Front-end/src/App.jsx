@@ -16,6 +16,7 @@ import FAQ from "./pages/user/FAQ";
 import UserLeningen from "./pages/user/leningen";
 import InventarisCategorie from "./pages/user/inventarisCategorie";
 import Winkelmandje from "./pages/user/winkelmandje";
+import { WinkelMandjeProvider } from "./contexts/winkelmandjeContext";
 
 const App = () => {
  const location = useLocation();
@@ -23,8 +24,8 @@ const App = () => {
   if(location.pathname === "/") return <Login />
 
   return (
-    <div>
-      <Routes className="w-screen">
+    <div className="flex flex-col min-h-screen max-w-screen">
+      <Routes>
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<UserRoutes />} />
@@ -54,9 +55,9 @@ const AdminRoutes = () => {
 
 const UserRoutes = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <WinkelMandjeProvider>
+    <div className="flex flex-col flex-grow">
       <NavBar />
-        <Winkelmandje />
       <div className="flex-grow">
         <Routes>  
           <Route path="/home" element={<Home />} />
@@ -65,8 +66,9 @@ const UserRoutes = () => {
           <Route path="/leningen" element={<UserLeningen />} />
         </Routes>
       </div>
-      <Footer />
+      <Footer/>
     </div>
+    </WinkelMandjeProvider>
   );
 };
 

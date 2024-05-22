@@ -29,8 +29,8 @@ const Popup = ({model}) => {
     <>
       <button onClick={openPopup} className="bg-Grijs text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"><FaCircleInfo className="size-6" /> </button>
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
-          <div className="bg-white h-[95%] max-w-xl mx-auto p-12 pt-1 rounded-xl relative my-2">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white h-[95%] w-1/2 mx-auto p-12 pt-1 rounded-xl relative my-2">
             <section className="flex items-center gap-6">
               <img
                 className="w-20 h-auto object-cover"
@@ -105,7 +105,7 @@ const Popup = ({model}) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="font-semibold">
+                  <tr className="font-semibold border">
                     
                     <td>01</td>
                     <td>#53050</td>

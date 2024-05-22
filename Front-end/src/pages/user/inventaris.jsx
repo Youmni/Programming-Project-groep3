@@ -58,7 +58,7 @@ useEffect(() => {
           <h1 className="font-semibold text-3xl">Inventaris</h1>
           <div className='flex gap-5'>
               <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs bg-white">
-                <IoSearchOutline className="size-6" />
+                <IoSearchOutline className="size-6 ml-3" />
                 <input
                   type="search"
                   name=""
@@ -77,7 +77,7 @@ useEffect(() => {
         </header>
         <content className="flex flex-wrap mt-5 gap-10 justify-center">
             {filteredProducten.map((product) => (
-                <figure key={product.productnr} className='border h-max-[200px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md'>
+                <figure key={product.productnr} className='border min-h-[170px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md'>
                     <img src={canonFoto} alt="" className='w-full h-16 object-contain'/>
                     <div className='flex flex-col flex-wrap '>
                         <h1 className='text-2xl font-semibold overflow-hidden'>{product.productNaam}</h1>

@@ -1,22 +1,21 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { MdNavigateNext } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
 import { enqueueSnackbar } from "notistack";
+import { WinkelMandjeContext } from "../../contexts/winkelmandjeContext";
 
 
 const reserveringForm = ({closeModal, product}) => {
-
-  console.log(product)
+  const {addToWinkelmandje } = useContext(WinkelMandjeContext);
   const [currentStep, setCurrentStep] = useState(1);
-
 
   const [formData, setFormData] = useState({
       boekingDatum: "",
       reden: "",
       extraItems: "",
-      product: [],
+      product: product,
       opmerking: "",
   })
 
@@ -38,9 +37,12 @@ const reserveringForm = ({closeModal, product}) => {
       closeModal(); 
     }
   };
-  const handleSubmit = () => {
-
-    localStorage.setItem("formData", JSON.stringify(formData));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const productData = {
+      ...formData,
+    }
+    addToWinkelmandje(productData);
     closeModal();
     enqueueSnackbar("Product toegevoegd aan winkelmandje", {variant: "success"});
   };
@@ -64,7 +66,7 @@ const reserveringForm = ({closeModal, product}) => {
           </header>
 
           <label className="text-3xl">Kies de periode:</label>
-          <input type="date" />
+          <input type="date" required name="boekingDatum" value={formData.boekingDatum} onChange={handleChange}/>
           
           <div className="flex justify-between w-full absolute bottom-0">
             <button className="hover:underline flex justify-center items-center text-lg" onClick={handleBack}>
@@ -100,20 +102,19 @@ const reserveringForm = ({closeModal, product}) => {
           <div className="flex flex-col items-start gap-8 w-1/2">
             <div className="flex flex-col w-full gap-1">
               <label className="text-lg">Extra's</label>
-              <select name="" id="" className="h-8 border border-gray-300 rounded-lg text-gray-500">
+              <select name="extraItems" value={formData.extraItems} onChange={handleChange} className="h-8 border border-gray-300 rounded-lg text-gray-500">
                 <option value="">Selecteer</option>
-                <option value="">Statief</option>
-                <option value="">Kabel</option>
-                <option value=""></option>
+                <option value="Statief">Statief</option>
+                <option value="Kabel">Kabel</option>
               </select>
             </div>
             <div className="flex flex-col w-full gap-1">
               <label className="text-lg">Geef de reden van je reservatie</label>
-              <select name="" id="" className="h-8 border rounded-lg text-gray-500 border-gray-300">
+              <select name="reden" value={formData.reden} onChange={handleChange} className="h-8 border rounded-lg text-gray-500 border-gray-300">
                 <option value="">Selecteer</option>
-                <option value="" className="text-black">Voor project</option>
-                <option value="" className="text-black">Voor eigen gebruik </option>
-                <option value="" className="text-black">Andere</option>
+                <option value="Voor project" className="text-black">Voor project</option>
+                <option value="Voor eigen gebruik" className="text-black">Voor eigen gebruik </option>
+                <option value="Andere" className="text-black">Andere</option>
               </select>
             </div>
             <div className="flex flex-col w-full gap-1">
@@ -122,8 +123,8 @@ const reserveringForm = ({closeModal, product}) => {
                   type="text"
                   placeholder="Eventuele opmerkingen."
                   className="p-3 rounded-xl border border-gray-300 text-gray-500"
-                  value={formData.productModelBeschrijving}
-                  onChange
+                  value={formData.opmerking}
+                  onChange={handleChange}
                 />
                 
               
@@ -177,8 +178,8 @@ const reserveringForm = ({closeModal, product}) => {
               <label className="text-xl font-semibold border-b border-black">Datum</label>
               <div className="flex">
                 <div>
-                  <label>Afhaaldatum:</label>
-                  <input type="text" disabled="true" value="2024-05-19" id="" />
+                  <label>BoekingDatum:</label>
+                  <input type="text" disabled="true" value={formData.boekingDatum}  />
                 </div>
                 <div>
                   <label>Terugbrengdatum:</label>
@@ -192,8 +193,8 @@ const reserveringForm = ({closeModal, product}) => {
                   type="text"
                   placeholder="Eventuele opmerkingen."
                   className="p-3 rounded-xl border border-gray-300 text-gray-500"
-                  value={formData.productModelBeschrijving}
-                  onChange
+                  value={formData.opmerking}
+                  disabled="true"
                 />
                 
               
@@ -205,7 +206,7 @@ const reserveringForm = ({closeModal, product}) => {
               <IoIosArrowBack className="text-xl" />
               <p>Terug</p>
             </button>
-            <button className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110" onClick={handleSubmit}>
+            <button type="submit" className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110" onClick={handleSubmit}>
               <FaCheckCircle className="text-xl"/>
               <p>Bevestig</p> 
             </button>
