@@ -59,7 +59,7 @@ Get-requests:
     -Om te zoeken op status: "http://localhost:8080/product/status={VulIn}"
     -Om te zoeken op naam en op status: "http://localhost:8080/product/naam={VulIn}/status={VulIn}"
     -Om te zoeken op id en op status: "http://localhost:8080/product/id={VulIn}/status={VulIn}"
-    -Om te zoeken op categorienr: "http://localhost:8080/product/categorienr={id}"
+    -Om te zoeken op categorienr: "http://localhost:8080/product/categorienr={categorienr}"
 
 
 Post-requests:

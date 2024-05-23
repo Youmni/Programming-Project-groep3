@@ -40,15 +40,14 @@ public class Blacklisting {
             }
         }
     }
-
     @Scheduled(cron = "0 0 2 * * *")
     public void removeBlacklisting() {
-            List<Blacklists> blacklists = repoBlacklist.findByBlacklistStatus("Actief");
-            if(blacklists.isEmpty()){
-                return;
-            }
+        List<Blacklists> blacklists = repoBlacklist.findByBlacklistStatus("Actief");
+        if(blacklists.isEmpty()){
+            return;
+        }
 
-            for(Blacklists blacklist : blacklists){
+        for(Blacklists blacklist : blacklists){
 
             LocalDate blacklistDatumAfter3Months = blacklist.getBlacklistDatum().plusMonths(3);
             if (blacklist.getBlacklistDatum().equals(blacklistDatumAfter3Months)) {
