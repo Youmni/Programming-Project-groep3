@@ -9,7 +9,7 @@ const winkelmandje = ({ closeWinkelMandje }) => {
 
   return (
     <main className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50'>
-      <div className='bg-white p-10 rounded-lg h-3/4 w-1/2 relative shadow-md'>
+      <div className='bg-white p-10 rounded-lg min-h-[75%] w-1/2 relative shadow-md'>
         <h1 className='text-3xl font-semibold text-center'>Winkelmandje</h1>
         {winkelmandje.length === 0 ? (
           <div className="flex justify-center items-center h-full relative">

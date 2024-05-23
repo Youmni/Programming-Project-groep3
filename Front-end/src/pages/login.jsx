@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import bcrypt from 'bcryptjs'
-import jwtDecode from 'jwt-decode';
-
+import {jwtDecode} from 'jwt-decode';
+import axios from 'axios';  
 const login = () => {
 
   const [loginData, setLoginData] = useState({gebruikersnaam: "", wachtwoord: ""});
@@ -67,8 +67,8 @@ const login = () => {
             </Link>
           </header>
           <div className="flex flex-col w-full gap-2 mt-10">
-            <label htmlFor="" className="font-bold">
-              Gebruikersnaam
+            <label className="font-bold">
+              Email
             </label>
             <input
               type="text"

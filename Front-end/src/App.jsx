@@ -17,6 +17,8 @@ import UserLeningen from "./pages/user/leningen";
 import InventarisCategorie from "./pages/user/inventarisCategorie";
 import Winkelmandje from "./pages/user/winkelmandje";
 import { WinkelMandjeProvider } from "./contexts/winkelmandjeContext";
+import Register from "./components/Register";
+
 
 const App = () => {
  const location = useLocation();
@@ -28,6 +30,7 @@ const App = () => {
       <Routes>
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/register' element={<Register />} />
         <Route path="/*" element={<UserRoutes />} />
       </Routes>
     </div>
