@@ -1,8 +1,8 @@
 package org.ehbproject.backend.services.exceptions;
 
-public class ProductNietBeschikbaar extends Exception{
+public class ProductUnavailableException extends Exception{
     private final String tekst;
-    public ProductNietBeschikbaar(String tekst) {
+    public ProductUnavailableException(String tekst) {
         this.tekst = tekst;
     }
 

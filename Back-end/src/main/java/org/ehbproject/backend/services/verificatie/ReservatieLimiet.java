@@ -18,7 +18,7 @@ import java.util.Locale;
 
 
 @Service
-public class StudentReservatieLimiet {
+public class ReservatieLimiet {
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
@@ -27,7 +27,7 @@ public class StudentReservatieLimiet {
     @Autowired
     ProductReservatieCrudRepository repoProductReservatie;
 
-    private static final Logger logger = LoggerFactory.getLogger(org.ehbproject.backend.services.verificatie.IsProductGereserveerd.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
     public List<Gebruiker> getGebruikerObject(int studentId) {
 
         return repoGebruiker.findByGebruikerID(studentId);

@@ -5,6 +5,7 @@ import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 public interface ReservatieCrudRepository extends CrudRepository<Reservatie, Integer> {
@@ -14,6 +15,7 @@ public interface ReservatieCrudRepository extends CrudRepository<Reservatie, Int
     public List<Reservatie> findByRetourDatum(LocalDate retourDatum);
     public List<Reservatie> findByGebruiker(Gebruiker gebruiker);
     public List<Reservatie> findByStatus(String status);
+    public List<Reservatie> findByStatusIn(List<String> status);
     List<Reservatie> findByGebruikerAndStatusIn(Gebruiker gebruiker, List<String> status);
     List<Reservatie> findByGebruikerAndStatus(Gebruiker gebruiker, String status);
     public List<Reservatie> findByOpmerking(String opmerking);

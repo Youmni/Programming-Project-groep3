@@ -11,10 +11,10 @@ import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
 import org.ehbproject.backend.services.emailservice.EmailService;
-import org.ehbproject.backend.services.exceptions.OngeldigeStatusException;
-import org.ehbproject.backend.services.exceptions.ProductNietBeschikbaar;
-import org.ehbproject.backend.services.verificatie.IsProductGereserveerd;
-import org.ehbproject.backend.services.verificatie.StudentReservatieLimiet;
+import org.ehbproject.backend.services.exceptions.InvalidStatusException;
+import org.ehbproject.backend.services.exceptions.ProductUnavailableException;
+import org.ehbproject.backend.services.verificatie.ProductReservationVerifier;
+import org.ehbproject.backend.services.verificatie.ReservatieLimiet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +42,9 @@ public class ReservatieController {
     @Autowired
     ProductReservatieCrudRepository repoProductReservatie;
     @Autowired
-    private StudentReservatieLimiet studentLimiet;
+    private ReservatieLimiet studentLimiet;
     @Autowired
-    private IsProductGereserveerd beschikbaar;
+    private ProductReservationVerifier beschikbaar;
 
     private EmailService emailService;
 
@@ -66,7 +66,7 @@ public class ReservatieController {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
             if (Arrays.asList(statussen).contains(reservatieDTO.getStatus())) {
-                throw new OngeldigeStatusException("De status die u ingaf is ongeldig. Het moet een van de volgende zijn: 'Voorboeking' of 'Bezig'");
+                throw new InvalidStatusException("De status die u ingaf is ongeldig. Het moet een van de volgende zijn: 'Voorboeking' of 'Bezig'");
             }
         Gebruiker gebruiker = gebruikers.getFirst();
             int aantalProductenDezeWeek = studentLimiet.checkAantalReservatiesDezeWeek(reservatieDTO.getGebruikerId());
@@ -80,7 +80,7 @@ public class ReservatieController {
             boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),wekenTussen,reservatieDTO.getProducten());
             if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getIsGeblacklist().equalsIgnoreCase("False")){
             if(beschikbaarheidsControle){
-                throw new ProductNietBeschikbaar("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
+                throw new ProductUnavailableException("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
             }
                 Reservatie reservatie = new Reservatie(
                         reservatieDTO.getAfhaalDatum(),
@@ -108,9 +108,9 @@ public class ReservatieController {
                 return ResponseEntity.status((HttpStatus.FORBIDDEN)).body("De student is of op de zwarte lijst of heeft deze week al meer dan vijf reserveringen gemaakt.");
             }
 
-        } catch (ProductNietBeschikbaar e){
+        } catch (ProductUnavailableException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getTekst());
-        }catch (OngeldigeStatusException e) {
+        }catch (InvalidStatusException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fout bij toevoegen van reservatie: " + e.getMessage());
         }
         catch (Exception e) {
