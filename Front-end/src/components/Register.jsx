@@ -14,7 +14,9 @@ const Register = () => {
     isGeblacklist: "False",
   });
   const [showPassword, setShowPassword] = useState(false);
+
   console.log(registerData)
+
   const titleCheck = (email) => {
     if (email.includes("@student.ehb.be")) {
       setRegisterData((prevData) => ({
@@ -30,6 +32,15 @@ const Register = () => {
     setError("Email moet een @student.ehb.be of @ehb.be bevatten");
 }
 }
+
+const generateHash = async (message) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+};
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -59,7 +70,7 @@ const Register = () => {
     }
 
     try {
-      const hashedPassword = await bcrypt.hash(wachtwoord, 10);
+      const hashedPassword = await generateHash(wachtwoord);
       const updatedData = { ...registerData, wachtwoord: hashedPassword };
       console.log(updatedData);
       const response = await axios.post(

@@ -3,14 +3,15 @@ import { IoInformationCircleSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'; 
+import { enqueueSnackbar } from "notistack";
 
 const Login = () => {
+
   const [loginData, setLoginData] = useState({ email: "", wachtwoord: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-  navigate("/home");
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +43,7 @@ const Login = () => {
       
       const response = await axios.post('http://localhost:8080/gebruiker/login', {
         email: loginData.email,
-        wachtwoord: hashedWachtwoord,
+        wachtwoord: hashedWachtwoord
       });
 
       if (response.status === 200) {
@@ -50,11 +51,15 @@ const Login = () => {
         const decoded = jwtDecode(response.data);
         console.log(decoded.Titel);
         redirectToPage(decoded.Titel);
+        enqueueSnackbar("Succesvol ingelogd", { variant: "success"});
+      }
+      else{
+       
       }
 
       setLoading(false);
     } catch (err) {
-      setError(err.response ? err.response.data : err.message);
+      enqueueSnackbar("Fout bij inloggen: "+err, { variant: "error"});
       setLoading(false);
     }
   };
