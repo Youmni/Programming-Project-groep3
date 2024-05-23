@@ -2,6 +2,9 @@ package org.ehbproject.backend.modellen;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +18,7 @@ public class Reservatie {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Reservatienr")
+    @Size(max = 8)
     private int reservatieNr;
 
 
@@ -22,22 +26,30 @@ public class Reservatie {
     @JoinColumn(name = "Gebruikerid", nullable = false)
     private Gebruiker gebruiker;
 
-    @Column(name="Afhaaldatum")
+    @Column(name="Afhaaldatum", nullable = false)
+    @NotBlank
     private LocalDate afhaalDatum;
 
-    @Column(name="Retourdatum")
+    @Column(name="Retourdatum", nullable = false)
+    @NotBlank
     private LocalDate retourDatum;
 
-    @Column(name="Boekingdatum")
+    @Column(name="Boekingdatum", nullable = false)
+    @NotBlank
     private LocalDate boekingDatum;
 
-    @Column(name="Reservatiereden")
+    @Column(name="Reservatiereden", nullable = false)
+    @Size(max = 100)
+    @NotBlank
     private String reden;
 
     @Column(name="Reservatieopmerking")
+    @Size(max = 100)
     private String opmerking;
 
-    @Column(name="Status")
+    @Column(name="Status", nullable = false)
+    @NotBlank
+    @Size(max = 20)
     private String status;
 
     @ManyToMany

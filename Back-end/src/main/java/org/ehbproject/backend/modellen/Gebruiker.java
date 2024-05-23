@@ -2,6 +2,10 @@ package org.ehbproject.backend.modellen;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,22 +18,34 @@ public class Gebruiker {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Gebruikerid")
+    @Size(max = 6)
     private int gebruikerID;
 
-    @Column(name="Email" )
+    @Column(name="Email", nullable = false, unique = true)
+    @NotBlank
+    @Email
+    @Size(max = 70)
     private String email;
 
-    @Column(name="Wachtwoord")
+    @Column(name="Wachtwoord", nullable = false)
+    @NotBlank
+    @Size(max = 64)
     private String wachtwoord;
 
-    @Column(name="Titel")
+    @Column(name="Titel", nullable = false)
+    @NotBlank
+    @Size(max = 15)
     private String titel;
 
-    @Column(name= "ISGEBLACKLIST")
+    @Column(name= "ISGEBLACKLIST", nullable = false)
+    @NotBlank
+    @Size(max = 10)
     private String  isGeblacklist;
 
 
     @Column(name= "OVERTREDING")
+    @NotBlank
+    @Size(max = 3)
     private int overtreding;
 
 

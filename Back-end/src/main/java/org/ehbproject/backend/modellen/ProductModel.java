@@ -1,6 +1,8 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,22 +15,33 @@ public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Productmodelnr")
+    @Size(max = 4)
     private int productModelNr;
 
     @ManyToOne
     @JoinColumn(name = "Categorienr", nullable = false)
+    @NotBlank
+    @Size(max = 3)
     private Categorie categorie;
 
-    @Column(name="Productmodelnaam")
+    @Column(name="Productmodelnaam", nullable = false)
+    @NotBlank
+    @Size(max = 30)
     private String productModelNaam;
 
-    @Column(name="Productmodelmerk")
+    @Column(name="Productmodelmerk", nullable = false)
+    @NotBlank
+    @Size(max = 20)
     private String productModelMerk;
 
-    @Column(name="Productmodelfoto")
+    @Column(name="Productmodelfoto", nullable = false)
+    @NotBlank
+    @Size(max = 50)
     private String productModelFoto;
 
-    @Column(name="Productmodelbeschrijving")
+    @Column(name="Productmodelbeschrijving", nullable = false)
+    @NotBlank
+    @Size(max = 100)
     private String productModelBeschrijving;
 
     @OneToMany(mappedBy = "productModel")

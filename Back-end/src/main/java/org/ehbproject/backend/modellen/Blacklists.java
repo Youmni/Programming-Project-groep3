@@ -1,6 +1,8 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
@@ -10,19 +12,27 @@ public class Blacklists {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="Blacklistid")
+    @Column(name="Blacklistid", nullable = false)
+    @Size(max = 4)
     private int blacklistId;
 
     @ManyToOne
     @JoinColumn(name = "Gebruikerid", nullable = false)
+    @NotBlank
+    @Size(max = 6)
     private Gebruiker gebruiker;
 
-    @Column(name="Status")
+    @Column(name="Status", nullable = false)
+    @NotBlank
+    @Size(max = 20)
     private String blacklistStatus;
-    @Column(name="Blacklistreden")
+    @Column(name="Blacklistreden", nullable = false)
+    @NotBlank
+    @Size(max = 255)
     private String blacklistReden;
 
-    @Column(name="Blacklistdatum")
+    @Column(name="Blacklistdatum", nullable = false)
+    @NotBlank
     private LocalDate blacklistDatum;
 
     public Blacklists(Gebruiker gebruiker, String blacklistReden, LocalDate blacklistDatum, String blacklistStatus) {
