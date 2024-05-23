@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoInformationCircleSharp, IoEye, IoEyeOff } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
@@ -6,13 +6,30 @@ import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState('');
   const [registerData, setRegisterData] = useState({
     email: "",
     wachtwoord: "",
     titel: "",
-    blacklist: "False",
+    isGeblacklist: "False",
   });
   const [showPassword, setShowPassword] = useState(false);
+  console.log(registerData)
+  const titleCheck = (email) => {
+    if (email.includes("@student.ehb.be")) {
+      setRegisterData((prevData) => ({
+        ...prevData,
+        titel: "Student",
+      }));
+    } else if (email.includes("@ehb.be")) {
+      setRegisterData((prevData) => ({
+        ...prevData,
+        titel: "Docent"
+  }));
+}else {
+    setError("Email moet een @student.ehb.be of @ehb.be bevatten");
+}
+}
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -22,9 +39,13 @@ const Register = () => {
     }));
   };
 
+  useEffect(() => {
+    titleCheck(registerData.email);
+  }, [registerData.email]);
+
   const handleClick = async (e) => {
     e.preventDefault();
-    const email = registerData.gebruikersnaam;
+    const email = registerData.email;
     const wachtwoord = registerData.wachtwoord;
 
     if (wachtwoord.length < 8) {
@@ -48,9 +69,10 @@ const Register = () => {
       console.log(response.data);
     } catch (error) {
       console.error("Error registering user", error);
+      setError(error);
     }
 
-    navigate("/login");
+    error !== '' ? navigate("/login") : alert(error);
   };
 
   const togglePasswordVisibility = () => {
@@ -77,9 +99,9 @@ const Register = () => {
             <input
               type="email"
               placeholder="Email"
-              id="gebruikersnaam"
-              name="gebruikersnaam"
-              value={registerData.gebruikersnaam}
+              id="email"
+              name="email"
+              value={registerData.email}
               onChange={handleChange}
               required
               className="h-[50px] pl-4 rounded-2xl bg-gray-100"
@@ -87,7 +109,7 @@ const Register = () => {
             <label htmlFor="" className="font-bold mt-10">
               Wachtwoord
             </label>
-            <div className="relative w-full">
+            <div className="relative  rounded-2xl bg-gray-100 w-full h-[50px]">
               <input
                 type={showPassword ? "text" : "password"}
                 onChange={handleChange}
@@ -96,7 +118,7 @@ const Register = () => {
                 id="wachtwoord"
                 name="wachtwoord"
                 required
-                className="h-[50px] pl-4 rounded-2xl bg-gray-100 pr-10"
+                className="h-full w-full pl-5 bg-inherit rounded-2xl"
               />
               <div
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"

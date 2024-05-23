@@ -10,7 +10,8 @@ const Login = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-
+  navigate("/home");
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData({ ...loginData, [name]: value });
