@@ -2,15 +2,16 @@ import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { FaBoxes } from "react-icons/fa";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import { RiReservedFill } from "react-icons/ri";
 import { PiHandCoinsDuotone } from "react-icons/pi";
 import { FaCirclePause } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   
+  const navigate = useNavigate();
 
   return (
       <main className=" p-10 w-">

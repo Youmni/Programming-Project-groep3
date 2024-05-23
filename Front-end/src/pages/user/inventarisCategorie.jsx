@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React from 'react'
 import { useState, useEffect} from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { IoSearchOutline } from 'react-icons/io5'
 import { FaFilter } from 'react-icons/fa6'
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import { FaShoppingBag } from "react-icons/fa";
 import { enqueueSnackbar } from 'notistack';
 import ReserveringForm from './reserveringform';
+import { Link, useNavigate } from "react-router-dom";
 
 const inventarisCategorie = () => {
     const {categorieNr} = useParams();
@@ -17,20 +18,37 @@ const inventarisCategorie = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [categorieNaam, setCategorieNaam] = useState('')
 
-    useEffect(() => {
+    const navigate = useNavigate();
+
+useEffect(() => {
+        const token = localStorage.getItem('authToken');
+
+        if (!token) {
+            enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+            navigate("/login");
+            return;
+        }
+
         axios
-        .get(`http://localhost:8080/product/categorienr=${categorieNr}`)
-        .then((response) => {
-            setProducts(response.data);
-            console.log(response.data)
-            enqueueSnackbar('Producten opgehaald', {variant: 'success'})
-        
-        })
-        .catch((error) => {
-            console.error('Error fetching data: ', error);
-            enqueueSnackbar('Error', {variant: 'error'})
-        });
-    }, []);
+            .get(`http://localhost:8080/product/categorienr=${categorieNr}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then((response) => {
+                setProducts(response.data);
+                console.log(response.data);
+                enqueueSnackbar('Producten opgehaald', { variant: 'success' });
+            })
+            .catch((error) => {
+                console.error('Error fetching data: ', error);
+                enqueueSnackbar('Error', { variant: 'error' });
+                if (error.response && error.response.status === 401) {
+                    localStorage.removeItem('authToken');
+                    navigate("/login");
+                }
+            });
+    }, [categorieNr]);
 
 
     const handleSearch = (event) => {

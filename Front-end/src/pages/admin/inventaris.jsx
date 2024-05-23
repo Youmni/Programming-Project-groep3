@@ -2,7 +2,7 @@ import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
-import { Link, json } from "react-router-dom";
+import { json } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
@@ -11,6 +11,7 @@ import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Popup from '../../components/Popup';
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Inventaris = () => {
@@ -20,12 +21,26 @@ const Inventaris = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = ([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
     
     setLoading(true);
     // fetch productmodellen
     axios
-      .get("http://localhost:8080/productmodel")
+      .get("http://localhost:8080/productmodel", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setProductModellen(response.data);
         setLoading(false);
@@ -37,7 +52,11 @@ const Inventaris = () => {
   
   // Fetch categories
   axios
-      .get("http://localhost:8080/categorie")
+      .get("http://localhost:8080/categorie", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setCategories(response.data);
         setLoading(false);
@@ -60,6 +79,13 @@ const Inventaris = () => {
     String(model.productModelNr).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader ease-linear rounded-full border-4 border-t-4 border-red-200 h-16 w-16"></div>
+      </div>
+    );
+  }
   
 
   return (

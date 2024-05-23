@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
 import { RxDashboard } from "react-icons/rx";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductToevoegen = () => {
   const [categories, setCategories] = useState([]);
@@ -19,9 +19,20 @@ const ProductToevoegen = () => {
   });
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
     // fetch Categories
     axios
-      .get("http://localhost:8080/categorie")
+      .get("http://localhost:8080/categorie", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setCategories(response.data);
         enqueueSnackbar("Categorieën opgehaald", {variant: "success"});

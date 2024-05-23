@@ -2,7 +2,7 @@ import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
-import { Link, json } from "react-router-dom";
+import { json } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
@@ -13,16 +13,31 @@ import { HiMiniPencilSquare } from "react-icons/hi2";
 import { FaCircleInfo } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const Gebruikers = () => {
   const [gebruikers, setGebruikers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
+    
     setLoading(true);
     axios
-      .get("http://localhost:8080/gebruiker")
+      .get("http://localhost:8080/gebruiker", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setGebruikers(response.data);
         console.log(data);

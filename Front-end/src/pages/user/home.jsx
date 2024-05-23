@@ -1,28 +1,47 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { SiAudioboom } from "react-icons/si";
 import axios from "axios";
 import { useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { IoIosArrowForward } from "react-icons/io";
+import { Link, useNavigate } from "react-router-dom";
 
 
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
+
     axios
-      .get("http://localhost:8080/categorie")
+      .get('http://localhost:8080/categorie', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setCategories(response.data);
-        enqueueSnackbar("Categorieën opgehaald", { variant: "success" });
+        enqueueSnackbar('Categorieën opgehaald', { variant: 'success' });
       })
       .catch((error) => {
-        console.error("Error fetching data: ", error);
-        enqueueSnackbar("Error", { variant: "error" });
+        console.error('Error fetching data: ', error);
+        enqueueSnackbar('Error', { variant: 'error' });
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem('authToken');
+          navigate("/login");
+        }
       });
   }, []);
+
 
 
 
