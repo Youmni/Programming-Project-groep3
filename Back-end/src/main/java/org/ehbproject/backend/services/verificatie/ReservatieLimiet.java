@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,5 +60,17 @@ public class ReservatieLimiet {
         }
         logger.info(String.valueOf(aantalProductenDezeWeek));
         return aantalProductenDezeWeek;
+    }
+
+    public static List<LocalDate> getAlleDatumsTussen(LocalDate startDatum, LocalDate eindDatum) {
+        List<LocalDate> datums = new ArrayList<>();
+        LocalDate huidigeDatum = startDatum;
+
+        while (!huidigeDatum.isAfter(eindDatum)) {
+            datums.add(huidigeDatum);
+            huidigeDatum = huidigeDatum.plusDays(1);
+        }
+
+        return datums;
     }
     }

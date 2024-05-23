@@ -14,7 +14,6 @@ public class Categorie {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Categorienr")
-    @Size(max = 10)
     private int categorieNr;
 
     @OneToMany(mappedBy = "categorie")

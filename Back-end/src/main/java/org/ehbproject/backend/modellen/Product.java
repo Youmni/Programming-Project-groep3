@@ -16,12 +16,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Productid" )
-    @Size (max = 5)
     private int productID;
 
     @ManyToOne
     @JoinColumn(name = "Productmodelnr", nullable = false)
-    @Size(max = 4)
     private ProductModel productModel;
 
     @Column(name="Productnaam", nullable = false)

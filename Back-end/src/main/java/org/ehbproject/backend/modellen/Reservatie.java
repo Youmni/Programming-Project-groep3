@@ -18,7 +18,6 @@ public class Reservatie {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Reservatienr")
-    @Size(max = 8)
     private int reservatieNr;
 
 
@@ -44,7 +43,6 @@ public class Reservatie {
     private String reden;
 
     @Column(name="Reservatieopmerking")
-    @Size(max = 100)
     private String opmerking;
 
     @Column(name="Status", nullable = false)

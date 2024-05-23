@@ -18,7 +18,6 @@ public class Gebruiker {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Gebruikerid")
-    @Size(max = 6)
     private int gebruikerID;
 
     @Column(name="Email", nullable = false, unique = true)
@@ -44,8 +43,6 @@ public class Gebruiker {
 
 
     @Column(name= "OVERTREDING")
-    @NotBlank
-    @Size(max = 3)
     private int overtreding;
 
 

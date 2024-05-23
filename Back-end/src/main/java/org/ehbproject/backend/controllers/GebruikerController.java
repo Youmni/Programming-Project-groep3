@@ -38,6 +38,8 @@ public class GebruikerController {
         repo.findAll().forEach(gebruikerMandje::add);
         return gebruikerMandje;
     }
+
+    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<String> createAuthenticationToken(@RequestBody AuthRequestDTO authRequest) {
         try {

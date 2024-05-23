@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static org.ehbproject.backend.services.verificatie.ReservatieLimiet.getAlleDatumsTussen;
+
 @RestController
 @RequestMapping(value = "/reservatie")
 public class ReservatieController {
@@ -165,20 +167,36 @@ public class ReservatieController {
 
     @CrossOrigin
     @GetMapping(value = "/id={id}")
-    public List<Reservatie> getAllProductenByReservatieId(@PathVariable(name = "id") int id) {
+    public List<Reservatie> getReservatieByReservatieId(@PathVariable(name = "id") int id) {
         return repoReservatie.findByReservatieNr(id);
     }
 
     @CrossOrigin
+    @GetMapping(value = "/beschikbare-datums/{id}")
+    public List<LocalDate> getProductenByProductId(@PathVariable(name = "id") int id) {
+        List<Product> product = repoProduct.findByProductID(id);
+        Product productObject = product.getFirst();
+        List<Reservatie> reservatiesVoorProduct = repoReservatie.findByProductenContainingAndAfhaalDatumAfter(productObject, LocalDate.now().minusDays(1));
+
+        List<LocalDate> nietBeschikbareDagen = new ArrayList<>();
+        for(Reservatie reservatieProduct :  reservatiesVoorProduct){
+            List<LocalDate> alleDatums = getAlleDatumsTussen(reservatieProduct.getAfhaalDatum(), reservatieProduct.getRetourDatum());
+            nietBeschikbareDagen.addAll(alleDatums);
+        }
+
+        return nietBeschikbareDagen;
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}")
-    public List<Reservatie> getAllReservatiesByGebruikerId(@PathVariable(name = "id") int id) {
+    public List<Reservatie> getReservatiesByGebruikerId(@PathVariable(name = "id") int id) {
         List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruiker(gebruikerObject);
     }
 
     @GetMapping(value = "/gebruikerId={id}/status={status}")
-    public List<Reservatie> getAllReservatiesByGebruikerId(@PathVariable(name = "id") int id, @PathVariable(name = "status") String status) {
+    public List<Reservatie> getReservatiesByGebruikerIdAndStatus(@PathVariable(name = "id") int id, @PathVariable(name = "status") String status) {
         List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruikerAndStatus(gebruikerObject, status);
@@ -186,7 +204,7 @@ public class ReservatieController {
 
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}/actief")
-    public List<Reservatie> getAllReservatiesByGebruikerIdAndActief(@PathVariable(name = "id") int id) {
+    public List<Reservatie> getReservatiesByGebruikerIdAndActief(@PathVariable(name = "id") int id) {
         List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruikerAndStatusIn(gebruikerObject, List.of(new String[]{"Te laat", "Bezig", "Onvolledig", "Voorboeking"}));
@@ -194,19 +212,19 @@ public class ReservatieController {
 
     @CrossOrigin
     @GetMapping(value = "/afhaaldatum={date}")
-    public List<Reservatie> getAllProductenByAfhaalDatum(@PathVariable(name = "date") LocalDate date) {
+    public List<Reservatie> getProductenByAfhaalDatum(@PathVariable(name = "date") LocalDate date) {
         return repoReservatie.findByAfhaalDatum(date);
     }
 
     @CrossOrigin
     @GetMapping(value = "/retourDatum={date}")
-    public List<Reservatie> getAllReservatiesByRetourDatum(@PathVariable(name = "date") LocalDate date) {
+    public List<Reservatie> getReservatiesByRetourDatum(@PathVariable(name = "date") LocalDate date) {
         return repoReservatie.findByRetourDatum(date);
     }
 
     @CrossOrigin
     @GetMapping(value = "/boekingDatum={date}")
-    public List<Reservatie> getAllReservatieByBoekingDatum(@PathVariable(name = "date") LocalDate date) {
+    public List<Reservatie> getReservatieByBoekingDatum(@PathVariable(name = "date") LocalDate date) {
         return repoReservatie.findByBoekingDatum(date);
     }
 

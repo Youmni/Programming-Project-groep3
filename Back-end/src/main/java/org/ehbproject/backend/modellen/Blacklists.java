@@ -13,13 +13,10 @@ public class Blacklists {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Blacklistid", nullable = false)
-    @Size(max = 4)
     private int blacklistId;
 
     @ManyToOne
     @JoinColumn(name = "Gebruikerid", nullable = false)
-    @NotBlank
-    @Size(max = 6)
     private Gebruiker gebruiker;
 
     @Column(name="Status", nullable = false)

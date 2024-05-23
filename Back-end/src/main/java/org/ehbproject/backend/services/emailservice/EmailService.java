@@ -36,14 +36,13 @@ public class EmailService {
         catch (Exception e){
             LoggerFactory.getLogger(EmailService.class).error("Error sending email", e);}
     }
-    @Autowired
-    private EmailService emailService;
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
     private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
     @Scheduled(cron = "0 0 6 ? * SAT", zone = "Europe/Brussels")
     public void findGebruikersWhoAreLate() {
+        EmailService emailService = new EmailService();
         List<Reservatie> reservaties = repoReservatie.findByStatus("te laat");
         List<String> TeLateGebruikers = new ArrayList<>();
         for (Reservatie reservatie : reservaties) {
@@ -63,6 +62,7 @@ public class EmailService {
     }
         @Scheduled(cron = "0 0 18 ? * THU", zone = "Europe/Brussels")
         public void findGebruikersWhoHaveAreservation() {
+            EmailService emailService = new EmailService();
             List<Reservatie> reservaties = repoReservatie.findByStatus("Bezig");
             List<String> GebruikersMetReservatie = new ArrayList<>();
             for (Reservatie reservatie : reservaties) {

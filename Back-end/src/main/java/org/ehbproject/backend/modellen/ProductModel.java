@@ -15,13 +15,10 @@ public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Productmodelnr")
-    @Size(max = 4)
     private int productModelNr;
 
     @ManyToOne
     @JoinColumn(name = "Categorienr", nullable = false)
-    @NotBlank
-    @Size(max = 3)
     private Categorie categorie;
 
     @Column(name="Productmodelnaam", nullable = false)
