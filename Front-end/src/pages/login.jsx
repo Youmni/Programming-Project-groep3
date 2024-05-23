@@ -12,11 +12,13 @@ const login = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-  navigate("/home");
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const redirectToPage = (titel) => {
@@ -46,7 +48,6 @@ const login = () => {
       redirectToPage(decodedToken.titel);
 
       setLoading(false);
-      navigate('/home');
     } catch (err) {
       setError(err);
       setLoading(false);
