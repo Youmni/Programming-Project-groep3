@@ -37,6 +37,7 @@ public class EmailService {
             LoggerFactory.getLogger(EmailService.class).error("Error sending email", e);}
     }
 
+
     @Autowired
     ReservatieCrudRepository repoReservatie;
     private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
