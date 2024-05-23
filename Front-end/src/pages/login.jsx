@@ -1,12 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoInformationCircleSharp } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import bcrypt from 'bcryptjs'
+import jwtDecode from 'jwt-decode';
 
 const login = () => {
-  const navigate = useNavigate();
 
-  const handleClick = () => {
+  const [loginData, setLoginData] = useState({gebruikersnaam: "", wachtwoord: ""});
+  const [decodedToken, setDecodedToken] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+  navigate("/home");
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
+
+  const redirectToPage = (titel) => {
+    if (titel === "Admin") {
+      navigate("/admin");
+    } else {
       navigate("/home");
+    }
+  }
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const hashedWachtwoord = await bcrypt.hash(loginData.wachtwoord, 10);
+
+      const response = await axios.post('http://localhost:8080/gebruiker/login', {
+        gebruikersnaam: loginData.gebruikersnaam,
+        wachtwoord: hashedWachtwoord,
+      });
+
+      localStorage.setItem('authToken', response.data.token);
+
+      const decoded = jwtDecode(token);
+      setDecodedToken(decoded);
+
+      redirectToPage(decodedToken.titel);
+
+      setLoading(false);
+      navigate('/home');
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,8 +72,10 @@ const login = () => {
             </label>
             <input
               type="text"
-              name=""
-              id=""
+              value={loginData.gebruikersnaam}
+              onChange={handleChange}
+              name="gebruikersnaam"
+              id="gebruikersnaam"
               placeholder="Gebruikersnaam"
               className="h-[50px] pl-4 rounded-2xl bg-gray-100"
             />
@@ -38,8 +84,10 @@ const login = () => {
             </label>
             <input
               type="password"
-              name=""
-              id=""
+              value={loginData.wachtwoord}
+              onChange={handleChange}
+              name="wachtwoord"
+              id="wachtwoord"
               placeholder="Wachtwoord"
               className="h-[50px] pl-4 rounded-2xl bg-gray-100"
             />
