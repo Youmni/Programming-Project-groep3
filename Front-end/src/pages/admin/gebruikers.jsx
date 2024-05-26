@@ -14,6 +14,7 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import {enqueueSnackbar} from "notistack";
 
 const Gebruikers = () => {
   const [gebruikers, setGebruikers] = useState([]);
