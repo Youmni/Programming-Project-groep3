@@ -16,7 +16,6 @@ const Inventaris = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedProductNr, setSelectedProductNr] = useState(null);
 
   const navigate = useNavigate();
 
@@ -59,7 +58,6 @@ const Inventaris = () => {
 
   const openModal = (product) => {
     setSelectedProduct(product);
-    setSelectedProductNr(product.productID);
     setShowModal(true);
   };
 
@@ -129,7 +127,7 @@ const Inventaris = () => {
         ))}
       </content>
       {showModal && (
-        <ReserveringForm closeModal={closeModal} product={selectedProduct} productNr={selectedProductNr} />
+        <ReserveringForm closeModal={closeModal} product={selectedProduct} />
       )}
     </main>
   );

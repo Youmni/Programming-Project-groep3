@@ -5,29 +5,54 @@ import { IoIosArrowBack } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
 import { enqueueSnackbar } from "notistack";
 import { WinkelMandjeContext } from "../../contexts/winkelmandjeContext";
-import {jwtDecode} from 'jwt-decode'; 
+import { jwtDecode } from "jwt-decode";
+import { DateRangePicker } from "react-dates";
+import "react-dates/lib/css/_datepicker.css";
 import DatePicker from "react-datepicker";
+import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 
-const reserveringForm = ({ closeModal, product, productNr }) => {
+const reserveringForm = ({ closeModal, product }) => {
   const { addToWinkelmandje } = useContext(WinkelMandjeContext);
   const [currentStep, setCurrentStep] = useState(1);
-  const [excludeDates, setExcludeDates] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [excludeDates, setExcludeDates] = useState(null);
   const [correctDates, setCorrectDates] = useState(false);
 
+  const formatDate = (date) => {
+    let dag = date.getDate();
+    let maand = date.getMonth() + 1;
+    let jaar = date.getFullYear();
+
+    dag = dag < 10 ? "0" + dag : dag;
+    maand = maand < 10 ? "0" + maand : maand;
+
+    return `${jaar}-${maand}-${dag}`;
+  };
+
   const [formData, setFormData] = useState({
-    boekingDatum: "",
-    reden: "",
-    extraItems: "",
-    product: product,
-    opmerking: "",
+    gebruikerId: null,
+    afhaalDatum: null,
+    retourDatum: null,
+    boekingDatum: formatDate(new Date()),
+    reden: null,
+    opmerking: null,
+    status: "Voorboeking",
+    producten: [product.productID],
   });
 
-  const authToken = localStorage.getItem('authToken');
-  const decodedToken = jwtDecode(authToken);
-  
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
+        variant: "error",
+      });
+      navigate("/login");
+      return;
+    } else {
+      setFormData({ ...formData, gebruikerId: jwtDecode(authToken).UserId });
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -59,48 +84,128 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
     });
   };
 
+  const checkReden = (reden) => {
+    if (reden === null) {
+      enqueueSnackbar("Gelieve een reden te selecteren", {
+        variant: "error",
+      });
+    } else {
+      enqueueSnackbar("Reden succesvol geselecteerd", {
+        variant: "success",
+      });
+      formatDates();
+      handleNext();
+    }
+  };
+
+  const formatDates = () => {
+    let geformatteerdeStartDatum, geformatteerdeEindDatum;
+
+    if (formData.afhaalDatum) {
+      let startDag = new Date(formData.afhaalDatum);
+      let jaar = startDag.getFullYear();
+      let maand = startDag.getMonth() + 1;
+      let dag = startDag.getDate();
+
+      dag = dag < 10 ? "0" + dag : dag;
+      maand = maand < 10 ? "0" + maand : maand;
+
+      geformatteerdeStartDatum = `${jaar}-${maand}-${dag}`;
+    }
+
+    if (formData.retourDatum) {
+      let eindDag = new Date(formData.retourDatum);
+      let jaar = eindDag.getFullYear();
+      let maand = eindDag.getMonth() + 1;
+      let dag = eindDag.getDate();
+
+      dag = dag < 10 ? "0" + dag : dag;
+      maand = maand < 10 ? "0" + maand : maand;
+
+      geformatteerdeEindDatum = `${jaar}-${maand}-${dag}`;
+    }
+
+    setFormData({
+      ...formData,
+      afhaalDatum: geformatteerdeStartDatum,
+      retourDatum: geformatteerdeEindDatum,
+    });
+  };
+
   const checkDates = (afhaaldatum, retourdatum) => {
     try {
-      const afhaalDate = new Date(afhaaldatum);
-      const retourDate = new Date(retourdatum);
-  
-      const verschilInTijd = retourDate - afhaalDate;
-      const verschilInDagen = verschilInTijd / (1000 * 60 * 60 * 24);
-  
-      if (decodedToken.Titel === "Student" && verschilInDagen > 5) {
-        setCorrectDates(false);
-        enqueueSnackbar("Datums zijn te ver uiteen. De limiet voor een student is van maandag tot vrijdag!", {
+      const authToken = localStorage.getItem("authToken");
+
+      if (!authToken) {
+        enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
           variant: "error",
         });
+        navigate("/login");
+        return;
+      }
+
+      const decodedToken = jwtDecode(authToken);
+
+      const afhaalDate = new Date(afhaaldatum);
+      const retourDate = new Date(retourdatum);
+
+      const verschilInTijd = retourDate - afhaalDate;
+      const verschilInDagen = verschilInTijd / (1000 * 60 * 60 * 24);
+
+      // Als de gebruiker een student is en de datums meer dan 5 dagen uit elkaar liggen, geef dan een foutmelding.
+
+      const eenWeekInMiliSeconden = 7 * 24 * 60 * 60 * 1000;
+
+      if (afhaaldatum.getTime() > retourdatum.getTime() ||  afhaaldatum.getTime() < Date.now()) {
+        setCorrectDates(false);
+        enqueueSnackbar("De startdatum mag niet later zijn dan de einddatum! En ook niet in het verleden", {
+          variant: "error",
+        });
+      } else if (
+        decodedToken.Titel.toLowerCase() === "student" &&
+        verschilInDagen > 5 ||
+        afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden) {
+        setCorrectDates(false);
+        enqueueSnackbar(
+          "De limiet voor een student is van maandag tot vrijdag! En maar 1 week vooruit!",
+          {
+            variant: "error",
+          }
+        );
       } else {
         setCorrectDates(true);
         enqueueSnackbar("Datums succesvol geselecteerd", {
           variant: "success",
         });
+
         handleNext();
       }
     } catch (err) {
-      console.error('Er is een fout opgetreden:', err.message);
+      console.error("Er is een fout opgetreden:", err.message);
     }
   };
-  
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
 
-    fetch(`http://localhost:8080/reservatie/beschikbare-datums/${productNr}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `http://localhost:8080/reservatie/niet-beschikbare-datums/${product.productID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         const formattedDates = data.map((date) => new Date(date));
         setExcludeDates(formattedDates);
+        console.log("Dates fetched:", formattedDates);
       })
       .catch((error) => console.error("Error fetching dates:", error));
   }, []);
 
+  // deze functie is voorlopig niet nodig. Later indien dat er op andere dagen mag gereserveerd worden wel.
   const isWeekday = (date) => {
     const day = date.getDay();
 
@@ -112,6 +217,53 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
       return false;
     }
     return true;
+  };
+
+  const isMonday = (date) => {
+    const day = date.getDay();
+    return day === 1;
+  };
+
+  const isFriday = (date) => {
+    const day = date.getDay();
+    return day === 5;
+  };
+
+  const handleNuReserveren = async () => {
+    try {
+      const authToken = localStorage.getItem("authToken");
+      console.log(formData.gebruikerId);
+      console.log("formData:", formData);
+      if (!authToken) {
+        enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
+          variant: "error",
+        });
+        navigate("/login");
+        return;
+      }
+
+      console.log("Sending formData:", formData);
+
+      const response = await axios.post(
+        `http://localhost:8080/reservatie/toevoegen`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      enqueueSnackbar("Actie succesvol uitgevoerd!", {
+        variant: "success",
+      });
+
+      closeModal();
+    } catch (error) {
+      enqueueSnackbar("Er is een fout opgetreden bij het reserveren" + error, {
+        variant: "error",
+      });
+    }
   };
 
   let stepContent;
@@ -135,21 +287,25 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
           <div>
             <h2>Selecteer een begindatum:</h2>
             <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              filterDate={isWeekday}
-              excludeDates={null}
+              selected={formData.afhaalDatum}
+              onChange={(date) =>
+                setFormData({ ...formData, afhaalDatum: date })
+              }
+              filterDate={isMonday}
+              excludeDates={excludeDates}
               placeholderText="Kies een datum"
+              dateFormat="dd/MM/yyyy"
             />
             <h2>Selecteer een einddatum:</h2>
             <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              filterDate={isWeekday}
-              excludeDates={null}
+              selected={formData.retourDatum}
+              onChange={(date) =>
+                setFormData({ ...formData, retourDatum: date })
+              }
+              filterDate={isFriday}
+              excludeDates={excludeDates}
               placeholderText="Kies een datum"
-              startDate={startDate}
-              startDateClassName="bg-blue-200"
+              dateFormat="dd/MM/yyyy"
             />
           </div>
 
@@ -163,7 +319,9 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
             </button>
             <button
               className="h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
-              onClick={() => checkDates(startDate, endDate)}
+              onClick={() =>
+                checkDates(formData.afhaalDatum, formData.retourDatum)
+              }
             >
               <p>Volgende</p>
               <MdNavigateNext className="text-lg" />
@@ -188,19 +346,6 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
           </header>
 
           <div className="flex flex-col items-start gap-8 w-1/2">
-            <div className="flex flex-col w-full gap-1">
-              <label className="text-lg">Extra's</label>
-              <select
-                name="extraItems"
-                value={formData.extraItems}
-                onChange={handleChange}
-                className="h-8 border border-gray-300 rounded-lg text-gray-500"
-              >
-                <option value="">Selecteer</option>
-                <option value="Statief">Statief</option>
-                <option value="Kabel">Kabel</option>
-              </select>
-            </div>
             <div className="flex flex-col w-full gap-1">
               <label className="text-lg">Geef de reden van je reservatie</label>
               <select
@@ -243,7 +388,7 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
             </button>
             <button
               className="h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
-              onClick={handleNext}
+              onClick={() => checkReden(formData.reden)}
             >
               <p>Volgende</p>
               <MdNavigateNext className="text-lg" />
@@ -299,16 +444,20 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
               </label>
               <div className="flex">
                 <div>
-                  <label>BoekingDatum:</label>
+                  <label>Afhaal datum:</label>
                   <input
                     type="text"
                     disabled="true"
-                    value={formData.boekingDatum}
+                    value={formData.afhaalDatum}
                   />
                 </div>
                 <div>
-                  <label>Terugbrengdatum:</label>
-                  <input type="text" disabled="true" value="2024-05-24" id="" />
+                  <label>Terugbreng datum:</label>
+                  <input
+                    type="text"
+                    disabled="true"
+                    value={formData.retourDatum}
+                  />
                 </div>
               </div>
             </div>
@@ -338,7 +487,15 @@ const reserveringForm = ({ closeModal, product, productNr }) => {
               onClick={handleSubmit}
             >
               <FaCheckCircle className="text-xl" />
-              <p>Bevestig</p>
+              <p>In winkelmandje</p>
+            </button>
+            <button
+              type="submit"
+              className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
+              onClick={handleNuReserveren}
+            >
+              <FaCheckCircle className="text-xl" />
+              <p>Nu reservereren</p>
             </button>
           </div>
         </div>
