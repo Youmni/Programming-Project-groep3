@@ -8,9 +8,21 @@ import { PiHandCoinsDuotone } from "react-icons/pi";
 import { FaCirclePause } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import {enqueueSnackbar} from "notistack";
+
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
+  },[])
 
   return (
     <main className=" p-10 w-">

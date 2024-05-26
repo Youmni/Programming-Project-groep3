@@ -12,6 +12,8 @@ import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Popup from '../../components/Popup';
 import { Link, useNavigate } from "react-router-dom";
+import {enqueueSnackbar} from "notistack";
+import KeuzePopup from "../../components/keuzePopup";
 
 
 const Inventaris = () => {
@@ -20,6 +22,7 @@ const Inventaris = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = ([]);
+  const [showPopup, setShowPopup] = useState(false);
 
   const navigate = useNavigate();
 
@@ -86,6 +89,13 @@ const Inventaris = () => {
       </div>
     );
   }
+
+  const openPopup = () => {
+    setShowPopup(true);
+  }
+  const closePopup = () => {
+    setShowPopup(false);
+  }
   
 
   return (
@@ -95,13 +105,13 @@ const Inventaris = () => {
           <h1 className=" flex text-3xl font-bold w-40 border-b justify-center">
             Inventaris
           </h1>
-          <Link
-            to={`/admin/Inventaris/product_toevoegen`}
+          <button
+            onClick={openPopup}
             className="w-48 rounded-xl bg-Groen h-12 items-center justify-center flex gap-2 p-2 hover:bg-lime-400"
           >
             <MdOutlineAddCircle className="flex size-6" />
             <h2 className="font-semibold">Product Toevoegen</h2>
-          </Link>
+          </button>
         </div>
         <div className="flex items-center gap-2 mt-10 ml-5 w-auto justify-between">
           <breadcrumb className="flex items-center gap-2">
@@ -214,6 +224,7 @@ const Inventaris = () => {
             </tbody>
           </table>
         </div>
+        {showPopup && <KeuzePopup onClose={closePopup} />}
       </main>
     </content>
   );
