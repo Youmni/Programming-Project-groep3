@@ -187,5 +187,18 @@ public class ProductController {
         return products;
     }
 
+    @CrossOrigin
+    @GetMapping("/model={model}")
+    public List<Product> getAllProductenByCategorie(@PathVariable(name = "model") int model) {
+        List<ProductModel> productModellen = repoModel.findByProductModelNr(model);
+
+        List<Product> products = new ArrayList<>();
+        for (ProductModel productModel : productModellen) {
+            products.addAll(repo.findByProductModel(productModel));
+        }
+
+        return products;
+    }
+
     }
 
