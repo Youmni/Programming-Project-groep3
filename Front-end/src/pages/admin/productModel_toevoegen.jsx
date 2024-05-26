@@ -8,6 +8,7 @@ import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProductModelToevoegen = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     productModelNaam: "",
@@ -16,6 +17,7 @@ const ProductModelToevoegen = () => {
     productModelBeschrijving: "",
     productModelFoto: "",
   });
+  console.log(formData);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -51,6 +53,39 @@ const ProductModelToevoegen = () => {
     }
   }
 
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const token = localStorage.getItem('authToken');
+    const updatedFormData = {
+      ...formData,
+    }
+    console.log(updatedFormData);
+    axios
+    .post("http://localhost:8080/productmodel/toevoegen", updatedFormData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      enqueueSnackbar("Product Model toegevoegd", { variant: "success" });
+      console.log("Product Model Toegevoegd",response.data);
+      navigate("/admin/inventaris");
+    })
+    .catch(error => {
+      console.error("Error adding product model: ", error);
+      enqueueSnackbar("Error: Product Model niet toegevoegd, probeer het opnieuw", { variant: "error" });
+
+      setFormData({
+        productModelNaam: "",
+        productModelMerk: "",
+        categorieNaam: "",
+        productModelBeschrijving: "",
+        productModelFoto: "",
+      })
+    })
+    
+  }
+
 
     
   
@@ -67,7 +102,7 @@ const ProductModelToevoegen = () => {
               Annuleren
             </Link>
             <button
-              onClick
+              onClick={onSubmit}
               className="w-40 rounded-xl bg-Groen h-12 items-center justify-center flex gap-3 p-2 hover:bg-lime-300"
             >
               <MdOutlineAddCircle className="flex size-7" />
@@ -96,6 +131,7 @@ const ProductModelToevoegen = () => {
                   required
                   value={formData.productModelNaam}
                   onChange={handlechange}
+                  
                 />
               </div>
               <div className="flex flex-col w-3/4 text-Grijs">
@@ -121,7 +157,7 @@ const ProductModelToevoegen = () => {
                   <option value="">Selecteer Categorie</option>
                   {categories.map((categorie) => (
                     <option
-                      key={categorie.categorieId}
+                      key={categorie.categorieNr}
                       value={categorie.categorieNaam}
                     >
                       {categorie.categorieNaam}
@@ -135,10 +171,11 @@ const ProductModelToevoegen = () => {
                 <label>Beschrijving</label>
                 <textarea
                   type="text"
+                  name="productModelBeschrijving"
                   placeholder="Voer een beschrijving in."
                   className=" h-24 p-3 rounded-xl bg-red-100"
                   value={formData.productModelBeschrijving}
-                  onChange
+                  onChange={handlechange}
                 />
               </div>
             </div>
@@ -147,11 +184,13 @@ const ProductModelToevoegen = () => {
                 <label htmlFor="">Foto Toevoegen</label>
                 <input
                   type="file"
+                  name="productModelFoto"
                   accept=".jpg, .jpeg, .png"
                   placeholder="Foto Toevoegen"
                   className="w-96 h-7 pl-2"
                   value={formData.productModelFoto}
-                  onChange
+                  onChange={handlechange}
+                  disabled
                 />
               </div>
             </div>

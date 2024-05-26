@@ -73,6 +73,7 @@ const ProductToevoegen = () => {
     .catch(error => {
       console.error("Error adding product: ", error);
       enqueueSnackbar("Error: Product niet toegevoegd, probeer het opnieuw", { variant: "error" });
+      
     })
   };
 
