@@ -2,6 +2,10 @@ package org.ehbproject.backend.modellen;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,33 +20,42 @@ public class Gebruiker {
     @Column(name="Gebruikerid")
     private int gebruikerID;
 
-    @Column(name="Email" )
+    @Column(name="Email", nullable = false, unique = true)
+    @NotBlank
+    @Email
+    @Size(max = 70)
     private String email;
 
-    @Column(name="Wachtwoord")
+    @Column(name="Wachtwoord", nullable = false)
+    @NotBlank
+    @Size(max = 64)
     private String wachtwoord;
 
-    @Column(name="Titel")
+    @Column(name="Titel", nullable = false)
+    @NotBlank
+    @Size(max = 15)
     private String titel;
 
-    @Column(name="Blacklist")
-    private String blacklist;
+    @Column(name= "ISGEBLACKLIST", nullable = false)
+    @NotBlank
+    @Size(max = 10)
+    private String  isGeblacklist;
 
-    @Column(name="Blacklistreden")
-    private String blacklistReden;
+
+    @Column(name= "OVERTREDING")
+    private int overtreding;
 
 
 
     @OneToMany(mappedBy = "gebruiker")
     private Set<Reservatie> reservaties= new HashSet<>();
 
-    public Gebruiker(int gebruikerID, String email, String wachtwoord, String titel, String blacklist, String blacklistReden) {
-        this.gebruikerID = gebruikerID;
+    public Gebruiker(String email, String wachtwoord, String titel, String isGeblacklist) {
         this.email = email;
         this.wachtwoord = wachtwoord;
         this.titel = titel;
-        this.blacklist = blacklist;
-        this.blacklistReden = blacklistReden;
+        this.isGeblacklist = isGeblacklist;
+        this.overtreding = 0;
     }
 
     protected Gebruiker() {
@@ -81,4 +94,19 @@ public class Gebruiker {
         this.titel = titel;
     }
 
+    public String getIsGeblacklist() {
+        return isGeblacklist;
+    }
+
+    public void setIsGeblacklist(String isGeblacklist) {
+        this.isGeblacklist = isGeblacklist;
+    }
+
+    public int getOvertreding() {
+        return overtreding;
+    }
+
+    public void setOvertreding(int overtreding) {
+        this.overtreding= overtreding;
+    }
 }

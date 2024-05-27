@@ -1,4 +1,3 @@
-
 /*GELIEVE DEZE FILE GERUST TE LATEN DUS NIETS AANPASSEN*/
 
 
@@ -25,6 +24,7 @@
 -- Productmodelnr NUMBER(4),
 -- Productnaam VARCHAR2(50) NOT NULL,
 -- Status VARCHAR2(20) NOT NULL,
+-- IsBeschadigt VARCHAR2(40),
 -- CONSTRAINT pk_producten_productid PRIMARY KEY (Productid),
 -- CONSTRAINT fk_producten_productmodelnr_producten FOREIGN KEY (Productmodelnr) REFERENCES PRODUCTMODELLEN
 -- );
@@ -34,31 +34,52 @@
 -- Email VARCHAR2(70) NOT NULL,
 -- Wachtwoord VARCHAR2(64) NOT NULL,
 -- Titel VARCHAR2(15) NOT NULL,
+-- IsGeblacklist VARCHAR2(10),
+-- Overtreding NUMBER(3),
 -- CONSTRAINT pk_gebruikers_gebruikerid PRIMARY KEY (Gebruikerid)
 -- );
 
--- CREATE TABLE RESERVATIES
--- (
+-- CREATE TABLE BLACKLISTS (
+-- Blacklistid NUMBER(4),
+-- Gebruikerid NUMBER(6),
+-- Blacklistdatum date,
+-- Blacklistreden VARCHAR2(255),
+-- Status VARCHAR2(20),
+-- CONSTRAINT pk_blacklist_blacklistid PRIMARY KEY (Blacklistid),
+-- CONSTRAINT fk_blacklist_gebruikers_gebruikerid FOREIGN KEY (Gebruikerid) REFERENCES GEBRUIKERS
+-- );
+
+-- CREATE TABLE RESERVATIES (
 -- Reservatienr NUMBER(8),
 -- Afhaaldatum DATE NOT NULL,
 -- Retourdatum DATE NOT NULL,
 -- Boekingdatum DATE NOT NULL,
 -- Reservatiereden VARCHAR2(100) NOT NULL,
 -- Reservatieopmerking VARCHAR2(100),
+-- Status VARCHAR2(20),
 -- Gebruikerid NUMBER(6),
 -- CONSTRAINT pk_reservaties_reservatienr PRIMARY KEY (Reservatienr),
 -- CONSTRAINT fk_reservatie_gebruikerid_gebruikers FOREIGN KEY (Gebruikerid) REFERENCES GEBRUIKERS
 -- );
 
-CREATE TABLE PRODUCTRESERVATIES (
-Productid NUMBER(5),
-Reservatienr NUMBER(8),
-CONSTRAINT pk_productenreservaties_productid_reservatienr PRIMARY KEY (Productid, Reservatienr),
-CONSTRAINT fk_productenreservaties_productid_producten FOREIGN KEY (Productid) REFERENCES PRODUCTEN,
-CONSTRAINT fk_productenreservaties_reservatienr_reservaties FOREIGN KEY (Reservatienr) REFERENCES RESERVATIES
-);
+-- CREATE TABLE PRODUCTRESERVATIES (
+-- Productid NUMBER(5),
+-- Reservatienr NUMBER(8),
+-- CONSTRAINT pk_productenreservaties_productid_reservatienr PRIMARY KEY (Productid, Reservatienr),
+-- CONSTRAINT fk_productenreservaties_productid_producten FOREIGN KEY (Productid) REFERENCES PRODUCTEN,
+-- CONSTRAINT fk_productenreservaties_reservatienr_reservaties FOREIGN KEY (Reservatienr) REFERENCES RESERVATIES
+-- );
 
-DELETE FROM PRODUCTRESERVATIES;
+-- CREATE TABLE BESCHADIGINGEN (
+--     Beschadigingid NUMBER(5),
+--     Gebruikerid NUMBER(6),
+--     Productid NUMBER(5),
+--     Beschrijving VARCHAR2(255),
+--     beschadigingsdatum DATE,
+--     CONSTRAINT pk_beschadigingen_beschadigingid PRIMARY KEY (Beschadigingid),
+--     CONSTRAINT fk_beschadigingen_gebruikers_gebruikerid FOREIGN KEY (Gebruikerid) REFERENCES GEBRUIKERS,
+--     CONSTRAINT fk_beschadigingen_producten_productid FOREIGN KEY (Productid) REFERENCES PRODUCTEN
+-- );
 
 ALTER SESSION set nls_date_format='DD/MM/YYYY';
 
@@ -80,7 +101,7 @@ ALTER SESSION set nls_date_format='DD/MM/YYYY';
 -- INSERT INTO RESERVATIES (Reservatienr, Afhaaldatum, Retourdatum, Boekingdatum, Reservatiereden, Reservatieopmerking, Gebruikerid)
 -- VALUES (1,'25/04/2024', '30/04/2024','22/04/2024', 'nodig voor project', 'zal waarschijnlijk verlerngd worden', 1);
 
-INSERT INTO PRODUCTRESERVATIES (Productid, Reservatienr) VALUES (25,1);
-INSERT INTO PRODUCTRESERVATIES (Productid, Reservatienr) VALUES (44,1);
-COMMIT;
+-- INSERT INTO PRODUCTRESERVATIES (Productid, Reservatienr) VALUES (25,1);
+-- INSERT INTO PRODUCTRESERVATIES (Productid, Reservatienr) VALUES (44,1);
+-- COMMIT;
 

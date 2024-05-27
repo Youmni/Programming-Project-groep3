@@ -29,4 +29,5 @@ public class ProductReservatiesId implements Serializable {
     public void setReservatie(int reservatie) {
         this.reservatie = reservatie;
     }
+
 }

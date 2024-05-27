@@ -2,8 +2,11 @@ package org.ehbproject.backend.modellen;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,24 +22,33 @@ public class Product {
     @JoinColumn(name = "Productmodelnr", nullable = false)
     private ProductModel productModel;
 
-    @Column(name="Productnaam")
+    @Column(name="Productnaam", nullable = false)
+    @NotBlank
+    @Size(max = 50)
     private String productNaam;
 
-    @Column(name="Status")
+    @Column(name="Status", nullable = false)
+    @NotBlank
+    @Size(max = 20)
     private String status;
 
-    @OneToMany(mappedBy = "product")
-    private Set<ProductReservatie> productreservaties = new HashSet<>();
+    @Column(name = "ISBESCHADIGT")
+    @Size(max = 40)
+    private String productbeschrijving;
 
 
-    public Product(int productID, ProductModel productModel, String productNaam, String status) {
-        this.productID = productID;
+    @ManyToMany(mappedBy = "producten")
+    private List<Reservatie> reservaties;
+
+
+    public Product(ProductModel productModel, String productNaam, String status) {
         this.productModel = productModel;
         this.productNaam = productNaam;
         this.status = status;
     }
 
     protected Product() {}
+
 
 
     public int getProductID() {
@@ -70,4 +82,8 @@ public class Product {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+
+
 }

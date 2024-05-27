@@ -1,6 +1,8 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,16 +15,18 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Categorienr")
     private int categorieNr;
+
     @OneToMany(mappedBy = "categorie")
     private Set<ProductModel> productModellen = new HashSet<>();
 
     @Column(name= "Categorienaam")
+    @NotBlank
+    @Size(max = 30)
     private String categorieNaam;
-
     protected Categorie(){}
 
-    public Categorie(int categorieNr, String categorieNaam) {
-        this.categorieNr = categorieNr;
+    public Categorie(String categorieNaam) {
+
         this.categorieNaam = categorieNaam;
     }
 
@@ -42,4 +46,6 @@ public class Categorie {
     public void setCategorieNaam(String categorieNaam) {
         this.categorieNaam = categorieNaam;
     }
+
+
 }
