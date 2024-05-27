@@ -32,7 +32,7 @@ public class Product {
     @Size(max = 20)
     private String status;
 
-    @Column(name = "Productbeschrijving")
+    @Column(name = "ISBESCHADIGT")
     @Size(max = 40)
     private String productbeschrijving;
 
