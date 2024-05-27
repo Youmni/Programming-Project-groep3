@@ -15,11 +15,14 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import {enqueueSnackbar} from "notistack";
+import PopupUser from "../../components/PopupUser";
 
 const Gebruikers = () => {
   const [gebruikers, setGebruikers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedGebruiker, setSelectedGebruiker] = useState(null);
 
   const navigate = useNavigate();
 
@@ -67,6 +70,15 @@ const Gebruikers = () => {
       gebruiker.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       String(gebruiker.gebruikerID).toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const openUserPopup = (gebruiker) => {
+    setSelectedGebruiker(gebruiker);
+    setShowPopup(true);
+};
+
+const closeUserPopup = () => {
+    setShowPopup(false);
+}
 
   return (
     <content className="top-0 flex-grow">
@@ -171,13 +183,13 @@ const Gebruikers = () => {
 
                   <td className="">
                     <div className="flex justify-end items-center gap-2">
-                      <Link
-                        to={`/admin/gebruiker/info/${gebruiker.gebruikerID}`}
+                      <button
                         className="bg-Grijs text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"
                         title="Edit"
+                        onClick={() => openUserPopup(gebruiker)}
                       >
-                        <FaCircleInfo className="size-6" />
-                      </Link>
+                        <FaCircleInfo  className="size-6" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -186,6 +198,7 @@ const Gebruikers = () => {
           </table>
         </div>
       </main>
+      {showPopup && <PopupUser onClose={closeUserPopup} gebruiker={selectedGebruiker} />}
     </content>
   );
 };

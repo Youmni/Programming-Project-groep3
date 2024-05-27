@@ -10,10 +10,12 @@ import { data } from "autoprefixer";
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import Popup from '../../components/Popup';
+import Popup from '../../components/PopupProduct';
 import { Link, useNavigate } from "react-router-dom";
 import {enqueueSnackbar} from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
+import { FaCircleInfo } from "react-icons/fa6";
+import PopupProduct from "../../components/PopupProduct";
 
 
 const Inventaris = () => {
@@ -22,7 +24,9 @@ const Inventaris = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = ([]);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showKeuzePopup, setShowKeuzePopup] = useState(false);
+  const [showProductPopup, setShowProductPopup] = useState(false);
+  const [selectedModel, setSelectedModel] = useState(null);
 
   const navigate = useNavigate();
 
@@ -90,11 +94,19 @@ const Inventaris = () => {
     );
   }
 
-  const openPopup = () => {
-    setShowPopup(true);
+  const openKeuzePopup = () => {
+    setShowKeuzePopup(true);
   }
-  const closePopup = () => {
-    setShowPopup(false);
+  const closeKeuzePopup = () => {
+    setShowKeuzePopup(false);
+  }
+
+  const openProductPopup = (model) => {
+    setSelectedModel(model);
+    setShowProductPopup(true);
+  }
+  const closeProductPopup = () => {
+    setShowProductPopup(false);
   }
   
 
@@ -106,7 +118,7 @@ const Inventaris = () => {
             Inventaris
           </h1>
           <button
-            onClick={openPopup}
+            onClick={openKeuzePopup}
             className="w-48 rounded-xl bg-Groen h-12 items-center justify-center flex gap-2 p-2 hover:bg-lime-400"
           >
             <MdOutlineAddCircle className="flex size-6" />
@@ -139,7 +151,7 @@ const Inventaris = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-auto  h-auto">
+        <div className="flex w-auto h-auto">
           <div>{loading && <Spinner />}</div>
           <table className="w-full h-full">
             <thead className="w-full items-center h-16">
@@ -216,7 +228,7 @@ const Inventaris = () => {
                       >
                         <HiMiniPencilSquare className="size-6" />
                       </Link>
-                      <Popup model={model} />
+                      <button onClick={() => openProductPopup(model)} className="bg-Grijs text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"><FaCircleInfo className="size-6" /> </button>
                     </div>
                   </td>
                 </tr>
@@ -224,7 +236,9 @@ const Inventaris = () => {
             </tbody>
           </table>
         </div>
-        {showPopup && <KeuzePopup onClose={closePopup} />}
+        {showKeuzePopup && <KeuzePopup onClose={closeKeuzePopup} />}
+        {showProductPopup && <PopupProduct onClose={closeProductPopup} model = {selectedModel} />}
+
       </main>
     </content>
   );

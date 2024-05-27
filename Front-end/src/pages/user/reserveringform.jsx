@@ -6,8 +6,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { enqueueSnackbar } from "notistack";
 import { WinkelMandjeContext } from "../../contexts/winkelmandjeContext";
 import { jwtDecode } from "jwt-decode";
-import { DateRangePicker } from "react-dates";
-import "react-dates/lib/css/_datepicker.css";
+
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";

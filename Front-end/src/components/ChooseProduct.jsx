@@ -86,7 +86,7 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
                   <span className="text-center w-1/3">{product.status}</span>
                   <FaBasketShopping
                     onClick={() => handleProductClick(product)}
-                    className="text-right w-4 h-4 cursor-pointer w-1/3"
+                    className="text-right w-4 h-4 cursor-pointer"
                   />
                 </div>
               ))}
