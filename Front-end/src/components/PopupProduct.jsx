@@ -83,7 +83,7 @@ const PopupProduct = ({ onClose, model }) => {
       .then((response) => {
         enqueueSnackbar(`Product is ${newStatus}`, { variant: "success" });
         console.log(response.data);
-        
+        onClose()
       })
       .catch((error) => {
         console.error("Error pauzeren product: ", error);
