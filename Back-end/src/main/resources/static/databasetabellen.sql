@@ -1,4 +1,3 @@
-
 /*GELIEVE DEZE FILE GERUST TE LATEN DUS NIETS AANPASSEN*/
 
 
@@ -25,7 +24,7 @@
 -- Productmodelnr NUMBER(4),
 -- Productnaam VARCHAR2(50) NOT NULL,
 -- Status VARCHAR2(20) NOT NULL,
--- Productbeschrijving VARCHAR2(40),
+-- IsBeschadigt VARCHAR2(40),
 -- CONSTRAINT pk_producten_productid PRIMARY KEY (Productid),
 -- CONSTRAINT fk_producten_productmodelnr_producten FOREIGN KEY (Productmodelnr) REFERENCES PRODUCTMODELLEN
 -- );
@@ -71,6 +70,16 @@
 -- CONSTRAINT fk_productenreservaties_reservatienr_reservaties FOREIGN KEY (Reservatienr) REFERENCES RESERVATIES
 -- );
 
+-- CREATE TABLE BESCHADIGINGEN (
+--     Beschadigingid NUMBER(5),
+--     Gebruikerid NUMBER(6),
+--     Productid NUMBER(5),
+--     Beschrijving VARCHAR2(255),
+--     beschadigingsdatum DATE,
+--     CONSTRAINT pk_beschadigingen_beschadigingid PRIMARY KEY (Beschadigingid),
+--     CONSTRAINT fk_beschadigingen_gebruikers_gebruikerid FOREIGN KEY (Gebruikerid) REFERENCES GEBRUIKERS,
+--     CONSTRAINT fk_beschadigingen_producten_productid FOREIGN KEY (Productid) REFERENCES PRODUCTEN
+-- );
 
 ALTER SESSION set nls_date_format='DD/MM/YYYY';
 
