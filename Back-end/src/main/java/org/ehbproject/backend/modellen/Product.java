@@ -36,8 +36,6 @@ public class Product {
     @Size(max = 40)
     private String productbeschrijving;
 
-    @OneToMany(mappedBy = "product")
-    private Set<ProductReservatie> productreservaties = new HashSet<>();
 
     @ManyToMany(mappedBy = "producten")
     private List<Reservatie> reservaties;
@@ -84,6 +82,8 @@ public class Product {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
 
 
 }

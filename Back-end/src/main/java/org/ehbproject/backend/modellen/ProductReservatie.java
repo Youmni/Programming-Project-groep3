@@ -11,13 +11,11 @@ public class ProductReservatie {
     @Id
     @ManyToOne
     @JoinColumn(name = "Productid", referencedColumnName = "Productid")
-    @Size(max = 5)
     private Product product;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "Reservatienr", referencedColumnName = "Reservatienr")
-    @Size(max = 8)
     private Reservatie reservatie;
 
     protected ProductReservatie(){}
