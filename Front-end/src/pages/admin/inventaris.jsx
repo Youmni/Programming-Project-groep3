@@ -2,7 +2,7 @@ import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
-import { Link, json } from "react-router-dom";
+import { json } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
@@ -11,6 +11,9 @@ import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Popup from '../../components/Popup';
+import { Link, useNavigate } from "react-router-dom";
+import {enqueueSnackbar} from "notistack";
+import KeuzePopup from "../../components/keuzePopup";
 
 
 const Inventaris = () => {
@@ -19,13 +22,28 @@ const Inventaris = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = ([]);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
+
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
     
     setLoading(true);
     // fetch productmodellen
     axios
-      .get("http://localhost:8080/productmodel")
+      .get("http://localhost:8080/productmodel", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setProductModellen(response.data);
         setLoading(false);
@@ -37,7 +55,11 @@ const Inventaris = () => {
   
   // Fetch categories
   axios
-      .get("http://localhost:8080/categorie")
+      .get("http://localhost:8080/categorie", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setCategories(response.data);
         setLoading(false);
@@ -60,6 +82,20 @@ const Inventaris = () => {
     String(model.productModelNr).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader ease-linear rounded-full border-4 border-t-4 border-red-200 h-16 w-16"></div>
+      </div>
+    );
+  }
+
+  const openPopup = () => {
+    setShowPopup(true);
+  }
+  const closePopup = () => {
+    setShowPopup(false);
+  }
   
 
   return (
@@ -69,13 +105,13 @@ const Inventaris = () => {
           <h1 className=" flex text-3xl font-bold w-40 border-b justify-center">
             Inventaris
           </h1>
-          <Link
-            to={`/admin/Inventaris/product_toevoegen`}
+          <button
+            onClick={openPopup}
             className="w-48 rounded-xl bg-Groen h-12 items-center justify-center flex gap-2 p-2 hover:bg-lime-400"
           >
             <MdOutlineAddCircle className="flex size-6" />
             <h2 className="font-semibold">Product Toevoegen</h2>
-          </Link>
+          </button>
         </div>
         <div className="flex items-center gap-2 mt-10 ml-5 w-auto justify-between">
           <breadcrumb className="flex items-center gap-2">
@@ -188,6 +224,7 @@ const Inventaris = () => {
             </tbody>
           </table>
         </div>
+        {showPopup && <KeuzePopup onClose={closePopup} />}
       </main>
     </content>
   );

@@ -2,13 +2,16 @@ import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
-import { Link, json } from "react-router-dom";
+import { json } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
 import { data } from "autoprefixer";
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { PiKeyReturnFill } from "react-icons/pi";
+import { Link, useNavigate } from "react-router-dom";
+import {enqueueSnackbar} from "notistack";
+
 
 
 const Leningen = () => {
@@ -16,11 +19,25 @@ const Leningen = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      navigate("/login");
+      return;
+    }
+    
     setLoading(true);
     // fetch Reservaties
     axios
-      .get("http://localhost:8080/reservatie")
+      .get("http://localhost:8080/reservatie", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setReservaties(response.data);
         setLoading(false);

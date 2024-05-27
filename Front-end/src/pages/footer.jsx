@@ -16,7 +16,7 @@ const Footer = () => {
             </Link>
             <div className="flex-grow flex items-center justify-center">
                 <a href="https://www.erasmushogeschool.be/nl" target='blank'>
-                    <p className='hover:underline text-white'>©copyright erasmus hogeschool Brussel</p>
+                    <p className='hover:underline text-white'>©copyright Erasmushogeschool Brussel</p>
                 </a>
             </div>
         </footer>

@@ -1,5 +1,5 @@
 import Dashboard from "./pages/admin/dashboard";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import React from "react";
 import AdminSideBar from "./components/AdminSideBar";
 import NavBar from "./components/NavBar";
@@ -17,6 +17,10 @@ import UserLeningen from "./pages/user/leningen";
 import InventarisCategorie from "./pages/user/inventarisCategorie";
 import Winkelmandje from "./pages/user/winkelmandje";
 import { WinkelMandjeProvider } from "./contexts/winkelmandjeContext";
+import Register from "./components/Register";
+import ProductModel_toevoegen from "./pages/admin/productModel_toevoegen";
+
+
 
 const App = () => {
  const location = useLocation();
@@ -28,6 +32,7 @@ const App = () => {
       <Routes>
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/register' element={<Register />} />
         <Route path="/*" element={<UserRoutes />} />
       </Routes>
     </div>
@@ -46,6 +51,10 @@ const AdminRoutes = () => {
         <Route
           path="/inventaris/product_toevoegen"
           element={<Product_toevoegen />}
+        />
+        <Route
+          path="/inventaris/productModel_toevoegen"
+          element={<ProductModel_toevoegen />}
         />
         <Route path="/leningen" element={<Leningen />} />
       </Routes>
