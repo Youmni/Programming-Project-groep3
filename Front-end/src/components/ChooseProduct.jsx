@@ -52,9 +52,6 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
   return (
     <div
       className="fixed z-10 inset-0 overflow-y-auto"
-      aria-labelledby="modal-title"
-      role="dialog"
-      aria-modal="true"
     >
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div
@@ -86,7 +83,7 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
                   <span className="text-center w-1/3">{product.status}</span>
                   <FaBasketShopping
                     onClick={() => handleProductClick(product)}
-                    className="text-right w-4 h-4 cursor-pointer"
+                    className="text-right w-8 h-8 cursor-pointer"
                   />
                 </div>
               ))}

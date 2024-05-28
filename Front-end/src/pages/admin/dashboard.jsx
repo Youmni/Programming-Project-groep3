@@ -3,21 +3,32 @@ import { RxDashboard } from "react-icons/rx";
 import { FaCheck } from "react-icons/fa";
 import { FaBoxes } from "react-icons/fa";
 import axios from "axios";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { RiReservedFill } from "react-icons/ri";
 import { PiHandCoinsDuotone } from "react-icons/pi";
 import { FaCirclePause } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { IoInformationCircleSharp } from "react-icons/io5";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { enqueueSnackbar } from "notistack";
 import { IoMdArrowDropdown } from "react-icons/io";
+import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("authToken"));
-  const [reservatiesRetour, setReservaties] = useState([]);
+  const [reservatiesAfhalen, setReservatiesAfhalen] = useState([]);
+  const [reservatiesRetourneren, setReservatiesRetourneren] = useState([]);
+  const [reservatiesTeLaatOnvolledig, setReservatiesTeLaatOnvolledig] =
+    useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReservatie, setSelectedReservatie] = useState(null);
+  const [eyeToggleRetour, seyEyeToggleRetour] = useState(true);
+  const [eyeToggleAfhaal, setEyeToggleAfhaal] = useState(true);
+  const [eyeToggleTeLaatOnvolledig, setEyeToggleTeLaatOnvolledig] =
+    useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -34,7 +45,7 @@ const Dashboard = () => {
   const datumVandaag = () => {
     const vandaag = new Date();
     const dd = String(vandaag.getDate()).padStart(2, "0");
-    const mm = String(vandaag.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const mm = String(vandaag.getMonth() + 1).padStart(2, "0");
     const yyyy = vandaag.getFullYear();
 
     return yyyy + "-" + mm + "-" + dd;
@@ -42,31 +53,121 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/reservatie/retourDatum=${datumVandaag()}`, {
+      .get(
+        `http://localhost:8080/reservatie/retourdatum=${datumVandaag()}/status=Bezig`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setReservatiesRetourneren(response.data);
+      })
+      .catch((error) => {
+        // to-do
+      });
+  }, [reservatiesRetourneren]);
+
+  useEffect(() => {
+    const status = "Te laat&Onvolledig";
+
+    axios
+      .get(`http://localhost:8080/reservatie/status?status=${status}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        setReservaties(response.data);
-        console.log(response.data);
+        setReservatiesTeLaatOnvolledig(response.data);
       })
       .catch((error) => {
-        enqueueSnackbar("Er zijn geen reservaties gevonden", {
-          variant: "error",
-        });
+        // to-do
       });
-  }, []);
+  }, [reservatiesTeLaatOnvolledig]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:8080/reservatie/afhaaldatum=${datumVandaag()}/status=Voorboeking`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setReservatiesAfhalen(response.data);
+      })
+      .catch((error) => {
+        // to-do
+      });
+  }, [reservatiesAfhalen]);
+
+  const openModal = (reservatie) => {
+    setSelectedReservatie(reservatie);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const handleTerugbreng = (id) => {
+    console.log(id);
+
+    axios
+      .put(
+        `http://localhost:8080/reservatie/${id}/status?newStatus=In orde`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        enqueueSnackbar("Reservatie is succesvol afgerond", {
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+        enqueueSnackbar("Error" + error, { variant: "error" });
+      });
+  };
+
+  const handleUitleen = (id) => {
+    console.log(id);
+
+    axios
+      .put(
+        `http://localhost:8080/reservatie/${id}/status?newStatus=Bezig`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        enqueueSnackbar("Reservatie is succesvol gestart", {
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+        enqueueSnackbar("Error" + error, { variant: "error" });
+      });
+  };
 
   return (
     <div className="top-0 flex-grow">
       <main className=" p-10">
-        <h1 className="text-4xl font-bold underline">
-          Dashboard
-        </h1>
+        <h1 className="text-4xl font-bold underline">Dashboard</h1>
         <div className="flex items-center gap-2 mt-10">
-            <RxDashboard className="text-rood size-5" />
-            <breadcrumb-item>Dashboard</breadcrumb-item>
+          <RxDashboard className="text-rood size-5" />
+          <breadcrumb-item>Dashboard</breadcrumb-item>
         </div>
         <div className="flex mt-8 justify-center">
           <ul className="flex justify-center h-auto w-full">
@@ -217,83 +318,295 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="m-8">
-          <h1 className="text-xl font-semibold">Reservaties tegen vandaag</h1>
+          <div className="flex items-center gap-5">
+            <h1 className="text-xl font-semibold">
+              Reservaties op te halen vandaag
+            </h1>
+            <span
+              onClick={() => seyEyeToggleRetour(!eyeToggleRetour)}
+              className="cursor-pointer"
+            >
+              {eyeToggleRetour ? <FaEye /> : <FaEyeSlash />}
+            </span>
+          </div>
           <div className="flex w-auto  h-auto">
             <div>{loading && <Spinner />}</div>
-            <table className="w-full">
-        <thead>
-      <tr className="text-gray-300">
-        <th scope="col" className="px-1 font-semibold text-center">
-          Reservatie ID
-        </th>
-        <th scope="col" className="px-1 font-semibold text-center py-4">
-          Producten
-        </th>
-        <th scope="col" className="px-1 font-semibold text-center">
-          Uitgeleend door
-        </th>
-        <th scope="col" className="px-1 font-semibold text-center">
-          Afhaaldatum
-        </th>
-        <th scope="col" className="px-1 font-semibold text-center">
-          Retourdatum
-        </th>
-        <th scope="col" className="px-1 font-semibold text-center">
-          Valideren
-        </th>
-        <th scope="col" className="px-1 font-semibold text-center py-4">
-          Actie
-        </th>
-      </tr>
-        </thead>
-        <tbody>
-      {reservatiesRetour.map((reservatie) => (
-        <tr key={reservatie.reservatieNr} className="text-center">
-          <td className="px-2">{reservatie.reservatieNr}</td>
-          <td className="px-2">{reservatie.producten.length}</td>
-          <td className="px-2">{`${reservatie.gebruiker.email.split("@")[0].replace(".", " ")}`}</td>
-          <td className="px-2">{reservatie.afhaalDatum}</td>
-          <td className="px-2">{reservatie.retourDatum}</td>
-          <td className="px-2 flex justify-center">{/* hier moet je de reservatie in detail kunnen bekijken */}</td>
-          <td className="px-2 flex justify-center">
-            <FaCheck className="w-8 h-8 p-1 rounded-full bg-green-500 text-white cursor-pointer" />
-          </td>
-          <td className="px-2"></td>
-        </tr>
-      ))}
-        </tbody>
-      </table>
+            {eyeToggleRetour ? (
+              <table className="w-full">
+                <thead>
+                  <tr className="text-gray-400">
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Reservatie ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 font-semibold text-center py-4"
+                    >
+                      Product details
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Uitgeleend door
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Afhaaldatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Retourdatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Valideren
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservatiesRetourneren.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="bg-green-600 rounded p-4 text-white text-center"
+                      >
+                        Geen reservaties die vandaag worden afgehaald
+                      </td>
+                    </tr>
+                  ) : (
+                    reservatiesRetourneren.map((reservatie) => (
+                      <tr
+                        key={reservatie.reservatieNr}
+                        className="text-center space-y-4"
+                      >
+                        <td className="px-2">{reservatie.reservatieNr}</td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <IoInformationCircleSharp
+                              onClick={() => openModal(reservatie)}
+                              className="w-8 h-8 p-1 rounded-full bg-black text-white cursor-pointer"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-2">
+                          {`${reservatie.gebruiker.email
+                            .split("@")[0]
+                            .replace(".", " ")}`}
+                        </td>
+                        <td className="px-2">{reservatie.afhaalDatum}</td>
+                        <td className="px-2">{reservatie.retourDatum}</td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <FaCheck
+                              onClick={() =>
+                                handleTerugbreng(reservatie.reservatieNr)
+                              }
+                              className="w-8 h-8 p-1 rounded-full bg-green-500 text-white cursor-pointer"
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            ) : (
+              <></>
+            )}
           </div>
-          <hr className="my-4" />
-          <h1 className="text-xl font-semibold">Reservaties die te laat zijn</h1>
-          <div>{loading && <Spinner />}</div>
-          <table className="w-full h-full">
-            <thead className="w-full items-center h-16">
-              <tr className="flex justify-evenly items-center mt-5  text-gray-300">
-                <th scope="col" className="px-2 font-semibold">
-                  Product
-                </th>
-                <th scope="col" className="font-semibold">
-                  Uitgeleend door
-                </th>
-                <th scope="col" className="font-semibold">
-                  Afhaaldatum
-                </th>
-                <th scope="col" className=" font-semibold">
-                  Retourdatum
-                </th>
-                <th scope="col" className="font-semibold">
-                  Valideren
-                </th>
-                <th scope="col" className="font-semibold">
-                  Actie
-                </th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
         </div>
         <hr className="my-4" />
+
+        <div className="m-8">
+          <div className="flex items-center gap-5">
+            <h1 className="text-xl font-semibold">
+              Reservaties af te halen vandaag
+            </h1>
+            <span
+              onClick={() => setEyeToggleAfhaal(!eyeToggleAfhaal)}
+              className="cursor-pointer"
+            >
+              {eyeToggleAfhaal ? <FaEye /> : <FaEyeSlash />}
+            </span>
+          </div>
+          <div className="flex w-auto  h-auto">
+            <div>{loading && <Spinner />}</div>
+            {eyeToggleAfhaal ? (
+              <table className="w-full">
+                <thead>
+                  <tr className="text-gray-400">
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Reservatie ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 font-semibold text-center py-4"
+                    >
+                      Product details
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Uitgeleend door
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Afhaaldatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Retourdatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Valideren
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservatiesAfhalen.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="bg-green-600 rounded p-4 text-white text-center"
+                      >
+                        Geen reservaties die vandaag worden afgehaald
+                      </td>
+                    </tr>
+                  ) : (
+                    reservatiesAfhalen.map((reservatie) => (
+                      <tr
+                        key={reservatie.reservatieNr}
+                        className="text-center space-y-4"
+                      >
+                        <td className="px-2">{reservatie.reservatieNr}</td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <IoInformationCircleSharp
+                              onClick={() => openModal(reservatie)}
+                              className="w-8 h-8 p-1 rounded-full bg-black text-white cursor-pointer"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-2">
+                          {`${reservatie.gebruiker.email
+                            .split("@")[0]
+                            .replace(".", " ")}`}
+                        </td>
+                        <td className="px-2">{reservatie.afhaalDatum}</td>
+                        <td className="px-2">{reservatie.retourDatum}</td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <FaCheck
+                              onClick={() =>
+                                handleUitleen(reservatie.reservatieNr)
+                              }
+                              className="w-8 h-8 p-1 rounded-full bg-green-500 text-white cursor-pointer"
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            ) : (
+              <></>
+            )}
+          </div>
+          <hr className="my-4" />
+        </div>
+
+        <div className="m-8">
+          <div className="flex items-center gap-5">
+            <h1 className="text-xl font-semibold">Te laat of onvolledig</h1>
+            <span
+              onClick={() => setEyeToggleTeLaatOnvolledig(!eyeToggleTeLaatOnvolledig)}
+              className="cursor-pointer"
+            >
+              {eyeToggleTeLaatOnvolledig ? <FaEye /> : <FaEyeSlash />}
+            </span>
+          </div>
+          <div className="flex w-auto  h-auto">
+            <div>{loading && <Spinner />}</div>
+            {eyeToggleTeLaatOnvolledig ? (
+              <table className="w-full">
+                <thead>
+                  <tr className="text-gray-400">
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Reservatie ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 font-semibold text-center py-4"
+                    >
+                      Product details
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Uitgeleend door
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Afhaaldatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Retourdatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Valideren
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservatiesTeLaatOnvolledig.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="bg-green-600 rounded p-4 text-white text-center"
+                      >
+                        Geen reservaties die te laat of onvolledig zijn
+                      </td>
+                    </tr>
+                  ) : (
+                    reservatiesTeLaatOnvolledig.map((reservatie) => (
+                      <tr
+                        key={reservatie.reservatieNr}
+                        className="text-center space-y-4"
+                      >
+                        <td className="px-2">{reservatie.reservatieNr}</td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <IoInformationCircleSharp
+                              onClick={() => openModal(reservatie)}
+                              className="w-8 h-8 p-1 rounded-full bg-black text-white cursor-pointer"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-2">
+                          {`${reservatie.gebruiker.email
+                            .split("@")[0]
+                            .replace(".", " ")}`}
+                        </td>
+                        <td className="px-2">{reservatie.afhaalDatum}</td>
+                        <td className="px-2">{reservatie.retourDatum}</td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <FaCheck
+                              onClick={() =>
+                                handleTerugbreng(reservatie.reservatieNr)
+                              }
+                              className="w-8 h-8 p-1 rounded-full bg-green-500 text-white cursor-pointer"
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+
+        <hr className="my-4" />
+        {showModal && (
+          <ProductDetailsReservatie
+            reservatie={selectedReservatie}
+            closeModal={closeModal}
+          />
+        )}
+
       </main>
     </div>
   );

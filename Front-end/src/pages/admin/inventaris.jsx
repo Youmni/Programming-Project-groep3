@@ -14,6 +14,7 @@ import { enqueueSnackbar } from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
 import { FaCircleInfo } from "react-icons/fa6";
 import PopupProduct from "../../components/PopupProduct";
+import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 
 const Inventaris = () => {
   const [productModellen, setProductModellen] = useState([]);
@@ -24,6 +25,7 @@ const Inventaris = () => {
   const [showKeuzePopup, setShowKeuzePopup] = useState(false);
   const [showProductPopup, setShowProductPopup] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
+  
 
   const navigate = useNavigate();
 
