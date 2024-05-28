@@ -26,20 +26,15 @@ public class Reservatie {
     private Gebruiker gebruiker;
 
     @Column(name="Afhaaldatum", nullable = false)
-    @NotBlank
     private LocalDate afhaalDatum;
 
     @Column(name="Retourdatum", nullable = false)
-    @NotBlank
     private LocalDate retourDatum;
 
     @Column(name="Boekingdatum", nullable = false)
-    @NotBlank
     private LocalDate boekingDatum;
 
     @Column(name="Reservatiereden", nullable = false)
-    @Size(max = 100)
-    @NotBlank
     private String reden;
 
     @Column(name="Reservatieopmerking")

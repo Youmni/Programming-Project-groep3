@@ -94,7 +94,6 @@ public class Gebruiker {
         this.titel = titel;
     }
 
-
     public String getIsGeblacklist() {
         return isGeblacklist;
     }

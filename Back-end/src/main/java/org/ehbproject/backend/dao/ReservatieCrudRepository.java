@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface ReservatieCrudRepository extends CrudRepository<Reservatie, Integer> {
     public List<Reservatie> findByBoekingDatum(LocalDate boekingDatum);
@@ -22,7 +23,7 @@ public interface ReservatieCrudRepository extends CrudRepository<Reservatie, Int
     List<Reservatie> findByGebruikerAndStatus(Gebruiker gebruiker, String status);
     public List<Reservatie> findByOpmerking(String opmerking);
 
-    List<Reservatie> findByProductenContainingIgnoreCase(Product product);
+    List<Reservatie> findByProducten(Set<Product> producten);
 
 
     public List<Reservatie> findByRedenContainingIgnoreCase(String reden);
