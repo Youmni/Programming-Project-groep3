@@ -48,7 +48,6 @@ public class ReservatieController {
     private ProductReservationVerifier beschikbaar;
 
     private static final Logger logger = LoggerFactory.getLogger(ReservatieController.class);
-    private EmailService emailService;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)

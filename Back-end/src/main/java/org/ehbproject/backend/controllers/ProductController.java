@@ -54,10 +54,28 @@ public class ProductController {
             if (productModelen.isEmpty()) {
                 throw new RuntimeException("ProductModel met nummer " + productDTO.getProductModelNr() + " niet gevonden.");
             }
+
+
             ProductModel productModel = productModelen.getFirst();
+            String productnaam = productDTO.getProductNaam();
+
+//            List<ProductModel> productModellen = repoModel.findByProductModelNr(productModel.getProductModelNr());
+
+            List<Product> products = new ArrayList<>(repo.findByProductModel(productModel));
+            int aantalProducten = 0;
+            for(Product product : products){
+                aantalProducten++;
+            }
+
+            System.out.println(aantalProducten);
+            aantalProducten+=1;
+
+            String productNaamNummerString = String.valueOf(aantalProducten);
+
+
             Product product = new Product(
                     productModel,
-                    productDTO.getProductNaam(),
+                    productnaam + " (#" + productNaamNummerString + ")",
                     productDTO.getStatus()
             );
 
@@ -73,7 +91,7 @@ public class ProductController {
         @PutMapping("/{id}/bewerk-status")
         public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
             List<Product> reservaties = repo.findByProductID(id);
-            String[] statussen = {"Beschikbaar", "Niet beschikbaar", "Gepauseerd"};
+            String[] statussen = {"Beschikbaar", "Gereserveerd", "Gepauzeerd"};
 
             if (!reservaties.isEmpty()) {
                 boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
@@ -96,7 +114,7 @@ public class ProductController {
     @PutMapping("/{id}/bewerk-naam-status")
     public ResponseEntity<String> updateNaamAndStatus(@PathVariable int id, @RequestParam String newNaam, @RequestParam String newStatus) {
         List<Product> reservaties = repo.findByProductID(id);
-        String[] statussen = {"Beschikbaar", "Niet beschikbaar", "Gepauseerd"};
+        String[] statussen = {"Beschikbaar", "Gereserveerd", "Gepauzeerd"};
 
         if (!reservaties.isEmpty()) {
             boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
