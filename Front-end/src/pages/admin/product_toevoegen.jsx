@@ -131,7 +131,8 @@ const ProductToevoegen = () => {
         </div>
         <div className="flex flex-grow h-full mt-5 ml-8">
           <form className="flex w-full h-full gap-20">
-            <div className="flex flex-col w-1/2 border rounded-lg  p-5">
+            <div className="flex flex-col w-1/2 border rounded-lg gap-5 p-5">
+            <label className="text-lg">Selecteer Productmodel om een product aan toe te voegen</label>
               <div
                 onClick={() => setOpen(!open)}
                 className="bg-white w-[70%] p-4 flex border text-xl place-items-center justify-between rounded-xl"

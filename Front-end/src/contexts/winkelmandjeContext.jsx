@@ -6,6 +6,7 @@ const WinkelMandjeContext = createContext();
 const WinkelMandjeProvider = ({children}) => {
 
     const [winkelmandje, setWinkelmandje] = useState([])
+    console.log(winkelmandje)
 
     useEffect(() => {
         const storedWinkelmandje = localStorage.getItem('winkelmandje');
@@ -28,7 +29,7 @@ const WinkelMandjeProvider = ({children}) => {
     }
 
     const removeFromWinkelmandje = (productID) => {
-        setWinkelmandje((prevWinkelmandje) => prevWinkelmandje.filter((item) => item.product.productID !== productID))
+        setWinkelmandje((prevWinkelmandje) => prevWinkelmandje.filter((item) => item.productID !== productID))
         enqueueSnackbar('Product verwijderd uit winkelmandje', {variant: 'error'})
     };
 
