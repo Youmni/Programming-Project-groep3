@@ -38,12 +38,13 @@ public class BeschadigingsController {
             System.out.println("Inkomende BeschadigingDTO: " + beschadigingDTO.getGebruikerId() + beschadigingDTO.getProductId() + beschadigingDTO.getBeschrijving() + beschadigingDTO.getBeschadigingsDatum());
             List<Gebruiker> gebruikers = gebruikerrepo.findByGebruikerID(beschadigingDTO.getGebruikerId());
             if (gebruikers.isEmpty()) {
-                throw new RuntimeException("Gebruiker met ID " + beschadigingDTO.getGebruikerId() + " niet gevonden.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(beschadigingDTO.getGebruikerId() + " niet gevonden.");
+
             }
             Gebruiker gebruiker = gebruikers.getFirst();
             List<Product> producten = productrepo.findByProductID(beschadigingDTO.getProductId());
             if (producten.isEmpty()) {
-                throw new RuntimeException("product met ID " + beschadigingDTO.getProductId() + " niet gevonden.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(beschadigingDTO.getProductId() + " niet gevonden.");
             }
             Product product= producten.getFirst();
 
@@ -54,6 +55,10 @@ public class BeschadigingsController {
                     beschadigingDTO.getBeschadigingsDatum()
             );
             beschadigingrepo.save(beschadiging);
+
+            product.setIsBeschadigt("True");
+            productrepo.save(product);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Beschadiging successvol toegevoegd " + beschadiging);
         }
         catch (Exception e){

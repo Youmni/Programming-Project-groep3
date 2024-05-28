@@ -34,7 +34,7 @@ public class Product {
 
     @Column(name = "ISBESCHADIGT")
     @Size(max = 40)
-    private String productbeschrijving;
+    private String isBeschadigt;
 
 
     @ManyToMany(mappedBy = "producten")
@@ -83,7 +83,11 @@ public class Product {
         this.status = status;
     }
 
+    public String getIsBeschadigt() {
+        return isBeschadigt;
+    }
 
-
-
+    public void setIsBeschadigt(String isBeschadigt) {
+        this.isBeschadigt = isBeschadigt;
+    }
 }
