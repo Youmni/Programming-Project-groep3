@@ -20,7 +20,7 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
     }
 
     axios
-      .get(`http://localhost:8080/product/model=${productModelNr}`, {
+      .get(`http://localhost:8080/product/model=${productModelNr}/status?Beschikbaar&Gereserveerd`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
