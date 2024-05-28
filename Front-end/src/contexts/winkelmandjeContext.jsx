@@ -29,8 +29,8 @@ const WinkelMandjeProvider = ({children}) => {
     }
 
     const removeFromWinkelmandje = (productID) => {
-        setWinkelmandje((prevWinkelmandje) => prevWinkelmandje.filter((item) => item.productID !== productID))
-        enqueueSnackbar('Product verwijderd uit winkelmandje', {variant: 'error'})
+        setWinkelmandje((prevWinkelmandje) => prevWinkelmandje.filter((item) => item.productID !== productID));
+        enqueueSnackbar('Product verwijderd uit winkelmandje', { variant: 'error' });
     };
 
     const clearWinkelmandje = () => {

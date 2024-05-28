@@ -1,29 +1,26 @@
-import react, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
-import { json } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
-import { data } from "autoprefixer";
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Popup from '../../components/PopupProduct';
 import { Link, useNavigate } from "react-router-dom";
-import {enqueueSnackbar} from "notistack";
+import { enqueueSnackbar } from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
 import { FaCircleInfo } from "react-icons/fa6";
 import PopupProduct from "../../components/PopupProduct";
-
 
 const Inventaris = () => {
   const [productModellen, setProductModellen] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = ([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [showKeuzePopup, setShowKeuzePopup] = useState(false);
   const [showProductPopup, setShowProductPopup] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
@@ -31,7 +28,6 @@ const Inventaris = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     const token = localStorage.getItem('authToken');
 
     if (!token) {
@@ -39,9 +35,9 @@ const Inventaris = () => {
       navigate("/login");
       return;
     }
-    
+
     setLoading(true);
-    // fetch productmodellen
+    // Fetch product models
     axios
       .get("http://localhost:8080/productmodel", {
         headers: {
@@ -56,9 +52,9 @@ const Inventaris = () => {
         console.error("Error fetching data: ", error);
         setLoading(false);
       });
-  
-  // Fetch categories
-  axios
+
+    // Fetch categories
+    axios
       .get("http://localhost:8080/categorie", {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -72,17 +68,15 @@ const Inventaris = () => {
         console.error("Error fetching data: ", error);
         setLoading(false);
       });
-  }, []);
-
-
+  }, [navigate]);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const filteredProductModellen = productModellen.filter((model) =>
-    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase())||
-    model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase())||
+    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase()) ||
     String(model.productModelNr).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -96,19 +90,24 @@ const Inventaris = () => {
 
   const openKeuzePopup = () => {
     setShowKeuzePopup(true);
-  }
+  };
   const closeKeuzePopup = () => {
     setShowKeuzePopup(false);
-  }
+  };
 
   const openProductPopup = (model) => {
     setSelectedModel(model);
     setShowProductPopup(true);
-  }
+  };
   const closeProductPopup = () => {
     setShowProductPopup(false);
+  };
+
+  if (showKeuzePopup || showProductPopup) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
   }
-  
 
   return (
     <content className="top-0 flex-grow">
@@ -138,16 +137,16 @@ const Inventaris = () => {
                 name=""
                 id=""
                 placeholder="Zoek hier"
-                className="h-full w-full rounded-xl p-2"
+                className="h-full w-full rounded-xl p-2 outline-none"
                 value={searchQuery}
                 onChange={handleSearch}
               />
             </div>
             <div className="flex h-full border-2 rounded-xl items-end justify-center border-Lichtgrijs w-28 hover:cursor-pointer">
-            <div className="flex h-full items-center justify-center gap-2">
-              <FaFilter className="size-4 text-black-600" />
-              <h2 className="text-xl font-semibold">Filter</h2>
-            </div>
+              <div className="flex h-full items-center justify-center gap-2">
+                <FaFilter className="size-4 text-black-600" />
+                <h2 className="text-xl font-semibold">Filter</h2>
+              </div>
             </div>
           </div>
         </div>
@@ -163,7 +162,7 @@ const Inventaris = () => {
                   scope="col"
                   className="text-left hover:cursor-pointer w-80 "
                 >
-                  Product
+                  Product Model
                 </th>
                 <th scope="col" className="text-left">
                   Categorie
@@ -199,9 +198,9 @@ const Inventaris = () => {
                     <div className="flex items-center justify-start gap-2 overflow-x-hidden">
                       <div className="h-12 w-12 overflow-hidden rounded-full border-2 border-Lichtgrijs">
                         <img
-                          src={canonFoto}
+                          src={"/src/assets/ProductModelFotos/" + model.productModelFoto}
                           alt=""
-                          className="w-auto h-full object-cover bg-white"
+                          className="w-auto h-full object-cover"
                         />
                       </div>
                       <h2 className="flex flex-col -space-y-1">
@@ -237,8 +236,7 @@ const Inventaris = () => {
           </table>
         </div>
         {showKeuzePopup && <KeuzePopup onClose={closeKeuzePopup} />}
-        {showProductPopup && <PopupProduct onClose={closeProductPopup} model = {selectedModel} />}
-
+        {showProductPopup && <PopupProduct onClose={closeProductPopup} model={selectedModel} />}
       </main>
     </content>
   );

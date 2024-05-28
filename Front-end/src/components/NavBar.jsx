@@ -6,12 +6,14 @@ import { FaUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { BiShoppingBag } from "react-icons/bi";
 import WinkelMandje from "../pages/user/winkelmandje";
+import axios from "axios";
 
 
 const NavBar = () => {
   // For clicking inside and outside of the box --->>
   const [clicked, setClicked] = useState(false);
   const [winkelMandje, setWinkelMandje] = useState(false);
+  const [categories, setCategories] = useState([]); 
   const node = useRef();
 
   const handleClickOutside = (e) => {
@@ -46,8 +48,23 @@ const NavBar = () => {
     setWinkelMandje(false);
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    axios
+      .get("http://localhost:8080/categorie", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
+
   // Define categories
-  const categories = ['Audio', 'Video', 'XR', 'Tools', 'Belichting', 'Varia'];
 
   return (
     <>
@@ -75,11 +92,11 @@ const NavBar = () => {
             {clicked && (
               <div className="origin-top-right absolute left-0 mt-4 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
                 <h3 className="text-lg">Categoriën</h3>
-                <ul>
-                  {categories.map((category, index) => (
-                    <li key={index} className="hover:bg-blue-500 hover:text-white">{category}</li>
+                <div className="flex flex-col">
+                  {categories.map((categorie, index) => (
+                    <Link to={`/inventaris/${categorie.categorieNr}`} key={index} className="hover:bg-blue-500 p-2 hover:text-white">{categorie.categorieNaam}</Link>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
           </button>

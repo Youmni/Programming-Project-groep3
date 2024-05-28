@@ -81,7 +81,7 @@ const closeUserPopup = () => {
 }
 
   return (
-    <content className="top-0 flex-grow">
+    <div className="top-0 flex-grow">
       <main className="p-10">
         <h1 className="text-3xl font-bold w-40 border-b justify-center">
           Gebruikers
@@ -199,7 +199,7 @@ const closeUserPopup = () => {
         </div>
       </main>
       {showPopup && <PopupUser onClose={closeUserPopup} gebruiker={selectedGebruiker} />}
-    </content>
+    </div>
   );
 };
 

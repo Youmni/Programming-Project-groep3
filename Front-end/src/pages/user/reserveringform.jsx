@@ -76,6 +76,7 @@ const reserveringForm = ({ closeModal, product }) => {
     const productData = {
       ...formData,
     };
+    console.log(productData)
     addToWinkelmandje(productData);
     closeModal();
     enqueueSnackbar("Product toegevoegd aan winkelmandje", {

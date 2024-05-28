@@ -39,7 +39,6 @@ const inventarisCategorie = () => {
       })
       .then((response) => {
         setProductModels(response.data);
-        console.log(response.data);
         enqueueSnackbar("Productmodellen opgehaald", { variant: "success" });
       })
       .catch((error) => {
@@ -76,8 +75,7 @@ const inventarisCategorie = () => {
           <Link className="hover:underline" to={`/inventaris`}>
             <span>Inventaris </span>
           </Link>
-          / {categorieNaam}
-          <span></span>
+          <span>/ {categorieNaam}</span>
         </h1>
         <div className="flex gap-5">
           <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs">

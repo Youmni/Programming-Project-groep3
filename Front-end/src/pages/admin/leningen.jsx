@@ -18,6 +18,7 @@ const Leningen = () => {
   const [reservaties, setReservaties] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [product, setProduct] = useState(null);
 
   const navigate = useNavigate();
 

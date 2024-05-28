@@ -23,7 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   const location = useLocation();
-
+  
   console.log("Current location:", location.pathname);
 
   if (location.pathname === "/"){

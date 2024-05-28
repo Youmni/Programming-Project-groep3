@@ -13,16 +13,16 @@ import { useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io"; 
 import { MdOutlineBrokenImage } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
-
-
-
+import BeschadigingPopup from "./BeschadigingPopup";
 
 const PopupProduct = ({ onClose, model }) => {
   const [producten, setProducten] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [product, setProduct] = useState({});
+  const [showBeschadigingPopup, setShowBeschadigingPopup] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchProducten = () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
@@ -43,7 +43,6 @@ const PopupProduct = ({ onClose, model }) => {
         console.log(response.data);
         setProducten(response.data);
         enqueueSnackbar("Producten opgehaald", { variant: "success" });
-        navigate("/admin/inventaris");
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
@@ -52,7 +51,11 @@ const PopupProduct = ({ onClose, model }) => {
           { variant: "error" }
         );
       });
-  }, [model]);
+  };
+
+  useEffect(() => {
+    fetchProducten();
+  }, []);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -68,12 +71,13 @@ const PopupProduct = ({ onClose, model }) => {
   );
 
   const pauzeerProduct = (product) => {
-    
     const token = localStorage.getItem("authToken");
     const newStatus = product.status === "Gepauzeerd" ? "Beschikbaar" : "Gepauzeerd";
+
     axios
       .put(
-        `http://localhost:8080/product/${product.productID}/bewerk-status?newStatus=${newStatus}`,{},
+        `http://localhost:8080/product/${product.productID}/bewerk-status?newStatus=${newStatus}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,41 +87,65 @@ const PopupProduct = ({ onClose, model }) => {
       .then((response) => {
         enqueueSnackbar(`Product is ${newStatus}`, { variant: "success" });
         console.log(response.data);
-        onClose()
+        fetchProducten(); 
       })
       .catch((error) => {
         console.error("Error pauzeren product: ", error);
-        enqueueSnackbar("Error: Product niet gepauzeerd, probeer het opnieuw"+error, {
+        enqueueSnackbar("Error: Product niet gepauzeerd, probeer het opnieuw" + error, {
           variant: "error",
         });
       });
   };
 
-
   const deleteProduct = (product) => {
     const token = localStorage.getItem("authToken");
 
     axios
-    .delete(`http://localhost:8080/product/${product.productID}/delete`, {},{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => {
-      enqueueSnackbar("Product verwijderd", { variant: "success" });
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error verwijderen product: ", error);
-      enqueueSnackbar("Error: Product niet verwijderd, probeer het opnieuw", {
-        variant: "error",
+      .delete(`http://localhost:8080/product/${product.productID}/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        enqueueSnackbar("Product verwijderd", { variant: "success" });
+        console.log(response.data);
+        fetchProducten(); // Refetch the product data to update the UI
+      })
+      .catch((error) => {
+        console.error("Error verwijderen product: ", error);
+        enqueueSnackbar("Error: Product niet verwijderd, probeer het opnieuw", {
+          variant: "error",
+        });
       });
-    })
-  }
+  };
+
+  const beschadigingToevoegen = (product) => {
+    setProduct(product);
+    setShowBeschadigingPopup(true);
+  };
+
+  const closeBeschadigingPopup = () => {
+    setShowBeschadigingPopup(false);
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Beschikbaar":
+        return "text-green-500";
+      case "Gepauzeerd":
+        return "text-blue-500";
+      case "Beschadigd":
+        return "text-red-700";
+      case "Gereserveerd":
+        return "text-yellow-500";
+      default:
+        return "text-black";
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-10 rounded-2xl h-[100%] w-[60%] relative shadow-md">
+      <div className="bg-white p-10 rounded-2xl h-[90%] w-[60%] relative shadow-md">
         <section className="flex items-center gap-8 ">
           <img
             className="w-24 h-auto object-cover"
@@ -164,7 +192,7 @@ const PopupProduct = ({ onClose, model }) => {
           <p className="text-gray-600">{model.productModelBeschrijving}</p>
         </section>
         <h2 className="font-bold mt-4 text-gray-700 text-xl">Overzicht</h2>
-        <section className="mt-2 border-2 flex flex-col max-h-[400px] overflow-y-auto border-gray rounded-lg p-3">
+        <section className="mt-2 border-2 flex flex-col max-h-[calc(100%-px)] overflow-y-auto border-gray rounded-lg p-3">
           <section className="flex justify-start gap-6 sticky top-0 z-50 bg-white">
             <div className="flex items-center border border-gray-700 rounded-lg p-3 gap-2 w-[40%]">
               <CiSearch className="text-gray-500 font-bold" size={18} />{" "}
@@ -214,24 +242,24 @@ const PopupProduct = ({ onClose, model }) => {
             </thead>
             <tbody >
               {filteredProducten.map((product, index) => (
-                <tr key={product.productModelNr} className="h-12 w-auto ">
+                <tr key={product.productModelNr} className="h-12 w-auto font-bold ">
                   <td className="text-center h-full">
                     {index}
-                    </td>
+                  </td>
                   <td className="">
                     #{product.productID}
                   </td>
-                  <td className="">
+                  <td className={getStatusColor(product.status)}>
                     {product.status}
                   </td>
                   <td className="text-end space-x-1">
                     <button onClick={() =>{pauzeerProduct(product)}} className= {`p-2 rounded-xl ${product.status === "Gepauzeerd" ? "bg-green-500" : "bg-blue-500"}`}>
                       {product.status === "Gepauzeerd" ? <FaPlay className="text-white"/> : <FaPause className="text-white"/>}
                     </button>
-                    <button  className="bg-red-800 p-2 rounded-xl">
-                    <MdOutlineBrokenImage className="text-white"/>
+                    <button title="Beschadiging toevoegen" onClick={() => {beschadigingToevoegen(product)}}  className="bg-red-800 p-2 rounded-xl">
+                      <MdOutlineBrokenImage  className="text-white"/>
                     </button>
-                    <button onClick={() =>{deleteProduct(product)}} className="bg-red-500 p-2 rounded-xl">
+                    <button title="delete" onClick={() =>{deleteProduct(product)}} className="bg-red-500 p-2 rounded-xl">
                       <MdDelete className="text-white"/>
                     </button>
                   </td>
@@ -245,13 +273,14 @@ const PopupProduct = ({ onClose, model }) => {
             terug
           </button>
           <div className="">
-            <button className="bg-Groen text-black px-6 py-2 rounded-2xl flex items-center gap-2 text-2xl">
+            <button className="bg-Groen text-black px-6 py-2 rounded-2xl flex items-center gap-2 text-2xl transform transition-transform duration-250 hover:scale-110">
               <FaCheckCircle className="" />
               <span>Opslaan</span>
             </button>
           </div>
         </section>
       </div>
+      {showBeschadigingPopup && (<BeschadigingPopup onClose={closeBeschadigingPopup} product={product} />)}
     </div>
   );
 };

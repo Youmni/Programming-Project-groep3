@@ -6,6 +6,7 @@ import { RxDashboard } from "react-icons/rx";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
+import CategorieToevoegen from "../../components/categorieToevoegen";
 
 const ProductModelToevoegen = () => {
   const navigate = useNavigate();
@@ -17,17 +18,97 @@ const ProductModelToevoegen = () => {
     productModelBeschrijving: "",
     productModelFoto: "",
   });
+  const [openCategoriePopup, setOpenCategoriePopup] = useState(false);
   console.log(formData);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const fetchCategories = () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+        navigate("/login");
+        return;
+      }
+      axios
+        .get("http://localhost:8080/categorie", {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then((response) => {
+          setCategories(response.data);
+          enqueueSnackbar("Categorieën opgehaald", {variant: "success"});
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+          enqueueSnackbar("Error: Categorieën niet opgehaald", {variant: "error"});
+        });
+    };
+    fetchCategories();
+  }, []);
 
+  const handlechange = (event) => {
+    const { name, value, type, files } = event.target;
+    console.log(name, value);
+    if (type === "file") {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+
+    if (value === "Categorie toevoegen.") {
+      categorieToevoegen();
+    }
+  }
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const token = localStorage.getItem('authToken');
+    const updatedFormData = {
+      ...formData,
+    }
+    console.log(updatedFormData);
+    axios
+      .post("http://localhost:8080/productmodel/toevoegen", updatedFormData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        enqueueSnackbar("Product Model toegevoegd", { variant: "success" });
+        console.log("Product Model Toegevoegd", response.data);
+        navigate("/admin/inventaris");
+      })
+      .catch(error => {
+        console.error("Error adding product model: ", error);
+        enqueueSnackbar("Error: Product Model niet toegevoegd, probeer het opnieuw", { variant: "error" });
+
+        setFormData({
+          productModelNaam: "",
+          productModelMerk: "",
+          categorieNaam: "",
+          productModelBeschrijving: "",
+          productModelFoto: "",
+        });
+      })
+  }
+
+  const categorieToevoegen = () => {
+    setOpenCategoriePopup(true);
+    console.log("Categorie toevoegen")
+  }
+
+  const closeCategoriePopup = () => {
+    setOpenCategoriePopup(false);
+  }
+
+  const refreshCategories = () => {
+    const token = localStorage.getItem('authToken');
     if (!token) {
       enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
       navigate("/login");
       return;
     }
-    // fetch Categories
     axios
       .get("http://localhost:8080/categorie", {
         headers: {
@@ -42,53 +123,7 @@ const ProductModelToevoegen = () => {
         console.error("Error fetching data: ", error);
         enqueueSnackbar("Error: Categorieën niet opgehaald", {variant: "error"});
       });
-  }, []);
-
-  const handlechange = (event) => {
-    const { name, value, type, files } = event.target;
-    if (type === "file") {
-      setFormData({ ...formData, [name]: files[0] });
-    }else{
-      setFormData({ ...formData, [name]: value });
-    }
   }
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    const token = localStorage.getItem('authToken');
-    const updatedFormData = {
-      ...formData,
-    }
-    console.log(updatedFormData);
-    axios
-    .post("http://localhost:8080/productmodel/toevoegen", updatedFormData, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      enqueueSnackbar("Product Model toegevoegd", { variant: "success" });
-      console.log("Product Model Toegevoegd",response.data);
-      navigate("/admin/inventaris");
-    })
-    .catch(error => {
-      console.error("Error adding product model: ", error);
-      enqueueSnackbar("Error: Product Model niet toegevoegd, probeer het opnieuw", { variant: "error" });
-
-      setFormData({
-        productModelNaam: "",
-        productModelMerk: "",
-        categorieNaam: "",
-        productModelBeschrijving: "",
-        productModelFoto: "",
-      })
-    })
-    
-  }
-
-
-    
-  
 
   return (
     <content className="top-0 flex-grow">
@@ -120,7 +155,7 @@ const ProductModelToevoegen = () => {
           </breadcrumb>
         </div>
         <div className="flex flex-grow h-full mt-5 ml-8 ">
-          <form onSubmit className="flex w-full h-full gap-20">
+          <form onSubmit={onSubmit} className="flex w-full h-full gap-20">
             <div className="flex flex-col w-1/2 border rounded-lg gap-8 p-5">
               <div className="flex flex-col w-3/4 text-Grijs">
                 <label htmlFor="text">Product Naam</label>
@@ -131,7 +166,6 @@ const ProductModelToevoegen = () => {
                   required
                   value={formData.productModelNaam}
                   onChange={handlechange}
-                  
                 />
               </div>
               <div className="flex flex-col w-3/4 text-Grijs">
@@ -163,10 +197,10 @@ const ProductModelToevoegen = () => {
                       {categorie.categorieNaam}
                     </option>
                   ))}
-                  <option onClick>Categorie toevoegen.</option>
+                  <option>Categorie toevoegen.</option>
                 </select>
               </div>
-              
+
               <div className="flex flex-col w-3/4 text-Grijs">
                 <label>Beschrijving</label>
                 <textarea
@@ -196,10 +230,15 @@ const ProductModelToevoegen = () => {
             </div>
           </form>
         </div>
+        {openCategoriePopup && (
+          <CategorieToevoegen
+            onClose={() => closeCategoriePopup()}
+            onCategorieAdded={refreshCategories}
+          />
+        )}
       </main>
     </content>
   );
 };
 
 export default ProductModelToevoegen;
-
