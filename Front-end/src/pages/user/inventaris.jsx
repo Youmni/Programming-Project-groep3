@@ -107,8 +107,8 @@ const inventarisCategorie = () => {
             className="border bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16"
           >
             <img
-              src={productModel.productModelFoto}
-              alt=""
+              src={"/src/assets/ProductModelFotos/" + productModel.productModelFoto}
+              alt={productModel.productModelNaam}
               className="w-full h-24 object-contain shadow-md"
             />
             <div className="flex flex-col flex-wrap ">
