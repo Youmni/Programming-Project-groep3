@@ -1,27 +1,27 @@
+import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-import { enqueueSnackbar } from "notistack";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
-import canonFoto from "../../assets/canon-eos-200d.jpg";
-import { FaShoppingBag } from "react-icons/fa";
+import { FaBox } from "react-icons/fa";
+import { enqueueSnackbar } from "notistack";
 import ReserveringForm from "./reserveringform";
 import { Link, useNavigate } from "react-router-dom";
+import ChooseProduct from "../../components/ChooseProduct";
 
-const Inventaris = () => {
-  const [Inventaris, setInventaris] = useState([]);
+const inventarisCategorie = () => {
+  const [productModels, setProductModels] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [selectedProductModel, setSelectedProductModel] = useState(null);
+  const [categorieNaam, setCategorieNaam] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
+ 
     if (!token) {
       enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
         variant: "error",
@@ -29,22 +29,25 @@ const Inventaris = () => {
       navigate("/login");
       return;
     }
-    setLoading(true);
+
     axios
-      .get("http://localhost:8080/product", {
+      .get(`http://localhost:8080/productmodel`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        setLoading(false);
-        setInventaris(res.data);
-        enqueueSnackbar("Inventaris opgehaald", { variant: "success" });
+      .then((response) => {
+        setProductModels(response.data);
+        console.log(response.data);
+        enqueueSnackbar("Productmodellen opgehaald", { variant: "success" });
       })
       .catch((error) => {
-        setLoading(false);
-        console.log(error);
+        console.error("Error fetching data: ", error);
         enqueueSnackbar("Error", { variant: "error" });
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("authToken");
+          navigate("/login");
+        }
       });
   }, []);
 
@@ -52,12 +55,12 @@ const Inventaris = () => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredProducten = Inventaris.filter((model) =>
-    model.productNaam.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProductModels = productModels.filter((model) =>
+    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const openModal = (product) => {
-    setSelectedProduct(product);
+  const openModal = (productModel) => {
+    setSelectedProductModel(productModel);
     setShowModal(true);
   };
 
@@ -65,27 +68,24 @@ const Inventaris = () => {
     setShowModal(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center flex-col space-y-2 items-center h-screen">
-        <h1>Even geduld, het inventaris wordt ingeladen</h1>
-        <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
-      </div>
-    );
-  }
-
   return (
-    <main className="flex p-12 w-full flex-col bg-slate-50">
+    <main className="flex p-12 w-full flex-col bg-slate-50 z-0">
       <header className="flex justify-between w-full ">
-        <h1 className="font-semibold text-3xl">Inventaris</h1>
+        <h1 className="font-semibold text-3xl">
+          <Link className="hover:underline" to={`/inventaris`}>
+            <span>Inventaris </span>
+          </Link>
+          / {categorieNaam}
+          <span></span>
+        </h1>
         <div className="flex gap-5">
-          <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs bg-white">
-            <IoSearchOutline className="size-6 ml-3" />
+          <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs">
+            <IoSearchOutline className="ml-2 size-6" />
             <input
               type="search"
               name=""
               id=""
-              placeholder="Zoek naar producten..."
+              placeholder="Zoek naar productmodellen..."
               className="h-full rounded-xl p-2"
               value={searchQuery}
               onChange={handleSearch}
@@ -97,40 +97,53 @@ const Inventaris = () => {
           </div>
         </div>
       </header>
-      <content className="flex flex-wrap mt-5 gap-10 justify-center">
-        {filteredProducten.map((product) => (
+      <section className="flex flex-wrap mt-5 gap-10 justify-center">
+        {filteredProductModels.map((productModel) => (
           <figure
-            key={product.productnr}
-            className="border min-h-[170px] bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md"
+            onLoad={() => {
+              setCategorieNaam(productModel.categorie.categorieNaam);
+            }}
+            key={productModel.productModelNr}
+            className="border bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16"
           >
             <img
-              src={canonFoto}
+              src={productModel.productModelFoto}
               alt=""
-              className="w-full h-16 object-contain"
+              className="w-full h-24 object-contain shadow-md"
             />
             <div className="flex flex-col flex-wrap ">
               <h1 className="text-2xl font-semibold overflow-hidden">
-                {product.productNaam}
+                {productModel.productModelNaam}
               </h1>
               <div className="flex flex-col w-3/5 flex-wrap">
-                <h2 className="text-Lichtgrijs">ProductBeschrijving</h2>
-                <p className="text-sm">Dit is de beschrijving</p>
+                <h2 className="text-Lichtgrijs">ProductModelBeschrijving</h2>
+                <p className="text-sm">
+                  {productModel.productModelBeschrijving === null
+                    ? "geen beschrijving beschikbaar"
+                    : productModel.productModelBeschrijving}
+                </p>
               </div>
             </div>
             <button
               className="h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950"
-              onClick={() => openModal(product)}
+              onClick={() => openModal(productModel)}
             >
-              <FaShoppingBag className="size-6 text-white" />
+              <FaBox className="size-6 text-white" />
             </button>
           </figure>
         ))}
-      </content>
+      </section>
+
       {showModal && (
-        <ReserveringForm closeModal={closeModal} product={selectedProduct} />
-      )}
+  <ChooseProduct
+    productModelNr={selectedProductModel.productModelNr}
+    closeModal={closeModal}
+    
+  />
+)}
+
     </main>
   );
 };
 
-export default Inventaris;
+export default inventarisCategorie;

@@ -1,5 +1,6 @@
 import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
+import { FaCheck } from "react-icons/fa";
 import { FaBoxes } from "react-icons/fa";
 import axios from "axios";
 import { FaCheckCircle } from "react-icons/fa";
@@ -8,21 +9,54 @@ import { PiHandCoinsDuotone } from "react-icons/pi";
 import { FaCirclePause } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import {enqueueSnackbar} from "notistack";
-
+import { MdOutlineAddCircle } from "react-icons/md";
+import { enqueueSnackbar } from "notistack";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
+  const [reservatiesRetour, setReservaties] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
 
     if (!token) {
-      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
+        variant: "error",
+      });
       navigate("/login");
       return;
     }
-  },[])
+  }, []);
+
+  const datumVandaag = () => {
+    const vandaag = new Date();
+    const dd = String(vandaag.getDate()).padStart(2, "0");
+    const mm = String(vandaag.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = vandaag.getFullYear();
+
+    return yyyy + "-" + mm + "-" + dd;
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/reservatie/retourDatum=${datumVandaag()}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setReservaties(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        enqueueSnackbar("Er zijn geen reservaties gevonden", {
+          variant: "error",
+        });
+      });
+  }, []);
 
   return (
     <main className=" p-10 w-">
@@ -187,46 +221,85 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="m-8">
-      <h1 className="text-xl font-semibold">Reservaties tegen vandaag</h1>
-      <div className="grid grid-cols-5 mt-4">
-        <div>
-          <p className="ml-4 font-semibold">Product</p>
-        </div>
-        <div>
-          <p className="font-semibold">Uitgeleend door</p>
-        </div>
-        <div>
-          <p className="font-semibold">Uitgeleend van</p>
-        </div>
-        <div>
-          <p className="font-semibold">Uitgeleend tot</p>
-        </div>
-        <div>
-          <p className="font-semibold">Teruggave valideren</p>
-        </div>
-      </div>
-      <hr className="my-4" />
+        <h1 className="text-xl font-semibold">Reservaties tegen vandaag</h1>
+        <div className="flex w-auto  h-auto">
+          <div>{loading && <Spinner />}</div>
+          <table className="w-full">
+  <thead>
+    <tr className="text-gray-300">
+      <th scope="col" className="px-1 font-semibold text-center">
+        Reservatie ID
+      </th>
+      <th scope="col" className="px-1 font-semibold text-center py-4">
+        Producten
+      </th>
+      <th scope="col" className="px-1 font-semibold text-center">
+        Uitgeleend door
+      </th>
+      <th scope="col" className="px-1 font-semibold text-center">
+        Afhaaldatum
+      </th>
+      <th scope="col" className="px-1 font-semibold text-center">
+        Retourdatum
+      </th>
+      <th scope="col" className="px-1 font-semibold text-center">
+        Valideren
+      </th>
+      <th scope="col" className="px-1 font-semibold text-center py-4">
+        Actie
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {reservatiesRetour.map((reservatie) => (
+      <tr key={reservatie.reservatieNr} className="text-center">
+        <td className="px-2">{reservatie.reservatieNr}</td>
+        <td className="px-2">{reservatie.producten.length}</td>
+        <td className="px-2">{`${reservatie.gebruiker.email.split("@")[0].replace(".", " ")}`}</td>
+        <td className="px-2">{reservatie.afhaalDatum}</td>
+        <td className="px-2">{reservatie.retourDatum}</td>
+        <td className="px-2 flex justify-center">{/* hier moet je de reservatie in detail kunnen bekijken */}</td>
+        <td className="px-2 flex justify-center">
+          <FaCheck className="w-8 h-8 p-1 rounded-full bg-green-500 text-white cursor-pointer" />
+        </td>
+        <td className="px-2"></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-      <h1 className="text-xl font-semibold">Reservaties die te laat zijn</h1>
-      <div className="grid grid-cols-5 mt-4">
-        <div>
-          <p className="ml-4 font-semibold">Product</p>
         </div>
-        <div>
-          <p className="font-semibold">Uitgeleend door</p>
-        </div>
-        <div>
-          <p className="font-semibold">Uitgeleend van</p>
-        </div>
-        <div>
-          <p className="font-semibold">Uitgeleend tot</p>
-        </div>
-        <div>
-          <p className="font-semibold">Teruggave valideren</p>
-        </div>
+        <hr className="my-4" />
+
+        <h1 className="text-xl font-semibold">Reservaties die te laat zijn</h1>
+        <div>{loading && <Spinner />}</div>
+        <table className="w-full h-full">
+          <thead className="w-full items-center h-16">
+            <tr className="flex justify-evenly items-center mt-5  text-gray-300">
+              <th scope="col" className="px-2 font-semibold">
+                Product
+              </th>
+              <th scope="col" className="font-semibold">
+                Uitgeleend door
+              </th>
+              <th scope="col" className="font-semibold">
+                Afhaaldatum
+              </th>
+              <th scope="col" className=" font-semibold">
+                Retourdatum
+              </th>
+              <th scope="col" className="font-semibold">
+                Valideren
+              </th>
+              <th scope="col" className="font-semibold">
+                Actie
+              </th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
       <hr className="my-4" />
-    </div>
     </main>
   );
 };

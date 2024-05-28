@@ -19,27 +19,48 @@ import Winkelmandje from "./pages/user/winkelmandje";
 import { WinkelMandjeProvider } from "./contexts/winkelmandjeContext";
 import Register from "./components/Register";
 import ProductModel_toevoegen from "./pages/admin/productModel_toevoegen";
-
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
- const location = useLocation();
+  const location = useLocation();
 
-  if(location.pathname === "/") return <Login />
+  console.log("Current location:", location.pathname);
+
+  if (location.pathname === "/"){
+    console.log("Navigating to /login because current path is /");
+    return <Login />;
+  } 
 
   return (
     <div className="flex flex-col min-h-screen max-w-screen">
       <Routes>
-        <Route path="/admin/*" element={<AdminRoutes />} />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute component={AdminRoutes} allowedRoles={["Admin"]} />
+          }
+        />
         <Route path="/login" element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path="/*" element={<UserRoutes />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute
+              component={UserRoutes}
+              allowedRoles={["Student", "Docent", "Admin"]}
+            />
+          }
+        />
+
+        <Route path="/forbidden" element={<Forbidden />} />
       </Routes>
     </div>
   );
 };
 
 const AdminRoutes = () => {
+
+  console.log("Rendering AdminRoutes");
   return (
     <div className="flex">
       <AdminSideBar />
@@ -63,26 +84,27 @@ const AdminRoutes = () => {
 };
 
 const UserRoutes = () => {
+  console.log("Rendering UserRoutes");
   return (
     <WinkelMandjeProvider>
-    <div className="flex flex-col flex-grow">
-      <NavBar />
-      <div className="flex-grow">
-        <Routes>  
-          <Route path="/home" element={<Home />} />
-          <Route path="/inventaris/*" element={<InventarisRoutes />} />
-          <Route path="/FAQ" element={<FAQ />}/>
-          <Route path="/leningen" element={<UserLeningen />} />
-        </Routes>
+      <div className="flex flex-col flex-grow">
+        <NavBar />
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/inventaris/*" element={<InventarisRoutes />} />
+            <Route path="/FAQ" element={<FAQ />} />
+            <Route path="/leningen" element={<UserLeningen />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
-      <Footer/>
-    </div>
     </WinkelMandjeProvider>
   );
 };
 
 const InventarisRoutes = () => {
-
+  console.log("Rendering InventarisRoutes");
   return (
     <div>
       <Routes>
@@ -91,8 +113,11 @@ const InventarisRoutes = () => {
       </Routes>
     </div>
   );
-
 };
 
+const Forbidden = () => {
+  console.log("Rendering Forbidden");
+  return <div className="flex justify-center items-center h-screen"><p className="text-5xl">403 Forbidden</p></div>;
+};
 
 export default App;

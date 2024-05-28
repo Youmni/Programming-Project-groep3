@@ -16,7 +16,7 @@ const keuzePopup = ({ onClose }) => {
       <div className="bg-white p-10 rounded-lg min-h-[75%] w-1/2 relative shadow-md">
 
         <div className="flex justify-between mb-40">
-            <h1 className="text-2xl">Bestaat het product al?</h1>
+            <h1 className="text-2xl">Bestaat het productmodel al?</h1>
             <button onClick={onClose} className="hover:underline">Terug</button>
         </div>
         <div className="flex justify-evenly">
