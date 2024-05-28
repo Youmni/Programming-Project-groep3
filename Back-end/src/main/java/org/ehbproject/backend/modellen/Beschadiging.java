@@ -12,7 +12,7 @@ public class Beschadiging {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Beschadigingid")
-    private int BeschadigingId;
+    private int beschadigingId;
 
     @ManyToOne
     @JoinColumn(name = "Gebruikerid", nullable = false)
@@ -26,23 +26,23 @@ public class Beschadiging {
     private String Beschrijving;
 
     @Column(name="Beschadigingsdatum", nullable = false)
-    private LocalDate Beschadigingsdatum;
+    private LocalDate beschadigingsdatum;
 
     public Beschadiging(Gebruiker gebruiker, Product product, String beschrijving, LocalDate beschadigingsdatum) {
         this.gebruiker = gebruiker;
         this.product = product;
         Beschrijving = beschrijving;
-        Beschadigingsdatum = beschadigingsdatum;
+        this.beschadigingsdatum = beschadigingsdatum;
     }
 
     protected Beschadiging(){}
 
     public int getBeschadigingId() {
-        return BeschadigingId;
+        return beschadigingId;
     }
 
     public void setBeschadigingId(int beschadigingId) {
-        BeschadigingId = beschadigingId;
+        this.beschadigingId = beschadigingId;
     }
 
     public Gebruiker getGebruiker() {
@@ -70,10 +70,10 @@ public class Beschadiging {
     }
 
     public LocalDate getBeschadigingsdatum() {
-        return Beschadigingsdatum;
+        return beschadigingsdatum;
     }
 
     public void setBeschadigingsdatum(LocalDate beschadigingsdatum) {
-        Beschadigingsdatum = beschadigingsdatum;
+        this.beschadigingsdatum = beschadigingsdatum;
     }
 }

@@ -14,10 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/Beschadiging")
+@RequestMapping(value = "/beschadiging")
 public class BeschadigingsController {
 
     @Autowired
@@ -59,9 +61,38 @@ public class BeschadigingsController {
         }
     }
 
-//    @CrossOrigin
-//    @GetMapping(value = "/id={id}")
-//    public List<Beschadiging> getBeschadigingByBeschadigingId (@PathVariable(name = "id") int id){
-//        return beschadigingrepo.findByBeschadigingId(id);
-//    }
+
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Beschadiging> getAllBeschadigingen(){
+        ArrayList<Beschadiging> beschadigingen = new ArrayList<>();
+        beschadigingrepo.findAll().forEach(beschadigingen::add);
+       return beschadigingen;
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/id={id}")
+    public List<Beschadiging> getBeschadigingByBeschadigingId (@PathVariable(name = "id") int id){
+        return beschadigingrepo.findBeschadigingByBeschadigingId(id);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/gebruikerid={gebruikerid}")
+    public List<Beschadiging> getBeschadigingByGebruikerId (@PathVariable(name = "gebruikerid") Gebruiker gebruikerid){
+        return beschadigingrepo.findByGebruiker(gebruikerid);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/productid={productid}")
+    public List<Beschadiging> getBeschadigingByProductId (@PathVariable(name = "productid") Product productid){
+        return beschadigingrepo.findByProduct(productid);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/beschadigingsdatum={beschadigingsdatum}")
+    public List<Beschadiging> getBeschadigingByBeschadigingsDatum (@PathVariable(name = "beschadigingsdatum")LocalDate beschadigingsdatum){
+        return beschadigingrepo.findBeschadigingByBeschadigingsdatum(beschadigingsdatum);
+    }
+
+
 }

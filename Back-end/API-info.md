@@ -11,6 +11,7 @@ Hieronder kunnen alle URL's terug gevonden worden die nodig zijn voor het ophale
 5. ProductReservaties
 6. Reservaties
 7. Blacklists
+8. Beschadigingen
 
 ## Categorieën
 
@@ -141,3 +142,18 @@ Get-requests:
     -Om alle blacklists te zien: "http://localhost:8080/blacklist"
     -Om blacklists te zoeken op gebruikersId: "http://localhost:8080/blacklist/gebruikerId={VulIn}"
     -Om blacklists te zoeken op blacklistDatum: "http://localhost:8080/blacklist/blacklistDatum={VulIn}"
+
+## Beschadigingen
+Get-requests: 
+    -Om alle beschadigingen te zien: "http://localhost:8080/beschadiging"
+    -Om beschadigingen te zoeken op beschadigingsId: "http://localhost:8080/beschadiging/id={VulIn}"
+    -Om beschadigingen te zoeken op gebruikerId: "http://localhost:8080/beschadiging/gebruikerid={VulIn}"
+    -Om beschadigingen te zoeken op productId: "http://localhost:8080/beschadiging/productid="
+    -Om beschadigingen te zoeken op beschadigingsDatum: "http://localhost:8080/beschadiging/beschadigingsdatum={VulIn}" (datum formaat: yyyy-mm-dd bv 2024-05-28)
+
+Post-request:
+    -om een beschadiging toe te voegen: "http://localhost:8080/beschadiging/toevoegen"
+            bv: {"gebruikerId": "7",
+                 "productId": "22",
+                 "beschrijving": "kapoetski",
+                 "beschadigingsDatum": "2024-05-28"}
