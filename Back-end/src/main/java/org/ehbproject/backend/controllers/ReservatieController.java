@@ -141,6 +141,7 @@ public class ReservatieController {
         List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
         String[] statussen = {"Te laat", "Bezig", "Onvolledig", "In orde", "Voorboeking"};
 
+
         if (!reservaties.isEmpty()) {
             boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
 
@@ -150,7 +151,9 @@ public class ReservatieController {
                 repoReservatie.save(reservatie);
                 return ResponseEntity.ok("Status van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + newStatus);
             } else {
+                logger.info("Ongeldige status: "+newStatus);
                 return ResponseEntity.badRequest().body("Ongeldige status: " + newStatus);
+
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservatie met ID " + id + " niet gevonden");
@@ -220,11 +223,28 @@ public class ReservatieController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/afhaaldatum={date}/status={status}")
+    public List<Reservatie> getProductenByAfhaalDatumAndStatus(@PathVariable(name = "date") LocalDate date, @PathVariable(name = "status") String status) {
+        return repoReservatie.findByAfhaalDatumAndStatus(date, "Voorboeking");
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/retourdatum={date}/status={status}")
+    public List<Reservatie> getProductenByRetourDatumAndStatus(@PathVariable(name = "date") LocalDate date, @PathVariable(name = "status") String status) {
+        return repoReservatie.findByRetourDatumAndStatus(date, "Bezig");
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/retourDatum={date}")
     public List<Reservatie> getReservatiesByRetourDatum(@PathVariable(name = "date") LocalDate date) {
         return repoReservatie.findByRetourDatum(date);
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/status")
+    public List<Reservatie> getReservatiesByStatus(@RequestParam List<String> status) {
+        return repoReservatie.findByStatusIn(status);
+    }
     @CrossOrigin
     @GetMapping(value = "/boekingDatum={date}")
     public List<Reservatie> getReservatieByBoekingDatum(@PathVariable(name = "date") LocalDate date) {

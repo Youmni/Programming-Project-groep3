@@ -179,6 +179,11 @@ public class ProductController {
         public List<Product> getAllProductenByStatus(@PathVariable(name = "status") String status) {
             return repo.findByStatusIgnoreCase(status);
         }
+        @CrossOrigin
+        @GetMapping("/status")
+        public List<Product> getAllProductenByStatussen(@RequestParam List<String> status) {
+            return repo.findProductsByStatusIn(status);
+        }
 
         @CrossOrigin
         @GetMapping(value = "/naam={naam}/status={status}")
@@ -211,7 +216,7 @@ public class ProductController {
 
     @CrossOrigin
     @GetMapping("/model={model}")
-    public List<Product> getAllProductenByCategorie(@PathVariable(name = "model") int model) {
+    public List<Product> getAllProductenByModel(@PathVariable(name = "model") int model) {
         List<ProductModel> productModellen = repoModel.findByProductModelNr(model);
 
         List<Product> products = new ArrayList<>();
@@ -222,6 +227,17 @@ public class ProductController {
         return products;
     }
 
+    @CrossOrigin
+    @GetMapping("/model={model}/status")
+    public List<Product> getAllProductenByModelAndStatus(@PathVariable(name = "model") int model, @RequestParam List<String> statussen) {
+        List<ProductModel> productModellen = repoModel.findByProductModelNr(model);
 
+        List<Product> products = new ArrayList<>();
+        for (ProductModel productModel : productModellen) {
+            products.addAll(repo.findProductsByProductModelAndStatusIn(productModel, statussen));
+        }
+
+        return products;
+    }
     }
 
