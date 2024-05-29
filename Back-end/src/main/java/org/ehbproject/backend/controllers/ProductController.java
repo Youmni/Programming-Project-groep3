@@ -239,5 +239,19 @@ public class ProductController {
 
         return products;
     }
+
+    @CrossOrigin
+    @GetMapping("/statusaantal={status}")
+    public int getAmountOfProductsByStatus(@PathVariable(name = "status") String status){
+        List<Product> products = new ArrayList<>(repo.findByStatusIgnoreCase(status));
+        int aantalProducten = 0;
+        for(Product product : products){
+            aantalProducten++;
+        }
+        System.out.println(aantalProducten);
+        return aantalProducten;
     }
+    }
+
+
 
