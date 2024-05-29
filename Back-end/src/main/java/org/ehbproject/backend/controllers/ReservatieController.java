@@ -273,7 +273,7 @@ public class ReservatieController {
     }
 
     @CrossOrigin
-    @GetMapping("/statusaantaal={status}")
+    @GetMapping("/statusaantal={status}")
     public int getAmountOfReservatiesByStatus(@PathVariable(name = "status") String status){
         List<Reservatie> reservaties = new ArrayList<>(repoReservatie.findByStatus(status));
         int aantalReservaties = 0;
