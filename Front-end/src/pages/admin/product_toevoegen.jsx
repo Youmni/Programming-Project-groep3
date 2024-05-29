@@ -32,7 +32,6 @@ const ProductToevoegen = () => {
       navigate("/login");
       return;
     }
-    // fetch Categories
     axios
       .get("http://localhost:8080/productmodel", {
         headers: {

@@ -1,5 +1,5 @@
 import react, { useEffect, useReducer, useState } from "react";
-import { RxDashboard } from "react-icons/rx";
+import { RiDatabase2Line } from "react-icons/ri";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
 import { json } from "react-router-dom";
@@ -85,6 +85,30 @@ const Leningen = () => {
     setShowModal(false);
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "In orde":
+        return "text-green-500";
+      case "Bezig":
+        return "text-orange-400";
+      case "Voorboeking":
+        return "text-sky-700";
+      case "Te laat":
+        return "text-rose-950";
+      default:
+        return "text-black";
+    }
+  };
+
+  const formatName = (email) => {
+    const localPart = email.split("@")[0];
+    const nameParts = localPart.split(".");
+    const formattedName = nameParts
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+    return formattedName;
+  };
+
   return (
     <div className="top-0 flex-grow">
       <main className="flex-grow p-10">
@@ -95,7 +119,7 @@ const Leningen = () => {
         </div>
         <div className="flex items-center gap-2 mt-10 ml-5 w-auto justify-between">
           <div className="flex items-center gap-2">
-            <RxDashboard className="text-rood" />
+            <RiDatabase2Line className="text-rood" />
             <span>Leningen</span>
           </div>
           <div className="flex items-center h-12 gap-4">
@@ -161,11 +185,11 @@ const Leningen = () => {
                     </div>
                   </td>
                   <td className="px-2">
-                    {reservatie.gebruiker.email.split('@')[0].replace('.', ' ')}
+                    {formatName(reservatie.gebruiker.email)}
                   </td>
                   <td className="px-2">{reservatie.afhaalDatum}</td>
                   <td className="px-2">{reservatie.retourDatum}</td>
-                  <td className="px-2">{reservatie.status}</td>
+                  <td className={getStatusColor(reservatie.status)}>{reservatie.status}</td>
                   <td className="">
                     <div className="flex justify-center items-center ">
                       <Link

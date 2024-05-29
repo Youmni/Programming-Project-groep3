@@ -66,6 +66,34 @@ const PopupUser = ({ onClose, gebruiker }) => {
       });
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "In orde":
+        return "text-green-500";
+      case "Bezig":
+        return "text-orange-400";
+      case "Voorboeking":
+        return "text-sky-700";
+      case "Te laat":
+        return "text-rose-950";
+      default:
+        return "text-black";
+    }
+  };
+
+
+  const statusCounts = reservaties.reduce((acc, reservatie) => {
+    acc[reservatie.status] = (acc[reservatie.status] || 0) + 1;
+    return acc;
+  }, {});
+
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-10 rounded-2xl h-[100%] w-[60%] relative shadow-md">
@@ -79,30 +107,30 @@ const PopupUser = ({ onClose, gebruiker }) => {
             <div className="text-lg flex  flex-col items-start mt-3">
               <h2 className="font-bold text-2xl">{naam} </h2>
               <h3>{gebruiker.email}</h3>
-              <h3>Id: {gebruiker.gebruikerID}</h3>
+              <h3>Id: #{gebruiker.gebruikerID}</h3>
             </div>
         </section>
         <section className="flex justify-start flex-wrap gap-5 mt-4">
-          <div className="bg-green-500 px-1 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
-            <TiDelete />
-            Te laat
-          </div>
-          <div className="bg-blue-500 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
-            <TiDelete />
-            Bezig
-          </div>
-          <div className="bg-yellow-500 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
-            <TiDelete />
-            In orde
-          </div>
-          <div className="bg-orange-500 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
-            <TiDelete />
-            Uitgeleend
-          </div>
-          <div className="bg-red-500 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
-            <TiDelete />
-            Voorboeking
-          </div>
+          {statusCounts["In orde"] && (
+            <div className="bg-green-500 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
+              Beschikbaar ({statusCounts["In orde"]})
+            </div>
+          )}
+          {statusCounts["Bezig"] && (
+            <div className="bg-orange-400 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
+              Bezig ({statusCounts["Bezig"]})
+            </div>
+          )}
+          {statusCounts["Voorboeking"] && (
+            <div className="bg-sky-700 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
+              Voorboeking ({statusCounts["Voorboeking"]})
+            </div>
+          )}
+          {statusCounts["Te laat"] && (
+            <div className="bg-rose-950 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
+              Te laat ({statusCounts["Te laat"]})
+            </div>
+          )}
         </section>
         <h2 className="font-bold mt-4 text-gray-700 text-xl">Overzicht</h2>
         <section className="mt-2 border-2 flex flex-col max-h-[380px] overflow-y-auto border-gray rounded-lg p-3">
@@ -150,7 +178,7 @@ const PopupUser = ({ onClose, gebruiker }) => {
                 <tr key={reservatie.reservatieNr} className="h-12 w-auto ">
                   <td className="text-center h-full">{index}</td>
                   <td className="">#{reservatie.reservatieNr}</td>
-                  <td className="">{reservatie.status}</td>
+                  <td className={getStatusColor(reservatie.status)}>{reservatie.status}</td>
                 </tr>
               ))}
             </tbody>

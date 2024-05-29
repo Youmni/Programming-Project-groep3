@@ -1,21 +1,26 @@
 import React, { useState } from "react";
-import { IoInformationCircleSharp } from "react-icons/io5";
+import { IoInformationCircleSharp, IoEye, IoEyeOff } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'; 
 import { enqueueSnackbar } from "notistack";
+
 
 const Login = () => {
 
   const [loginData, setLoginData] = useState({ email: "", wachtwoord: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const redirectToPage = (titel) => {
@@ -64,6 +69,10 @@ const Login = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   return (
     <div className="flex w-full h-screen bg-slate-100 justify-center items-center">
       <form className="flex w-3/5 h-3/4 shadow-lg rounded-md">
@@ -91,15 +100,24 @@ const Login = () => {
             <label htmlFor="wachtwoord" className="font-bold mt-10">
               Wachtwoord
             </label>
-            <input
-              type="password"
-              value={loginData.wachtwoord}
-              onChange={handleChange}
-              name="wachtwoord"
-              id="wachtwoord"
-              placeholder="Wachtwoord"
-              className="h-[50px] pl-4 rounded-2xl bg-gray-100"
-            />
+            <div className="relative  rounded-2xl bg-gray-100 w-full h-[50px]">
+              <input
+                type={showPassword ? "text" : "password"}
+                onChange={handleChange}
+                value={loginData.wachtwoord}
+                placeholder="Wachtwoord"
+                id="wachtwoord"
+                name="wachtwoord"
+                required
+                className="h-full w-full pl-5 bg-inherit rounded-2xl"
+              />
+              <div
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <IoEyeOff /> : <IoEye />}
+              </div>
+            </div>
           </div>
           <div className="flex flex-col w-full gap-5 mt-20">
             <button

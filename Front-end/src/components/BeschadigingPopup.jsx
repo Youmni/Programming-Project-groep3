@@ -5,14 +5,16 @@ import { CiSearch } from "react-icons/ci";
 
 import { IoIosAddCircle } from "react-icons/io";
 import BackupImage from "../assets/backup.jpg";
+import BeschadigingToevoegen from "./BeschadigingToevoegen";
 
 const BeschadigingPopup = ({ productObject, onClose }) => {
-
   const [product, setProduct] = useState(productObject);
 
   const [beschadigingen, setBeschadigingen] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMediumScreen, setIsMediumScreen] = useState(false);
+  const [showBeschadigingToevoegen, setShowBeschadigingToevoegen] =
+    useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -58,7 +60,14 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
     setSearchQuery(event.target.value);
   };
 
-  const beschadigingToevoegen = () => {};
+  const beschadigingToevoegen = (product) => {
+    setProduct(product);
+    setShowBeschadigingToevoegen(true);
+  };
+
+  const closeBeschadigingPopup = () => {
+    setShowBeschadigingToevoegen(false);
+  };
 
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full z-50">
@@ -68,19 +77,19 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
             <img
               className="w-24 h-auto object-cover"
               src={
-                product.productModelNr.productModelFoto
-                  ? `/src/assets/ProductModelFotos/${product.productModelNr.productModelFoto}`
+                productObject.productModelNr.productModelFoto
+                  ? `/src/assets/ProductModelFotos/${productObject.productModelNr.productModelFoto}`
                   : BackupImage
               }
               alt="Product foto"
             />
             <div className="bg-slate-300 py-1 px-10 rounded-lg text-black text-lg">
-              <h2>{product.productModelNr.categorie.categorieNaam}</h2>
+              <h2>{productObject.productModelNr.categorie.categorieNaam}</h2>
             </div>
           </div>
           <div className="text-lg flex flex-col w-1/4 flex-wrap">
             <h2 className="font-bold text-2xl">{product.productNaam} </h2>
-            <h3>ProductId: #{product.productID}</h3>
+            <h3>ProductId: #{productObject.productID}</h3>
           </div>
         </section>
         <section className="mt-4"></section>
@@ -122,9 +131,15 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
               {beschadigingen.map((beschadiging, index) => (
                 <tr className="h-12 w-auto ">
                   <td className="text-center h-full">{index}</td>
-                  <td className="text-center">#{beschadiging.beschadigingId}</td>
-                  <td className="text-center">{beschadiging.gebruiker.email}</td>
-                  <td className="text-center">{beschadiging.beschadigingsdatum}</td>
+                  <td className="text-center">
+                    #{beschadiging.beschadigingId}
+                  </td>
+                  <td className="text-center">
+                    {beschadiging.gebruiker.email}
+                  </td>
+                  <td className="text-center">
+                    {beschadiging.beschadigingsdatum}
+                  </td>
                   <td className="text-end">
                     <button
                       title="Beschadiging info"
@@ -144,17 +159,23 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
             terug
           </button>
         </section>
-          <button
-            onSubmit={() => {
-              beschadigingToevoegen();
-            }}
-            title="Beschadiging toevoegen"
-            className="absolute top-10 right-10 bg-Groen text-black px-3 py-2 rounded-2xl flex items-center gap-2 text-2xl transform transition-transform duration-250 hover:scale-110"
-          >
-            <IoIosAddCircle size={24} />
-            {!isMediumScreen && <span>Toevoegen</span>}
-          </button>
+        <button
+          onClick={() => {
+            beschadigingToevoegen(productObject);
+          }}
+          title="Beschadiging toevoegen"
+          className="absolute top-10 right-10 bg-Groen text-black px-3 py-2 rounded-2xl flex items-center gap-2 text-2xl transform transition-transform duration-250 hover:scale-110"
+        >
+          <IoIosAddCircle size={24} />
+          {!isMediumScreen && <span>Toevoegen</span>}
+        </button>
       </div>
+      {showBeschadigingToevoegen && (
+        <BeschadigingToevoegen
+          product={productObject}
+          onClose={closeBeschadigingPopup}
+        />
+      )}
     </div>
   );
 };

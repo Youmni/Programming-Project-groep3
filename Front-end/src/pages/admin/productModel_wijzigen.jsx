@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { useParams } from "react-router-dom";
-import { RxDashboard } from "react-icons/rx";
+import { TbBoxSeam } from "react-icons/tb";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,7 +23,6 @@ const ProductModelWijzigen = () => {
     productModelFoto: "",
   });
   const [openCategoriePopup, setOpenCategoriePopup] = useState(false);
-  console.log("Dit is de formdata", formData);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -110,34 +109,44 @@ const ProductModelWijzigen = () => {
     event.preventDefault();
     const token = localStorage.getItem("authToken");
     const updatedFormData = {
-      ...formData,
+      productModelNaam: formData.productModelNaam || "",
+      productModelMerk: formData.productModelMerk || "",
+      categorieNr: formData.categorie.categorieNr || "",
+      productModelBeschrijving: formData.productModelBeschrijving || "",
+      productModelFoto: formData.productModelFoto || "",
     };
-    console.log(updatedFormData);
+    console.log("Dit is de data dat wordt doorgestuurd", updatedFormData);
     axios
-      .put("http://localhost:8080/productmodel/toevoegen", updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(
+        `http://localhost:8080/productmodel/${productModelNr}/wijzig`,
+        updatedFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
-        enqueueSnackbar("Product Model toegevoegd", { variant: "success" });
-        console.log("Product Model Toegevoegd", response.data);
+        enqueueSnackbar("Product Model Gewijzigd", { variant: "success" });
+        console.log("Product Model gewijzigd", response.data);
+        setFormData({
+          productModelNaam: "",
+          productModelMerk: "",
+          categorie: {
+            categorieNaam: "",
+            categorieNr: "",
+          },
+          productModelBeschrijving: "",
+          productModelFoto: "",
+        });
         navigate("/admin/inventaris");
       })
       .catch((error) => {
         console.error("Error adding product model: ", error);
         enqueueSnackbar(
-          "Error: Product Model niet toegevoegd, probeer het opnieuw",
+          "Error: Product Model niet gewijzigd, probeer het opnieuw",
           { variant: "error" }
         );
-
-        setFormData({
-          productModelNaam: "",
-          productModelMerk: "",
-          categorieNr: "",
-          productModelBeschrijving: "",
-          productModelFoto: "",
-        });
       });
   };
 
@@ -175,7 +184,7 @@ const ProductModelWijzigen = () => {
         </div>
         <div className="flex items-center gap-2 mt-10 ml-5  justify-between">
           <breadcrumb className="flex items-center gap-2">
-            <RxDashboard className="text-rood" />
+            <TbBoxSeam className="text-rood" />
             <Link
               to={`/admin/inventaris`}
               className="hover:text-red-400 underline"
@@ -266,7 +275,6 @@ const ProductModelWijzigen = () => {
                   }
                   alt="Selected"
                   className="w-40 h-auto object-cover"
-                  
                 />
               </div>
             </div>

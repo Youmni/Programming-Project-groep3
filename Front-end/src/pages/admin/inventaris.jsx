@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { RxDashboard } from "react-icons/rx";
+import { TbBoxSeam } from "react-icons/tb";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
-import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import Popup from '../../components/PopupProduct';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
@@ -133,7 +131,7 @@ const Inventaris = () => {
         </div>
         <div className="flex items-center gap-2 mt-10 ml-5 w-auto justify-between">
           <breadcrumb className="flex items-center gap-2">
-            <RxDashboard className="text-rood" />
+            <TbBoxSeam className="text-rood" />
             <breadcrumb-item>Inventaris</breadcrumb-item>
           </breadcrumb>
           <div className="items-center flex h-12 gap-4">

@@ -181,7 +181,7 @@ const NavBar = () => {
             {search.length > 0 && (
               <div
                 ref={nodeSearchResults}
-                className="absolute top-16 p-4 bg-red-100 text-black w-full max-h-[600px] overflow-auto rounded-xl flex flex-col z-10"
+                className="absolute top-16 p-4 bg-white text-black w-full max-h-[600px] overflow-auto rounded-xl flex flex-col z-10 border"
               >
                 <label className="font-semibold mb-2">Product Modellen</label>
                 {search.map((productModel, index) => (
@@ -197,15 +197,15 @@ const NavBar = () => {
             )}
           </div>
 
-          <div className="flex h-full w-auto sm:ml-5 md:ml-10 lg:ml-20 items-center justify-start sm:gap-5 md:gap-10 lg:gap-20">
+          <div className="flex h-full w-1/5 ml-5 items-center  mr-5 justify-evenly">
             <Link to={"/leningen"}>
               <FaUser
-                className="flex h-full size-14 text-Grijs p-2 transform transition-transform duration-250 hover:scale-110"
+                className="size-14 text-Grijs p-2 transform transition-transform duration-250 hover:scale-110"
               />
             </Link>
 
             <button
-              className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 mr-10"
+              className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 "
               onClick={openWinkelMandje}
             >
               <BiShoppingBag className="text-5xl text-Grijs" />
@@ -214,7 +214,7 @@ const NavBar = () => {
               </div>
             </button>
             <IoLogOut
-              className="flex h-full size-14 text-Grijs p-2 cursor-pointer rounded-xl hover:text-rood
+              className="size-14 text-Grijs p-2 cursor-pointer rounded-xl hover:text-rood
               transform transition-transform duration-250 hover:scale-110"
               onClick={handleLogout}
             />

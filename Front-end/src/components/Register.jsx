@@ -93,6 +93,19 @@ const generateHash = async (message) => {
   return (
     <div className="flex w-full h-screen bg-slate-100 justify-center items-center">
       <form action="" className="flex w-3/5 h-3/4 shadow-lg rounded-md">
+      <div className="flex w-1/2 bg-gradient-to-r from-red-300 to-red-500">
+          <header className="flex w-full h-full">
+            <h1 className="flex flex-col w-full h-full items-center mt-48 gap-10">
+              <span className="text-4xl text-white font-extralight">
+                Welkom,
+              </span>
+              <span className="text-4xl text-center text-white font-semibold">
+                Bij het medialab{" "}
+                <span className="font-bold text-6xl">uitleendienst</span>
+              </span>
+            </h1>
+          </header>
+        </div>
         <div className="flex w-1/2 h-full bg-white pl-10 pt-10 pr-10 flex-col items-center">
           <header className="flex w-full h-20 items-center justify-between">
             <h1 className="text-4xl font-light">Registratie</h1>
@@ -152,19 +165,7 @@ const generateHash = async (message) => {
             </Link>
           </div>
         </div>
-        <div className="flex w-1/2 bg-gradient-to-r from-red-300 to-red-500">
-          <header className="flex w-full h-full">
-            <h1 className="flex flex-col w-full h-full items-center mt-48 gap-10">
-              <span className="text-4xl text-white font-extralight">
-                Welkom,
-              </span>
-              <span className="text-4xl text-center text-white font-semibold">
-                Bij het medialab{" "}
-                <span className="font-bold text-6xl">uitleendienst</span>
-              </span>
-            </h1>
-          </header>
-        </div>
+        
       </form>
     </div>
   );

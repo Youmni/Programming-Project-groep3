@@ -23,6 +23,7 @@ const Gebruikers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [selectedGebruiker, setSelectedGebruiker] = useState(null);
+  console.log(gebruikers);
 
   const navigate = useNavigate();
 
@@ -53,14 +54,19 @@ const Gebruikers = () => {
       });
   }, []);
 
-  const handleName = (email) => {
-    let parts = email.split("@");
-    let name = parts[0];
-    return name;
-  }
+
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const formatName = (email) => {
+    const localPart = email.split("@")[0];
+    const nameParts = localPart.split(".");
+    const formattedName = nameParts
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+    return formattedName;
   };
 
 
@@ -111,6 +117,10 @@ const closeUserPopup = () => {
             </div>
           </div>
         </div>
+        <div className="flex gap-2 items-center ml-8">
+          <div className="h-4 w-4 bg-black rounded-full"></div>
+          <h2>Geblacklist</h2>
+        </div>
         <div className="flex w-auto h-auto">
           <div>{loading && <Spinner />}</div>
           <table className="w-full h-auto">
@@ -154,8 +164,8 @@ const closeUserPopup = () => {
             </thead>
             <tbody>
               {filteredGebruikers.map((gebruiker) => (
-                <tr key={gebruiker.gebruikerID} className="h-16 w-auto">
-                  <td className="text-center h-full">
+                <tr key={gebruiker.gebruikerID} className="h-16 w-auto relative">
+                  <td className="text-center">
                     {gebruiker.gebruikerID}
                   </td>
                   <td className="">
@@ -164,7 +174,7 @@ const closeUserPopup = () => {
                         <FaRegUserCircle className="size-12" />
                       </div>
                       <h2 className="flex flex-col -space-y-1">
-                        <span className="text-base text-Grijs font-semibold">{handleName(gebruiker.email)}</span>
+                        <span className="text-base text-Grijs font-semibold">{formatName(gebruiker.email)}</span>
                         <span className="text-base text-Lichtgrijs font-light">{`${gebruiker.email}`}</span>
                       </h2>
                     </div>
@@ -192,7 +202,15 @@ const closeUserPopup = () => {
                       </button>
                     </div>
                   </td>
+
+                  {
+                    gebruiker.isGeblacklist === "True" && (
+                      <div className="absolute h-4 w-4 left-0 top-7 bg-black rounded-full"></div>
+                    )
+                  }
+                
                 </tr>
+                
               ))}
             </tbody>
           </table>

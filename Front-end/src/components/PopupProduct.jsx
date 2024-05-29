@@ -316,7 +316,7 @@ const PopupProduct = ({ onClose, model }) => {
         </section>
       </div>
       {showBeschadigingPopup && (
-        <BeschadigingPopup onClose={closeBeschadigingPopup} product={product} />
+        <BeschadigingPopup onClose={closeBeschadigingPopup} productObject={product} />
       )}
     </div>
   );

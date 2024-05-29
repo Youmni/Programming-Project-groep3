@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MdOutlineAddCircle } from "react-icons/md";
-import { RxDashboard } from "react-icons/rx";
+import { TbBoxSeam } from "react-icons/tb";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
@@ -153,7 +153,7 @@ const ProductModelToevoegen = () => {
         </div>
         <div className="flex items-center gap-2 mt-10 ml-5  justify-between">
           <breadcrumb className="flex items-center gap-2">
-            <RxDashboard className="text-rood" />
+            <TbBoxSeam className="text-rood" />
             <Link to={`/admin/inventaris`} className="hover:text-red-400 underline">
               <breadcrumb-item>Inventaris </breadcrumb-item>
             </Link>

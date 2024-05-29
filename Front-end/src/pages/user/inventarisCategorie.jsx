@@ -23,7 +23,7 @@ const inventarisCategorie = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
- 
+
     if (!token) {
       enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
         variant: "error",
@@ -78,23 +78,18 @@ const inventarisCategorie = () => {
           </Link>
           <span>/ {categorieNaam}</span>
         </h1>
-        <div className="flex gap-5">
-          <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs">
-            <IoSearchOutline className="ml-2 size-6" />
-            <input
-              type="search"
-              name=""
-              id=""
-              placeholder="Zoek naar productmodellen..."
-              className="h-full rounded-xl p-2"
-              value={searchQuery}
-              onChange={handleSearch}
-            />
-          </div>
-          <div className="flex h-full items-center justify-center gap-2 p-2 border-2 rounded-xl bg-white">
-            <FaFilter className="size-4 text-black-600" />
-            <h2 className="text-xl font-semibold">Filter</h2>
-          </div>
+
+        <div className="items-center flex h-full border-2 gap-2 rounded-xl bg-white border-Lichtgrijs">
+          <IoSearchOutline className="ml-2 size-6" />
+          <input
+            type="search"
+            name=""
+            id=""
+            placeholder="Zoek naar productmodellen..."
+            className="h-full rounded-xl p-3"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
         </div>
       </header>
       <section className="flex flex-wrap mt-5 gap-10 justify-center">
@@ -108,7 +103,11 @@ const inventarisCategorie = () => {
             className="border bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16 transition-transform transform hover:scale-110 cursor-pointer"
           >
             <img
-              src={productModel.productModelFoto ? `/src/assets/ProductModelFotos/${productModel.productModelFoto}` : BackUpImage}
+              src={
+                productModel.productModelFoto
+                  ? `/src/assets/ProductModelFotos/${productModel.productModelFoto}`
+                  : BackUpImage
+              }
               alt=""
               className="w-full h-24 object-contain shadow-md"
             />
@@ -136,13 +135,11 @@ const inventarisCategorie = () => {
       </section>
 
       {showModal && (
-  <ChooseProduct
-    productModelNr={selectedProductModel.productModelNr}
-    closeModal={closeModal}
-    
-  />
-)}
-
+        <ChooseProduct
+          productModelNr={selectedProductModel.productModelNr}
+          closeModal={closeModal}
+        />
+      )}
     </main>
   );
 };
