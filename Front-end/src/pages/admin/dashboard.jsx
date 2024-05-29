@@ -29,18 +29,101 @@ const Dashboard = () => {
   const [eyeToggleAfhaal, setEyeToggleAfhaal] = useState(true);
   const [eyeToggleTeLaatOnvolledig, setEyeToggleTeLaatOnvolledig] =
     useState(true);
+  const [inventarisAantallen, setInventarisAantallen] = useState({
+    beschikbaar: 0,
+    gereserveerd: 0,
+    gepauzeerd: 0,
+  });
+
+  const [leningAantallen, setLeningAantallen] = useState({
+    inOrde: 0,
+    bezig: 0,
+    teLaat: 0,
+    voorboeking: 0,
+  });
+
+
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
 
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
+    axios.get('http://localhost:8080/product/status-aantallen', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      const data = response.data;
+      const nieuweAantallen = {
+        beschikbaar: 0,
+        gereserveerd: 0,
+        gepauzeerd: 0,
+      };
+
+      data.forEach(item => {
+        if (item.status.toLowerCase() === 'beschikbaar') {
+          nieuweAantallen.beschikbaar = item.aantal;
+        } else if (item.status.toLowerCase() === 'gereserveerd') {
+          nieuweAantallen.gereserveerd = item.aantal;
+        } else if (item.status.toLowerCase() === 'gepauzeerd') {
+          nieuweAantallen.gepauzeerd = item.aantal;
+        }
       });
-      navigate("/login");
-      return;
-    }
-  }, []);
+
+      setInventarisAantallen(nieuweAantallen);
+    })
+    .catch((error) => {
+      console.error('Error fetching status counts:', error);
+    });
+  }, [inventarisAantallen]);
+
+
+  useEffect(() => {
+
+    axios.get('http://localhost:8080/reservatie/status-aantallen', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      const data = response.data;
+      const nieuweAantallen = {
+        inOrde: 0,
+        bezig: 0,
+        teLaat: 0,
+        voorboeking: 0,
+      };
+
+      data.forEach(item => {
+        if (item.status.toLowerCase() === 'in orde') {
+          nieuweAantallen.inOrde = item.aantal;
+        } else if (item.status.toLowerCase() === 'bezig') {
+          nieuweAantallen.bezig = item.aantal;
+        } else if (item.status.toLowerCase() === 'te laat') {
+          nieuweAantallen.teLaat = item.aantal;
+        }
+        else if (item.status.toLowerCase() === 'voorboeking') {
+          nieuweAantallen.voorboeking = item.aantal;
+        }
+      });
+
+      setLeningAantallen(nieuweAantallen);
+    })
+    .catch((error) => {
+      console.error('Error fetching status counts:', error);
+    });
+  }, [leningAantallen]);
+
+
+  // useEffect(() => {
+
+  //   if (!token) {
+  //     enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
+  //       variant: "error",
+  //     });
+  //     navigate("/login");
+  //     return;
+  //   }
+  // }, []);
 
   const datumVandaag = () => {
     const vandaag = new Date();
@@ -224,7 +307,7 @@ const Dashboard = () => {
                     Beschikbaar
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">6</span>
+                  <span className="text-2xl text-black font-semibold">{inventarisAantallen.beschikbaar}</span>
                 </h1>
               </figure>
               <figure className="flex h-full w-[100px] border rounded-lg items-start border-gray-300 bg-red-200 flex-col justify-center gap-4">
@@ -234,19 +317,10 @@ const Dashboard = () => {
                     Gereserveerd
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">6</span>
+                  <span className="text-2xl text-black font-semibold">{inventarisAantallen.gereserveerd}</span>
                 </h1>
               </figure>
-              <figure className="flex h-full w-[100px] border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4">
-                <PiHandCoinsDuotone className="size-16 ml-4 text-amber-600" />
-                <h1 className="flex flex-col -space-y-7 ml-4">
-                  <span className="text-base text-Grijs font-nm text-">
-                    Uitgeleend
-                  </span>
-                  <br />
-                  <span className="text-2xl text-black font-semibold">6</span>
-                </h1>
-              </figure>
+              
               <figure className="flex h-full w-[100px] border rounded-lg items-start border-gray-300 bg-blue-100 flex-col justify-center gap-4">
                 <FaCirclePause className="size-16 ml-4 text-blue-700" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
@@ -254,7 +328,7 @@ const Dashboard = () => {
                     Gepauzeerd
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-bold">6</span>
+                  <span className="text-2xl text-black font-bold">{inventarisAantallen.gepauzeerd}</span>
                 </h1>
               </figure>
             </div>
@@ -275,7 +349,7 @@ const Dashboard = () => {
                     In orde
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">6</span>
+                  <span className="text-2xl text-black font-semibold">{leningAantallen.inOrde}</span>
                 </h1>
               </figure>
               <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-red-200 flex-col justify-center gap-4">
@@ -285,7 +359,7 @@ const Dashboard = () => {
                     Lopend
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">6</span>
+                  <span className="text-2xl text-black font-semibold">{leningAantallen.bezig}</span>
                 </h1>
               </figure>
               <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4">
@@ -295,7 +369,7 @@ const Dashboard = () => {
                     Te laat
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">6</span>
+                  <span className="text-2xl text-black font-semibold">{leningAantallen.teLaat}</span>
                 </h1>
               </figure>
               <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-blue-100 flex-col justify-center gap-4">
@@ -305,7 +379,7 @@ const Dashboard = () => {
                     Voorboeking
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-bold">6</span>
+                  <span className="text-2xl text-black font-bold">{leningAantallen.voorboeking}</span>
                 </h1>
               </figure>
             </div>
@@ -321,6 +395,15 @@ const Dashboard = () => {
           <div className="flex items-center gap-5">
             <h1 className="text-xl font-semibold">
               Reservaties op te halen vandaag
+              <sup
+                className={
+                  reservatiesRetourneren.length
+                    ? "text-red-600"
+                    : "text-green-600"
+                }
+              >
+                {reservatiesRetourneren.length}
+              </sup>
             </h1>
             <span
               onClick={() => seyEyeToggleRetour(!eyeToggleRetour)}
@@ -416,6 +499,13 @@ const Dashboard = () => {
           <div className="flex items-center gap-5">
             <h1 className="text-xl font-semibold">
               Reservaties af te halen vandaag
+              <sup
+                className={
+                  reservatiesAfhalen.length ? "text-red-600" : "text-green-600"
+                }
+              >
+                {reservatiesAfhalen.length}
+              </sup>{" "}
             </h1>
             <span
               onClick={() => setEyeToggleAfhaal(!eyeToggleAfhaal)}
@@ -509,9 +599,22 @@ const Dashboard = () => {
 
         <div className="m-8">
           <div className="flex items-center gap-5">
-            <h1 className="text-xl font-semibold">Te laat of onvolledig</h1>
+            <h1 className="text-xl font-semibold">
+              Te laat of onvolledig
+              <sup
+                className={
+                  reservatiesTeLaatOnvolledig.length
+                    ? "text-red-600"
+                    : "text-green-600"
+                }
+              >
+                {reservatiesTeLaatOnvolledig.length}
+              </sup>
+            </h1>
             <span
-              onClick={() => setEyeToggleTeLaatOnvolledig(!eyeToggleTeLaatOnvolledig)}
+              onClick={() =>
+                setEyeToggleTeLaatOnvolledig(!eyeToggleTeLaatOnvolledig)
+              }
               className="cursor-pointer"
             >
               {eyeToggleTeLaatOnvolledig ? <FaEye /> : <FaEyeSlash />}
@@ -606,7 +709,6 @@ const Dashboard = () => {
             closeModal={closeModal}
           />
         )}
-
       </main>
     </div>
   );

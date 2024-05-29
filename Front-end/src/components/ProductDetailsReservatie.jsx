@@ -54,8 +54,8 @@ const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
                   key={product.productID}
                   className="flex flex-row justify-between items-center h-full mb-2"
                 >
-                  <p className="text-left w-1/3">{product.productNaam}</p>
-                  <span className="text-center w-1/3">{product.status}</span>
+                  <p className="text-left">{product.productNaam}</p>
+                  <span className="text-center">{product.productModelNr.productModelMerk}</span>
                   <MdOutlineBrokenImage
                     onClick={() => openModal(selectedProduct)}
                     className="text-right w-8 h-8 cursor-pointer"
