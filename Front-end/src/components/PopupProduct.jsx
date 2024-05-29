@@ -211,7 +211,7 @@ const PopupProduct = ({ onClose, model }) => {
           <p className="text-gray-600">{model.productModelBeschrijving}</p>
         </section>
         <h2 className="font-bold mt-4 text-gray-700 text-xl">Overzicht</h2>
-        <section className="mt-2 border-2 flex flex-col max-w- overflow-y-auto border-gray rounded-lg p-3">
+        <section className="mt-2 border-2 flex flex-col h-1/2 overflow-y-auto border-gray rounded-lg p-3">
           <section className="flex justify-start gap-6 sticky top-0 z-50 bg-white">
             <div className="flex items-center border border-gray-700 rounded-lg p-2 gap-2 w-[40%]">
               <CiSearch className="text-gray-500 font-bold" size={18} />{" "}

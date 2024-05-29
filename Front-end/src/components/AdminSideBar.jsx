@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
 import { RxDashboard } from "react-icons/rx";
 import { TbBoxSeam } from "react-icons/tb";
@@ -10,12 +10,17 @@ import { IoIosArrowForward } from "react-icons/io";
 const AdminSideBar = () => {
   const [nav, setNav] = useState(true);
   const [isMediumScreen, setIsMediumScreen] = useState(false);
+  const location = useLocation();
 
   const toggleNav = () => {
     if (!isMediumScreen) {
       setNav(!nav);
     }
   };
+
+  const isActiveLink = (path) => {
+    return location.pathname === path ? "bg-red-200 rounded-xl text-red-500" : "";
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,25 +66,25 @@ const AdminSideBar = () => {
         </button>
         <ul className="flex flex-col w-full gap-5">
           <h2 className="text-l p-3 text-Lichtgrijs ml-2">Menu</h2>
-          <Link to={`/admin/Dashboard`} className="text-Grijs">
+          <Link to={`/admin/Dashboard`} className={`text-Grijs ${isActiveLink("/admin/Dashboard")}`}>
             <li className="w-full flex items-center p-3 text-2xl gap-5 font-medium cursor-pointer rounded-xl hover:bg-red-200 hover:text-rood">
               <RxDashboard className="size-7 bg-inherit ml-4" />
               Dashboard
             </li>
           </Link>
-          <Link to={`/admin/Inventaris`} className="text-Grijs">
+          <Link to={`/admin/Inventaris`} className={`text-Grijs ${isActiveLink("/admin/Inventaris")}`}>
             <li className="w-full flex items-center p-3 text-2xl gap-5 font-medium cursor-pointer rounded-xl hover:bg-red-200 hover:text-rood">
               <TbBoxSeam className="size-7 bg-inherit ml-4" />
               Inventaris
             </li>
           </Link>
-          <Link to={`/admin/Gebruikers`} className="text-Grijs">
+          <Link to={`/admin/Gebruikers`} className={`text-Grijs ${isActiveLink("/admin/Gebruikers")}`}>
             <li className="w-full flex items-center p-3 text-2xl gap-5 font-medium cursor-pointer rounded-xl hover:bg-red-200 hover:text-rood">
               <FaUsers className="size-7 bg-inherit ml-4" />
               Gebruikers
             </li>
           </Link>
-          <Link to={`/admin/Leningen`} className="text-Grijs">
+          <Link to={`/admin/Leningen`} className={`text-Grijs ${isActiveLink("/admin/Leningen")}`}>
             <li className="w-full flex items-center p-3 text-2xl gap-5 font-medium cursor-pointer rounded-xl hover:bg-red-200 hover:text-rood">
               <RiDatabase2Line className="size-7 bg-inherit ml-4" />
               Leningen
