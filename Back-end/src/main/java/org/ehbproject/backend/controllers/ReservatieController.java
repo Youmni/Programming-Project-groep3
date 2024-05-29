@@ -159,8 +159,6 @@ public class ReservatieController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservatie met ID " + id + " niet gevonden");
         }
 
-
-
     }
 
 
@@ -272,5 +270,17 @@ public class ReservatieController {
             aantal++;
         }
         return aantal;
+    }
+
+    @CrossOrigin
+    @GetMapping("/statusaantaal={status}")
+    public int getAmountOfReservatiesByStatus(@PathVariable(name = "status") String status){
+        List<Reservatie> reservaties = new ArrayList<>(repoReservatie.findByStatus(status));
+        int aantalReservaties = 0;
+        for(Reservatie reservatie : reservaties){
+            aantalReservaties++;
+        }
+        System.out.println(aantalReservaties);
+        return aantalReservaties;
     }
 }
