@@ -32,8 +32,6 @@ public class ProductModel {
     private String productModelMerk;
 
     @Column(name="Productmodelfoto", nullable = false)
-    @NotBlank
-    @Size(max = 50)
     private String productModelFoto;
 
     @Column(name="Productmodelbeschrijving", nullable = false)

@@ -20,8 +20,6 @@ public class Categorie {
     private Set<ProductModel> productModellen = new HashSet<>();
 
     @Column(name= "Categorienaam")
-    @NotBlank
-    @Size(max = 30)
     private String categorieNaam;
     protected Categorie(){}
 
