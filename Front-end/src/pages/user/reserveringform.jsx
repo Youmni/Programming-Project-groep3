@@ -74,7 +74,7 @@ const reserveringForm = ({ closeModal, product }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const productData = {
-      ...formData,
+      ...formData, product: product
     };
     console.log(productData)
     addToWinkelmandje(productData);

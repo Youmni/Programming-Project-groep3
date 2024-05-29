@@ -1,14 +1,13 @@
 import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
 import { FaBox } from "react-icons/fa";
 import { enqueueSnackbar } from "notistack";
-import ReserveringForm from "./reserveringform";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseProduct from "../../components/ChooseProduct";
+import BackUpImage from "../../assets/backup.jpg";
 
 const inventarisCategorie = () => {
   const [productModels, setProductModels] = useState([]);
@@ -75,8 +74,6 @@ const inventarisCategorie = () => {
           <Link className="hover:underline" to={`/inventaris`}>
             <span>Inventaris </span>
           </Link>
-          / {categorieNaam}
-          <span></span>
         </h1>
         <div className="flex gap-5">
           <div className="items-center flex h-full border-2 gap-2 rounded-xl border-Lichtgrijs">
@@ -100,14 +97,12 @@ const inventarisCategorie = () => {
       <section className="flex flex-wrap mt-5 gap-10 justify-center">
         {filteredProductModels.map((productModel) => (
           <figure
-            onLoad={() => {
-              setCategorieNaam(productModel.categorie.categorieNaam);
-            }}
             key={productModel.productModelNr}
-            className="border bg-white w-[270px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16"
+            onClick={() => openModal(productModel)}
+            className="border bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16 transition-transform transform hover:scale-110 cursor-pointer"
           >
             <img
-              src={"/src/assets/ProductModelFotos/" + productModel.productModelFoto}
+              src={productModel.productModelFoto ? `/src/assets/ProductModelFotos/${productModel.productModelFoto}` : BackUpImage}
               alt={productModel.productModelNaam}
               className="w-full h-24 object-contain shadow-md"
             />

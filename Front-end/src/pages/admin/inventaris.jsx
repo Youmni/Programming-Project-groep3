@@ -14,6 +14,7 @@ import { enqueueSnackbar } from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
 import { FaCircleInfo } from "react-icons/fa6";
 import PopupProduct from "../../components/PopupProduct";
+import BackupImage from "../../assets/backup.jpg";
 import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 
 const Inventaris = () => {
@@ -200,7 +201,7 @@ const Inventaris = () => {
                     <div className="flex items-center justify-start gap-2 overflow-x-hidden">
                       <div className="h-12 w-12 overflow-hidden rounded-full border-2 border-Lichtgrijs">
                         <img
-                          src={"/src/assets/ProductModelFotos/" + model.productModelFoto}
+                          src={model.productModelFoto ? `/src/assets/ProductModelFotos/${model.productModelFoto}` : BackupImage}
                           alt=""
                           className="w-auto h-full object-cover"
                         />

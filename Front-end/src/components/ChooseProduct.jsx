@@ -32,6 +32,15 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
         console.error("Error fetching products:", error);
       });
   }, [productModelNr]);
+   useEffect(() => {
+    // Disable scrolling when the component mounts
+    document.body.style.overflow = 'hidden';
+
+    // Re-enable scrolling when the component unmounts
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const openReserveren = (product) => {
     console.log("Product clicked reservatie: ", product)
@@ -48,6 +57,8 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
   if(reserverenOpen){
     return <ReserveringForm closeModal={closeModal} product={selectedProduct}/>
   } ;
+
+  
 
   return (
     <div

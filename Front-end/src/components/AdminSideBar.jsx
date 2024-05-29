@@ -90,7 +90,7 @@ const AdminSideBar = () => {
     );
   } else {
     return (
-      <aside className="flex gap-1 flex-col h-screen max-w-20 border-r w-24 border-Lichtgrijs top-0 left-0">
+      <aside className={`flex gap-1 flex-col sticky h-screen max-w-20 border-r w-24 border-Lichtgrijs top-0 left-0`}>
         <a href="/admin/Dashboard">
           <header className="flex w-full h-20 gap-x-5 items-center">
             <img
@@ -100,13 +100,14 @@ const AdminSideBar = () => {
             />
           </header>
         </a>
-        <button
-          onClick={toggleNav}
-          className="flex bg-red-500 w-8 absolute h-8 rounded-full top-20 left-16 items-center justify-center"
-          disabled={isMediumScreen}
-        >
-          <IoIosArrowForward className="text-white size-5" />
-        </button>
+        {!isMediumScreen && (
+          <button
+            onClick={toggleNav}
+            className="flex bg-red-500 w-8 absolute h-8 rounded-full top-20 left-16 items-center justify-center"
+          >
+            <IoIosArrowForward className="text-white size-5" />
+          </button>
+        )}
         <ul className="flex flex-col w-full gap-5">
           <h2 className="text-l p-3 text-Lichtgrijs ml-2">Menu</h2>
           <Link to={`/admin/Dashboard`} className="text-Grijs">

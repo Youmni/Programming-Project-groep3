@@ -1,15 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { WinkelMandjeContext } from '../../contexts/winkelmandjeContext';
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
+import BackupImage from "../../assets/backup.jpg";
 
 const winkelmandje = ({ closeWinkelMandje }) => {
   const { winkelmandje, removeFromWinkelmandje, clearWinkelmandje } = useContext(WinkelMandjeContext);
+  useEffect(() => {
+    
+  })
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   return (
     <main className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50'>
-      <div className='bg-white p-10 rounded-lg min-h-[75%] w-1/2 relative shadow-md'>
+      <div className='bg-white p-10 rounded-lg h-[75%] w-1/2 relative shadow-md'>
         <h1 className='text-3xl font-semibold text-center'>Winkelmandje</h1>
         {winkelmandje.length === 0 ? (
           <div className="flex justify-center items-center h-full relative">
@@ -20,19 +31,22 @@ const winkelmandje = ({ closeWinkelMandje }) => {
             </button>
           </div>
         ) : (
-          <div className='flex flex-wrap justify-evenly gap-4 mt-12'>
+          <div className='flex flex-wrap justify-evenly max-h-full overflow-auto'>
             {winkelmandje.map((product) => (
-              <figure key={product.productID} className='border min-h-[220px] bg-white w-[300px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-lg'>
-                <img src={canonFoto} alt="" className='w-full h-16 object-contain' />
-                <div className='flex flex-col flex-wrap '>
-                  <h1 className='text-2xl font-semibold overflow-hidden'>{product.productNaam}</h1>
-                  <div className='flex flex-col w-3/5 flex-wrap text-lg font-medium'>
+              <figure key={product.productID} className='border max-h-[270px] overflow-auto bg-white w-1/2 rounded-2xl flex flex-col gap-2 p-5 relative shadow-lg'>
+                <img src={product.product.productModelNr.productModelFoto ? `/src/assets/ProductModelFotos/${product.product.productModelNr.productModelFoto}` : BackupImage} alt="" className='w-full h-16 object-contain' />
+                <div className='flex flex-col flex-wrap'>
+                  <h1 className='text-2xl font-bold overflow-hidden'>{product.product.productNaam}</h1>
+                  <div className='flex flex-col flex-wrap w-full text-lg font-semibold'>
                     <label >Periode</label>
-                    <h2 className=''>{product.boekingDatum}</h2>
+                    <div className='flex text-sm'>
+                      <h2 className=''>{product.afhaalDatum + " "} -  </h2>
+                      <h2 className=''>{" " + product.retourDatum}</h2>
+                    </div>
                   </div>
                 </div>
                 <div className='flex flex-col justify-center w-1/2 gap-3 text-white text-lg font-light'>
-                  <button className='h-14 w-auto border rounded-3xl bg-red-400 justify-center  items-center flex p-2 hover:bg-red-800' onClick={() => removeFromWinkelmandje(product. productID)}>
+                  <button className='h-14 w-auto border rounded-3xl bg-red-400 justify-center  items-center flex p-2 hover:bg-red-800' onClick={() => removeFromWinkelmandje(product.product.productID)}>
                     <p>Verwijderen</p>
                   </button>
                   <button className='h-14 border w-auto rounded-3xl bg-gray-800 justify-center  items-center flex p-2 shadow-lg hover:bg-black'>

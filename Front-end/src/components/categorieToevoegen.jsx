@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { MdOutlineAddCircle } from "react-icons/md";
@@ -20,7 +19,6 @@ const CategorieToevoegen = ({ onClose }) => {
     const updatedFormData = {
       ...formData,
     };
-    console.log(updatedFormData);
     try {
       const response = await axios.post(
         "http://localhost:8080/categorie/toevoegen",
@@ -52,7 +50,7 @@ const CategorieToevoegen = ({ onClose }) => {
     <main className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg min-h-[40%] w-1/2 relative shadow-md">
         <section className="w-full h-full rounded-lg">
-          <form onSubmit className="flex w-full h-full gap-20">
+          <form onSubmit={onSubmit} className="flex w-full h-full gap-20">
             <div className="flex flex-col gap-10 w-full rounded-lg p-5">
               <h1 className="text-3xl font-medium">Categorie Toevoegen</h1>
               <div className="flex flex-col gap-1 w-3/4">

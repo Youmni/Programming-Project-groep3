@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { MdOutlineAddCircle } from "react-icons/md";
-import { IoSearchOutline } from "react-icons/io5";
-import { FaFilter } from "react-icons/fa6";
 import { RxDashboard } from "react-icons/rx";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
@@ -14,7 +12,7 @@ const ProductModelToevoegen = () => {
   const [formData, setFormData] = useState({
     productModelNaam: "",
     productModelMerk: "",
-    categorieNaam: "",
+    categorieNr: "",
     productModelBeschrijving: "",
     productModelFoto: "",
   });
@@ -49,13 +47,21 @@ const ProductModelToevoegen = () => {
 
   const handlechange = (event) => {
     const { name, value, type, files } = event.target;
-    console.log(name, value);
     if (type === "file") {
-      setFormData({ ...formData, [name]: files[0] });
+      const file = files[0];
+      if (file) {
+        setFormData({ ...formData, [name]: file.name });
+      }
     } else {
-      setFormData({ ...formData, [name]: value });
+      if (name === "categorieNr") {
+        const selectedCategory = categories.find(categorie => categorie.categorieNaam === value);
+        setFormData({ ...formData, [name]: selectedCategory ? String(selectedCategory.categorieNr) : "" });
+      } else {
+        console.log(name, value); 
+        setFormData({ ...formData, [name]: value});
+      }
     }
-
+    
     if (value === "Categorie toevoegen.") {
       categorieToevoegen();
     }
@@ -86,7 +92,7 @@ const ProductModelToevoegen = () => {
         setFormData({
           productModelNaam: "",
           productModelMerk: "",
-          categorieNaam: "",
+          categorieNr: "",
           productModelBeschrijving: "",
           productModelFoto: "",
         });
@@ -158,7 +164,7 @@ const ProductModelToevoegen = () => {
           <form onSubmit={onSubmit} className="flex w-full h-full gap-20">
             <div className="flex flex-col w-1/2 border rounded-lg gap-8 p-5">
               <div className="flex flex-col w-3/4 text-Grijs">
-                <label htmlFor="text">Product Naam</label>
+                <label htmlFor="text">Product Model Naam</label>
                 <input
                   type="text"
                   name="productModelNaam"
@@ -169,7 +175,7 @@ const ProductModelToevoegen = () => {
                 />
               </div>
               <div className="flex flex-col w-3/4 text-Grijs">
-                <label htmlFor="">Product Merk</label>
+                <label htmlFor="">Product Model Merk</label>
                 <input
                   type="text"
                   name="productModelMerk"
@@ -184,9 +190,9 @@ const ProductModelToevoegen = () => {
                 <select
                   className=" h-10 pl-4 rounded-xl bg-red-100"
                   required
-                  value={formData.categorieNaam}
+                  value={Option.key}
                   onChange={handlechange}
-                  name="categorieNaam"
+                  name="categorieNr"
                 >
                   <option value="">Selecteer Categorie</option>
                   {categories.map((categorie) => (
@@ -221,10 +227,8 @@ const ProductModelToevoegen = () => {
                   name="productModelFoto"
                   accept=".jpg, .jpeg, .png"
                   placeholder="Foto Toevoegen"
-                  className="w-96 h-7 pl-2"
-                  value={formData.productModelFoto}
+                  className="w-96 h-7 pl-2"         
                   onChange={handlechange}
-                  disabled
                 />
               </div>
             </div>
