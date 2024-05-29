@@ -11,7 +11,9 @@ import Spinner from "../../components/Spinner";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 import {enqueueSnackbar} from "notistack";
-
+import { IoInformationCircleSharp } from "react-icons/io5";
+import ChooseProduct from "../../components/ChooseProduct";
+import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 
 
 const Leningen = () => {
@@ -19,6 +21,9 @@ const Leningen = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [product, setProduct] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReservatie, setSelectedReservatie] = useState(null);
+
 
   const navigate = useNavigate();
 
@@ -30,6 +35,7 @@ const Leningen = () => {
       navigate("/login");
       return;
     }
+
     
     setLoading(true);
     // fetch Reservaties
@@ -49,6 +55,7 @@ const Leningen = () => {
       });
   }, []);
 
+
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -61,130 +68,106 @@ const Leningen = () => {
       reservatie.gebruiker.titel
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
+        reservatie.status
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       String(reservatie.reservatieNr)
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
   );
 
+  const openModal = (reservatie) => {
+    setSelectedReservatie(reservatie);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <content className="top-0 flex-grow">
+    <div className="top-0 flex-grow">
       <main className="flex-grow p-10">
         <div className="flex justify-between items-center w-auto h-auto">
-          <h1 className=" flex text-3xl font-bold w-40 border-b justify-center">
+          <h1 className="flex text-3xl font-bold w-40 border-b justify-center">
             Leningen
           </h1>
         </div>
-        <div className="flex items-center gap-2 mt-10 ml-5 w-auto  justify-between">
-          <breadcrumb className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-10 ml-5 w-auto justify-between">
+          <div className="flex items-center gap-2">
             <RxDashboard className="text-rood" />
-            <breadcrumb-item>Leningen</breadcrumb-item>
-          </breadcrumb>
-          <div className="items-center flex h-12 gap-4">
-            <div className="items-center flex h-full border-2 w-56 gap-2 rounded-xl border-Lichtgrijs hover:border-black">
+            <span>Leningen</span>
+          </div>
+          <div className="flex items-center h-12 gap-4">
+            <div className="flex items-center h-full border-2 w-56 gap-2 rounded-xl border-Lichtgrijs hover:border-black">
               <IoSearchOutline className="ml-2 size-6" />
               <input
                 type="search"
-                name=""
-                id=""
                 placeholder="Zoek hier"
                 className="h-full w-full rounded-xl p-2"
                 value={searchQuery}
                 onChange={handleSearch}
               />
             </div>
-            <div className="flex h-full border-2 rounded-xl items-end justify-center border-Lichtgrijs w-28 hover:cursor-pointer">
-              <div className="flex h-full items-center justify-center gap-2">
-                <FaFilter className="size-4 text-black-600" />
-                <h2 className="text-xl font-semibold">Filter</h2>
-              </div>
+            <div className="flex h-full border-2 rounded-xl items-center justify-center border-Lichtgrijs w-28 hover:cursor-pointer">
+              <FaFilter className="size-4 text-black-600" />
+              <h2 className="text-xl font-semibold">Filter</h2>
             </div>
           </div>
         </div>
-        <div className="flex w-auto h-auto">
-          <div>{loading && <Spinner />}</div>
-          <table className="w-full h-full">
-            <thead className="w-full items-center h-16">
-              <tr className="text-sm text-Lichtgrijs font-thin">
-                <th scope="col" className="text-left px-2 ">
-                <div className="flex items-center justify-center">
-                    Nr
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  className="text-left hover:cursor-pointer w-80 "
-                >
-                  <div className="flex items-center ">
-                    Product
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th scope="col" className="text-left">
-                  Aantal
-                </th>
-                <th scope="col" className="">
-                  <div className="flex items-center">
-                    Uitgeleend door
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th scope="col" className="text-left">
-                  <div className="flex items-center">
-                    Uitgeleend op
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th scope="col" className="text-left ">
-                <div className="flex items-center">
-                    Uitgeleend tot
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th scope="col" className="text-left ">
-                <div className="flex items-center">
-                    status
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th scope="col" className="text-right">
-                  Actie
-                </th>
+        <table className="w-full mt-10">
+          <thead>
+            <tr className="text-gray-400">
+              <th scope="col" className="px-1 font-semibold text-center">
+                Reservatie ID
+              </th>
+              <th scope="col" className="px-1 font-semibold text-center py-4">
+                Product details
+              </th>
+              <th scope="col" className="px-1 font-semibold text-center">
+                Uitgeleend door
+              </th>
+              <th scope="col" className="px-1 font-semibold text-center">
+                Afhaaldatum
+              </th>
+              <th scope="col" className="px-1 font-semibold text-center">
+                Retourdatum
+              </th>
+              <th scope="col" className="px-1 font-semibold text-center">
+                Status
+              </th>
+              <th scope="col" className="px-1 font-semibold text-center">
+                Actie
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {reservaties.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="bg-grey-300 rounded p-4 text-white text-center">
+                  Geen reservaties
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredReservaties.map((reservatie) => (
-                <tr
-                  key={reservatie.reservatieNr}
-                  className="h-20 text-black font-semibold hover:bg-gray-200 "
-                >
-                  <td className="text-center h-full ">
-                    {reservatie.reservatieNr}
-                  </td>
-                  <td className="">
-                    <div className="flex items-center justify-start gap-2  ">
-                      <div className="h-12 w-12 overflow-hidden rounded-full border-2 border-Lichtgrijs">
-                        <img
-                          src={canonFoto}
-                          alt=""
-                          className="w-full h-full object-cover bg-white"
-                        />
-                      </div>
-                      <h2 className="flex flex-col -space-y-1">
-                        <span className="text-base text-black font-semibold">{`${reservatie.productreservatieNaam}`}</span>
-                        <span className="text-sm text-Lichtgrijs">{`${reservatie.productreservatieMerk}`}</span>
-                      </h2>
+            ) : (
+              filteredReservaties.map((reservatie) => (
+                <tr key={reservatie.reservatieNr} className="text-center space-y-4">
+                  <td className="px-2">{reservatie.reservatieNr}</td>
+                  <td className="px-2 flex justify-center">
+                    <div>
+                      <IoInformationCircleSharp
+                        onClick={() => openModal(reservatie)}
+                        className="w-8 h-8 p-1 rounded-full bg-black text-white cursor-pointer"
+                      />
                     </div>
                   </td>
-                  <td className="">
-                    <h2 className="text-lg">{`${reservatie.aantal}`}</h2>
+                  <td className="px-2">
+                    {reservatie.gebruiker.email.split('@')[0].replace('.', ' ')}
                   </td>
-                  <td className="">{reservatie.gebruiker.email}</td>
-                  <td className="">{reservatie.boekingDatum}</td>
-                  <td className="">{reservatie.retourDatum}</td>
-                  <td className="">{reservatie.status}</td>
+                  <td className="px-2">{reservatie.afhaalDatum}</td>
+                  <td className="px-2">{reservatie.retourDatum}</td>
+                  <td className="px-2">{reservatie.status}</td>
                   <td className="">
-                    <div className="flex justify-end items-center ">
+                    <div className="flex justify-center items-center ">
                       <Link
                         to={`/admin/inventaris/wijzigen/${reservatie.productreservatieNr}`}
                         className="bg-gray-600 text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"
@@ -194,12 +177,18 @@ const Leningen = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
+        {showModal && (
+          <ProductDetailsReservatie
+            reservatie={selectedReservatie}
+            closeModal={closeModal}
+          />
+        )}
       </main>
-    </content>
+    </div>
   );
 };
 

@@ -6,8 +6,9 @@ import { CiSearch } from "react-icons/ci";
 import { IoIosAddCircle } from "react-icons/io";
 import BackupImage from "../assets/backup.jpg";
 
-const BeschadigingPopup = ({ product, onClose }) => {
-  console.log(product);
+const BeschadigingPopup = ({ productObject, onClose }) => {
+
+  const [product, setProduct] = useState(productObject);
 
   const [beschadigingen, setBeschadigingen] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -99,21 +100,18 @@ const BeschadigingPopup = ({ product, onClose }) => {
           </section>
           <table className="w-full h-full">
             <thead className="w-full items-center h-16">
-              <tr className="text-sm text-Lichtgrijs font-thin ">
+              <tr className="text-sm text-grey font-thin ">
                 <th scope="col" className=" px-2 ">
                   Nr
                 </th>
-                <th scope="col" className="text-left ">
+                <th scope="col" className="text-center ">
                   Beschadiging Id
                 </th>
-                <th scope="col" className="text-left">
+                <th scope="col" className="text-center">
                   Beschadigd door
                 </th>
-                <th scope="col" className="text-left">
-                  Uitgeleeend op
-                </th>
-                <th scope="col" className="text-left">
-                  Uitgeleend tot
+                <th scope="col" className="text-center">
+                  Registratie beschadiging
                 </th>
                 <th scope="col" className="text-right">
                   Actie
@@ -122,12 +120,11 @@ const BeschadigingPopup = ({ product, onClose }) => {
             </thead>
             <tbody>
               {beschadigingen.map((beschadiging, index) => (
-                <tr key={beschadiging} className="h-12 w-auto ">
+                <tr className="h-12 w-auto ">
                   <td className="text-center h-full">{index}</td>
-                  <td className="">#{beschadiging}</td>
-                  <td className="">Naam{beschadiging}</td>
-                  <td className="">Op{beschadiging}</td>
-                  <td className="">Tot{beschadiging}</td>
+                  <td className="text-center">#{beschadiging.beschadigingId}</td>
+                  <td className="text-center">{beschadiging.gebruiker.email}</td>
+                  <td className="text-center">{beschadiging.beschadigingsdatum}</td>
                   <td className="text-end">
                     <button
                       title="Beschadiging info"

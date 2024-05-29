@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
 import { RxDashboard } from "react-icons/rx";
 import { TbBoxSeam } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import { RiDatabase2Line } from "react-icons/ri";
 import { IoIosArrowForward } from "react-icons/io";
+import { IoLogOut } from "react-icons/io5";
+
 
 const AdminSideBar = () => {
   const [nav, setNav] = useState(true);
   const [isMediumScreen, setIsMediumScreen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleNav = () => {
     if (!isMediumScreen) {
@@ -23,7 +26,7 @@ const AdminSideBar = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); 
+    handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -33,6 +36,12 @@ const AdminSideBar = () => {
       setNav(false);
     }
   }, [isMediumScreen]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
+
 
   if (nav) {
     return (
@@ -86,11 +95,19 @@ const AdminSideBar = () => {
             </li>
           </Link>
         </ul>
+        <div className="w-full h-full flex items-end p-3 text-2xl gap-5 font-medium ">
+          <div onClick={()=>handleLogout()} className=" flex items-center gap-5 cursor-pointer rounded-xl hover:text-rood">
+          <IoLogOut className="size-7 bg-inherit ml-4" />
+          Log out
+          </div>
+        </div>
       </aside>
     );
   } else {
     return (
-      <aside className={`flex gap-1 flex-col sticky h-screen max-w-20 border-r w-24 border-Lichtgrijs top-0 left-0`}>
+      <aside
+        className={`flex gap-1 flex-col sticky h-screen max-w-20 border-r w-24 border-Lichtgrijs top-0 left-0`}
+      >
         <a href="/admin/Dashboard">
           <header className="flex w-full h-20 gap-x-5 items-center">
             <img
@@ -131,6 +148,11 @@ const AdminSideBar = () => {
             </li>
           </Link>
         </ul>
+        <div className="w-full h-full flex items-end p-3 text-2xl gap-5 font-medium ">
+          <div onClick={()=>handleLogout()} className=" flex items-center gap-5 cursor-pointer rounded-xl hover:text-rood">
+          <IoLogOut className="size-7 bg-inherit ml-4" />
+          </div>
+        </div>
       </aside>
     );
   }

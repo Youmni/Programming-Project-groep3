@@ -9,7 +9,7 @@ import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Popup from '../../components/PopupProduct';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
 import { FaCircleInfo } from "react-icons/fa6";
@@ -26,9 +26,13 @@ const Inventaris = () => {
   const [showKeuzePopup, setShowKeuzePopup] = useState(false);
   const [showProductPopup, setShowProductPopup] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
-  
 
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const url = location.state?.url || "http://localhost:8080/productmodel";
+
+
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -42,7 +46,7 @@ const Inventaris = () => {
     setLoading(true);
     // Fetch product models
     axios
-      .get("http://localhost:8080/productmodel", {
+      .get(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

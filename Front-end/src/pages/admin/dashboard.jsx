@@ -7,16 +7,19 @@ import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { RiReservedFill } from "react-icons/ri";
 import { PiHandCoinsDuotone } from "react-icons/pi";
 import { FaCirclePause } from "react-icons/fa6";
-import { MdKeyboardArrowRight } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { enqueueSnackbar } from "notistack";
+import Spinner from "react-bootstrap/esm/Spinner";
+import Leningen from "./leningen";
+import {BiCheckCircle,BiCircle,BiPauseCircle,BiArrowToRight,BiCheck,BiRun,BiTimeFive,BiBook,} from "react-icons/bi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
+import Inventaris from "./inventaris";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [reservatiesAfhalen, setReservatiesAfhalen] = useState([]);
@@ -30,89 +33,86 @@ const Dashboard = () => {
   const [eyeToggleTeLaatOnvolledig, setEyeToggleTeLaatOnvolledig] =
     useState(true);
   const [inventarisAantallen, setInventarisAantallen] = useState({
-    beschikbaar: 0,
-    gereserveerd: 0,
-    gepauzeerd: 0,
+    beschikbaar: "...",
+    gereserveerd: "...",
+    gepauzeerd: "...",
   });
 
   const [leningAantallen, setLeningAantallen] = useState({
-    inOrde: 0,
-    bezig: 0,
-    teLaat: 0,
-    voorboeking: 0,
+    inOrde: "...",
+    bezig: "...",
+    teLaat: "...",
+    voorboeking: "...",
   });
-
-
+  const navigate = useNavigate();
 
   useEffect(() => {
+    axios
+      .get("http://localhost:8080/product/status-aantallen", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        const nieuweAantallen = {
+          beschikbaar: 0,
+          gereserveerd: 0,
+          gepauzeerd: 0,
+        };
 
-    axios.get('http://localhost:8080/product/status-aantallen', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => {
-      const data = response.data;
-      const nieuweAantallen = {
-        beschikbaar: 0,
-        gereserveerd: 0,
-        gepauzeerd: 0,
-      };
+        data.forEach((item) => {
+          if (item.status.toLowerCase() === "beschikbaar") {
+            nieuweAantallen.beschikbaar = item.aantal;
+          } else if (item.status.toLowerCase() === "gereserveerd") {
+            nieuweAantallen.gereserveerd = item.aantal;
+          } else if (item.status.toLowerCase() === "gepauzeerd") {
+            nieuweAantallen.gepauzeerd = item.aantal;
+          }
+        });
 
-      data.forEach(item => {
-        if (item.status.toLowerCase() === 'beschikbaar') {
-          nieuweAantallen.beschikbaar = item.aantal;
-        } else if (item.status.toLowerCase() === 'gereserveerd') {
-          nieuweAantallen.gereserveerd = item.aantal;
-        } else if (item.status.toLowerCase() === 'gepauzeerd') {
-          nieuweAantallen.gepauzeerd = item.aantal;
-        }
+        console.log(response.data)
+        setInventarisAantallen(nieuweAantallen);
+      })
+      .catch((error) => {
+        console.error("Error fetching status counts:", error);
       });
-
-      setInventarisAantallen(nieuweAantallen);
-    })
-    .catch((error) => {
-      console.error('Error fetching status counts:', error);
-    });
   }, [inventarisAantallen]);
 
-
   useEffect(() => {
+    axios
+      .get("http://localhost:8080/reservatie/status-aantallen", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        const nieuweAantallen = {
+          inOrde: 0,
+          bezig: 0,
+          teLaat: 0,
+          voorboeking: 0,
+        };
 
-    axios.get('http://localhost:8080/reservatie/status-aantallen', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => {
-      const data = response.data;
-      const nieuweAantallen = {
-        inOrde: 0,
-        bezig: 0,
-        teLaat: 0,
-        voorboeking: 0,
-      };
+        data.forEach((item) => {
+          if (item.status.toLowerCase() === "in orde") {
+            nieuweAantallen.inOrde = item.aantal;
+          } else if (item.status.toLowerCase() === "bezig") {
+            nieuweAantallen.bezig = item.aantal;
+          } else if (item.status.toLowerCase() === "te laat") {
+            nieuweAantallen.teLaat = item.aantal;
+          } else if (item.status.toLowerCase() === "voorboeking") {
+            nieuweAantallen.voorboeking = item.aantal;
+          }
+        });
 
-      data.forEach(item => {
-        if (item.status.toLowerCase() === 'in orde') {
-          nieuweAantallen.inOrde = item.aantal;
-        } else if (item.status.toLowerCase() === 'bezig') {
-          nieuweAantallen.bezig = item.aantal;
-        } else if (item.status.toLowerCase() === 'te laat') {
-          nieuweAantallen.teLaat = item.aantal;
-        }
-        else if (item.status.toLowerCase() === 'voorboeking') {
-          nieuweAantallen.voorboeking = item.aantal;
-        }
+        setLeningAantallen(nieuweAantallen);
+      })
+      .catch((error) => {
+        console.error("Error fetching status counts:", error);
       });
-
-      setLeningAantallen(nieuweAantallen);
-    })
-    .catch((error) => {
-      console.error('Error fetching status counts:', error);
-    });
   }, [leningAantallen]);
-
 
   // useEffect(() => {
 
@@ -244,6 +244,42 @@ const Dashboard = () => {
       });
   };
 
+  // de onclick methodes die nodig zijn voor de tegels
+
+  const inventarisBeschikbaar = () => {
+    const status = "Beschikbaar";
+    navigate("/admin/inventaris", { state: { url: `http://localhost:8080/productmodel/product/status=${status}`} });
+
+  };
+  const inventarisGereserveerd = () => {
+    const status = "Gereserveerd";
+    navigate("/admin/inventaris", { state: { url: `http://localhost:8080/productmodel/product/status=${status}`} });
+  };
+  const inventarisGepauzeerd = () => {
+    const status = "Gepauzeerd";
+    navigate("/admin/inventaris", { state: { url: `http://localhost:8080/productmodel/product/status=${status}`} });
+  };
+
+  const leningInOrde = () => {
+    const status = "In orde";
+    navigate("/admin/leningen", { state: { url: `http://localhost:8080/reservatie/status?status=${status}`} });
+
+  };
+  const leningBezig = () => {
+    const status = "Bezig";
+    navigate("/admin/leningen", { state: { url: `http://localhost:8080/reservatie/status?status=${status}`} });
+
+  };
+  const leningTeLaat = () => {
+    const status = "Te laat";
+    navigate("/admin/leningen", { state: { url: `http://localhost:8080/reservatie/status?status=${status}`} });
+
+  };
+  const leningVoorboeking = () => {
+    const status = "Voorboeking";
+    navigate("/admin/leningen", { state: { url: `http://localhost:8080/reservatie/status?status=${status}`} });
+  };
+
   return (
     <div className="top-0 flex-grow">
       <main className=" p-10">
@@ -296,39 +332,46 @@ const Dashboard = () => {
             </li>
           </ul>
         </div>
-        <div className="flex w-full justify-start gap-20  mt-10 flex-wrap ">
-          <div className="flex flex-col gap-1 max-w-1/2 flex-wrap ">
-            <h1 className="text-xl font-semibold">Inventaris Overzicht</h1>
-            <div className="flex gap-10 w-full h-3/4 border">
-              <figure className="flex h-full w-[100px] border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4">
-                <FaCheckCircle className="size-16 ml-4 text-green-700" />
+        <div className="flex w-full justify-center gap-10  mt-10 flex-wrap ">
+          <div className="flex flex-col items-stretch gap-1 flex-wrap ">
+            <h1 className="text-xl text-center font-semibold">
+              Inventaris Overzicht
+            </h1>
+            <div className="flex gap-8 h-44 mt-6 border ">
+              <figure onClick={()=> inventarisBeschikbaar()} className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4">
+                <BiCheckCircle className="size-16 ml-4 text-green-700" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     Beschikbaar
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">{inventarisAantallen.beschikbaar}</span>
+                  <span className="text-2xl text-black font-semibold">
+                    {inventarisAantallen.beschikbaar}
+                  </span>
                 </h1>
               </figure>
-              <figure className="flex h-full w-[100px] border rounded-lg items-start border-gray-300 bg-red-200 flex-col justify-center gap-4">
-                <RiReservedFill className="size-16 ml-4 text-red-600" />
+              <figure onClick={()=> inventarisGereserveerd()} className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-blue-200 flex-col justify-center gap-4">
+                <BiCircle className="size-16 ml-4 text-blue-600" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     Gereserveerd
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">{inventarisAantallen.gereserveerd}</span>
+                  <span className="text-2xl text-black font-semibold">
+                  {inventarisAantallen.gereserveerd}
+                  </span>
                 </h1>
               </figure>
-              
-              <figure className="flex h-full w-[100px] border rounded-lg items-start border-gray-300 bg-blue-100 flex-col justify-center gap-4">
-                <FaCirclePause className="size-16 ml-4 text-blue-700" />
+              <figure onClick={()=> inventarisGepauzeerd()} className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4">
+                <BiPauseCircle className="size-16 ml-4 text-amber-600" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     Gepauzeerd
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-bold">{inventarisAantallen.gepauzeerd}</span>
+                  <span className="text-2xl text-black font-semibold">
+                  {inventarisAantallen.gepauzeerd}
+                  </span>
                 </h1>
               </figure>
             </div>
@@ -340,46 +383,59 @@ const Dashboard = () => {
             </footer>
           </div>
           <div className="flex flex-col gap-1 max-w-1/2 flex-wrap ">
-            <h1 className="text-xl font-semibold">Leningen Overzicht</h1>
+            <h1 className="text-xl text-center font-semibold">
+              Leningen Overzicht
+            </h1>
             <div className="flex gap-8 h-44 mt-6 border ">
-              <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4">
-                <FaCheckCircle className="size-16 ml-4 text-green-700" />
+              <figure
+                onClick={() => leningInOrde()}
+                className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4"
+              >
+                <BiCheck className="size-16 ml-4 text-green-700" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     In orde
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">{leningAantallen.inOrde}</span>
+                  <span className="text-2xl text-black font-semibold">
+                    {leningAantallen.inOrde}
+                  </span>
                 </h1>
               </figure>
-              <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-red-200 flex-col justify-center gap-4">
-                <RiReservedFill className="size-16 ml-4 text-red-600" />
+              <figure onClick={()=> leningBezig()} className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4">
+                <BiRun className="size-16 ml-4 text-amber-600" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     Lopend
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">{leningAantallen.bezig}</span>
+                  <span className="text-2xl text-black font-semibold">
+                    {leningAantallen.bezig}
+                  </span>
                 </h1>
               </figure>
-              <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4">
-                <PiHandCoinsDuotone className="size-16 ml-4 text-amber-600" />
+              <figure onClick={()=> leningTeLaat()} className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-red-100 flex-col justify-center gap-4">
+                <BiTimeFive className="size-16 ml-4 text-red-600" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     Te laat
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-semibold">{leningAantallen.teLaat}</span>
+                  <span className="text-2xl text-black font-semibold">
+                    {leningAantallen.teLaat}
+                  </span>
                 </h1>
               </figure>
-              <figure className="flex h-full w-[120px] border rounded-lg items-start border-gray-300 bg-blue-100 flex-col justify-center gap-4">
-                <FaCirclePause className="size-16 ml-4 text-blue-700" />
+              <figure onClick={()=> leningVoorboeking()} className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-blue-100 flex-col justify-center gap-4">
+                <BiBook className="size-16 ml-4 text-blue-700" />
                 <h1 className="flex flex-col -space-y-7 ml-4">
                   <span className="text-base text-Grijs font-nm text-">
                     Voorboeking
                   </span>
                   <br />
-                  <span className="text-2xl text-black font-bold">{leningAantallen.voorboeking}</span>
+                  <span className="text-2xl text-black font-bold">
+                    {leningAantallen.voorboeking}
+                  </span>
                 </h1>
               </figure>
             </div>

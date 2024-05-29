@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
 import { IoIosMenu } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
@@ -9,6 +9,7 @@ import WinkelMandje from "../pages/user/winkelmandje";
 import axios from "axios";
 import { IoIosArrowDown } from "react-icons/io";
 import { WinkelMandjeContext } from "../contexts/winkelmandjeContext";
+import { IoLogOut } from "react-icons/io5";
 
 const NavBar = () => {
   // For clicking inside and outside of the box --->>
@@ -17,7 +18,7 @@ const NavBar = () => {
   const [categories, setCategories] = useState([]);
   const { winkelmandje } = useContext(WinkelMandjeContext);
   const node = useRef();
- 
+  const navigate = useNavigate();
 
   const handleClickOutside = (e) => {
     if (node.current.contains(e.target)) {
@@ -66,6 +67,11 @@ const NavBar = () => {
         console.error("Error fetching data: ", error);
       });
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
 
   // Define categories
 
@@ -143,6 +149,11 @@ const NavBar = () => {
                 <span>{winkelmandje.length}</span>
               </div>
             </button>
+            <IoLogOut
+              className="flex h-full size-14 text-Grijs p-2 cursor-pointer rounded-xl hover:text-rood
+              transform transition-transform duration-250 hover:scale-110"
+              onClick={handleLogout}
+            />
           </div>
         </div>
       </nav>

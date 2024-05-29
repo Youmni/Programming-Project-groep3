@@ -1,6 +1,7 @@
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 import { MdOutlineBrokenImage } from "react-icons/md";
+import BeschadigingPopup from "./BeschadigingPopup";
 
 const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
   const [products, setProducts] = useState(reservatie);
@@ -8,23 +9,15 @@ const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
   const [showModal, setShowModal] = useState(false);
 
   const openProductBeschadiging = (selectedProduct) => {
-    console.log("Product clicked: ", selectedProduct);
     setSelectedProduct(selectedProduct);
     setShowModal(true);
   };
 
   const handleProductClick = (product) => {
-    console.log("Product clicked: ", product)
     openProductBeschadiging(product);
-    setShowModal(true);
   };
 
-
-  if (showModal) {
-    return (
-      <></>
-    );
-  }
+  
   return (
     <div
       className="fixed z-10 inset-0 overflow-y-auto"
@@ -32,11 +25,9 @@ const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          aria-hidden="true"
         ></div>
         <span
           className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
         ></span>
         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -55,9 +46,9 @@ const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
                   className="flex flex-row justify-between items-center h-full mb-2"
                 >
                   <p className="text-left">{product.productNaam}</p>
-                  <span className="text-center">{product.productModelNr.productModelMerk}</span>
+                  <span className="text-center">ID: #{product.productID}</span>
                   <MdOutlineBrokenImage
-                    onClick={() => openModal(selectedProduct)}
+                    onClick={() => handleProductClick(product)}
                     className="text-right w-8 h-8 cursor-pointer"
                   />
                 </div>
@@ -75,6 +66,9 @@ const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
             </button>
           </div>
         </div>
+        {showModal && (<div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center overflow-y-hidden">
+        <BeschadigingPopup productObject={selectedProduct} onClose={closeModal} />
+      </div>)}
       </div>
     </div>
   );
