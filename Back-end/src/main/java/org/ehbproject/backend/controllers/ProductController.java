@@ -5,6 +5,7 @@ import org.ehbproject.backend.dao.CategorieCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductModelCrudRepository;
 import org.ehbproject.backend.dto.ProductDTO;
+import org.ehbproject.backend.dto.StatusAantalDTO;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
@@ -241,15 +242,15 @@ public class ProductController {
     }
 
     @CrossOrigin
-    @GetMapping("/statusaantal={status}")
-    public int getAmountOfProductsByStatus(@PathVariable(name = "status") String status){
-        List<Product> products = new ArrayList<>(repo.findByStatusIgnoreCase(status));
-        int aantalProducten = 0;
-        for(Product product : products){
-            aantalProducten++;
-        }
-        System.out.println(aantalProducten);
-        return aantalProducten;
+    @GetMapping("/status-aantallen")
+    public List<StatusAantalDTO> getAmountOfProductsByStatus() {
+        List<StatusAantalDTO> statusAantallen = new ArrayList<>();
+
+        statusAantallen.add(new StatusAantalDTO("Beschikbaar", repo.findByStatusIgnoreCase("Beschikbaar").size()));
+        statusAantallen.add(new StatusAantalDTO("Gereserveerd", repo.findByStatusIgnoreCase("Gereserveerd").size()));
+        statusAantallen.add(new StatusAantalDTO("Gepauzeerd", repo.findByStatusIgnoreCase("Gepauzeerd").size()));
+
+        return statusAantallen;
     }
     }
 
