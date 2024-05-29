@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
 import { IoIosMenu } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
@@ -10,27 +10,35 @@ import axios from "axios";
 import { IoIosArrowDown } from "react-icons/io";
 import { WinkelMandjeContext } from "../contexts/winkelmandjeContext";
 import { IoLogOut } from "react-icons/io5";
+import ChooseProduct from "./ChooseProduct";
 
 const NavBar = () => {
-  // For clicking inside and outside of the box --->>
   const [clicked, setClicked] = useState(false);
   const [winkelMandje, setWinkelMandje] = useState(false);
   const [categories, setCategories] = useState([]);
   const { winkelmandje } = useContext(WinkelMandjeContext);
+  const [search, setSearch] = useState("");
+  const [productModellen, setProductModellen] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProductModel, setSelectedProductModel] = useState(null);
   const node = useRef();
   const navigate = useNavigate();
+  const location = useLocation();
+  const nodeSearchResults = useRef();
 
   const handleClickOutside = (e) => {
-    if (node.current.contains(e.target)) {
-      // inside click
+    if (
+      (node.current && node.current.contains(e.target)) ||
+      (nodeSearchResults.current && nodeSearchResults.current.contains(e.target))
+    ) {
       return;
     }
-    // outside click
     setClicked(false);
+    setSearch("");
   };
 
   useEffect(() => {
-    if (clicked) {
+    if (clicked || search.length > 0) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -38,12 +46,12 @@ const NavBar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [clicked]);
+  }, [clicked, search]);
 
   const handleButtonClick = () => {
     setClicked(!clicked);
   };
-  //<<--
+
   const openWinkelMandje = () => {
     setWinkelMandje(true);
   };
@@ -66,6 +74,19 @@ const NavBar = () => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
+
+    axios
+      .get("http://localhost:8080/productmodel", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setProductModellen(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
   }, []);
 
   const handleLogout = () => {
@@ -74,6 +95,29 @@ const NavBar = () => {
   };
 
   // Define categories
+  const handleSearch = (e) => {
+    const zoekTerm = e.target.value.toLowerCase();
+    if (zoekTerm === "") {
+      setSearch([]);
+      return;
+    }
+    setSearch(
+      productModellen.filter((productModel) =>
+        productModel.productModelNaam.toLowerCase().includes(zoekTerm.toLowerCase())
+      )
+    );
+  };
+
+  const openModal = (productModel) => {
+    setSelectedProductModel(productModel);
+    setShowModal(true);
+    setSearch("");
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
 
   return (
     <>
@@ -110,8 +154,9 @@ const NavBar = () => {
                 {categories.map((categorie, index) => (
                   <Link
                     to={`/inventaris/${categorie.categorieNr}`}
+                    onClick={() => setClicked(false)}
                     key={index}
-                    className="hover:bg-blue-500 p-2 hover:text-white"
+                    className="hover:bg-blue-500 p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     {categorie.categorieNaam}
                   </Link>
@@ -122,21 +167,40 @@ const NavBar = () => {
         </div>
 
         <div className="flex w-full h-full items-center justify-between">
-          <div className="flex flex-grow h-12  border-2 items-center rounded-lg gap-1 mr-5">
+          <div className="flex flex-grow h-12 border-2 items-center rounded-lg gap-1 mr-5 relative">
             <IoSearchOutline className="size-7 text-Grijs ml-2 transform transition-transform duration-250 hover:scale-110" />
             <input
               type="search"
               name="search-bar"
               id=""
-              placeholder="Zoek hier..."
-              className="h-full w-full  rounded-lg border-Lichtgrijs p-2 "
+              placeholder="Zoek hier naar een productmodel..."
+              className="h-full w-full rounded-lg border-Lichtgrijs p-2 overflow-hidden"
+              onChange={handleSearch}
             />
+
+            {search.length > 0 && (
+              <div
+                ref={nodeSearchResults}
+                className="absolute top-16 p-4 bg-red-100 text-black w-full max-h-[600px] overflow-auto rounded-xl flex flex-col z-10"
+              >
+                <label className="font-semibold mb-2">Product Modellen</label>
+                {search.map((productModel, index) => (
+                  <span
+                    onClick={() => openModal(productModel)}
+                    className="cursor-pointer p-2 hover:bg-blue-500 hover:text-white rounded-lg"
+                    key={index}
+                  >
+                    {productModel.productModelNaam}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
+
           <div className="flex h-full w-auto sm:ml-5 md:ml-10 lg:ml-20 items-center justify-start sm:gap-5 md:gap-10 lg:gap-20">
             <Link to={"/leningen"}>
               <FaUser
-                className="flex h-full size-14  text-Grijs p-2 
-                transform transition-transform duration-250 hover:scale-110"
+                className="flex h-full size-14 text-Grijs p-2 transform transition-transform duration-250 hover:scale-110"
               />
             </Link>
 
@@ -158,6 +222,12 @@ const NavBar = () => {
         </div>
       </nav>
       {winkelMandje && <WinkelMandje closeWinkelMandje={closeWinkelMandje} />}
+      {showModal && (
+        <ChooseProduct
+          productModelNr={selectedProductModel.productModelNr}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };

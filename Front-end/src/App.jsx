@@ -20,6 +20,7 @@ import { WinkelMandjeProvider } from "./contexts/winkelmandjeContext";
 import Register from "./components/Register";
 import ProductModel_toevoegen from "./pages/admin/productModel_toevoegen";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProductModel_wijzigen from "./pages/admin/productModel_wijzigen";
 
 const App = () => {
   const location = useLocation();
@@ -78,6 +79,7 @@ const AdminRoutes = () => {
           element={<ProductModel_toevoegen />}
         />
         <Route path="/leningen" element={<Leningen />} />
+        <Route path="/inventaris/wijzigen/:productModelNr" element={<ProductModel_wijzigen />} />
       </Routes>
     </div>
   );

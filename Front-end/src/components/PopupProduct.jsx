@@ -211,7 +211,7 @@ const PopupProduct = ({ onClose, model }) => {
           <p className="text-gray-600">{model.productModelBeschrijving}</p>
         </section>
         <h2 className="font-bold mt-4 text-gray-700 text-xl">Overzicht</h2>
-        <section className="mt-2 border-2 flex flex-col max-w- overflow-y-auto border-gray rounded-lg p-3">
+        <section className="mt-2 border-2 flex flex-col h-1/2 overflow-y-auto border-gray rounded-lg p-3">
           <section className="flex justify-start gap-6 sticky top-0 z-50 bg-white">
             <div className="flex items-center border border-gray-700 rounded-lg p-2 gap-2 w-[40%]">
               <CiSearch className="text-gray-500 font-bold" size={18} />{" "}
@@ -235,7 +235,7 @@ const PopupProduct = ({ onClose, model }) => {
               </select>
             </div>
           </section>
-          <table className="w-full h-full">
+          <table className="w-full h-auto">
             <thead className="w-full items-center h-16">
               <tr className="text-sm text-Lichtgrijs font-thin ">
                 <th scope="col" className=" px-2 ">
@@ -261,7 +261,7 @@ const PopupProduct = ({ onClose, model }) => {
             </thead>
             <tbody>
               {filteredProducten.map((product, index) => (
-                <tr key={product.productID} className="h-12 w-auto font-bold ">
+                <tr key={product.productID} className="h-12 w-auto font-bold">
                   <td className="text-center h-full">{index+1}</td>
                   <td className="">#{product.productID}</td>
                   <td className={getStatusColor(product.status)}>

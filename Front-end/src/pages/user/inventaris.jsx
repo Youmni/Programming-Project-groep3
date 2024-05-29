@@ -99,7 +99,7 @@ const inventarisCategorie = () => {
           <figure
             key={productModel.productModelNr}
             onClick={() => openModal(productModel)}
-            className="border bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16 transition-transform transform hover:scale-110 cursor-pointer"
+            className="border  bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16 transition-transform transform hover:scale-110 cursor-pointer"
           >
             <img
               src={productModel.productModelFoto ? `/src/assets/ProductModelFotos/${productModel.productModelFoto}` : BackUpImage}
@@ -120,7 +120,7 @@ const inventarisCategorie = () => {
               </div>
             </div>
             <button
-              className="h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950"
+              className="h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               onClick={() => openModal(productModel)}
             >
               <FaBox className="size-6 text-white" />
