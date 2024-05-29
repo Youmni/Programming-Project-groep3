@@ -235,7 +235,7 @@ const PopupProduct = ({ onClose, model }) => {
               </select>
             </div>
           </section>
-          <table className="w-full h-full">
+          <table className="w-full h-auto">
             <thead className="w-full items-center h-16">
               <tr className="text-sm text-Lichtgrijs font-thin ">
                 <th scope="col" className=" px-2 ">
@@ -261,7 +261,7 @@ const PopupProduct = ({ onClose, model }) => {
             </thead>
             <tbody>
               {filteredProducten.map((product, index) => (
-                <tr key={product.productID} className="h-12 w-auto font-bold ">
+                <tr key={product.productID} className="h-12 w-auto font-bold">
                   <td className="text-center h-full">{index+1}</td>
                   <td className="">#{product.productID}</td>
                   <td className={getStatusColor(product.status)}>
