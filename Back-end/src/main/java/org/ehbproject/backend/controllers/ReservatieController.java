@@ -5,6 +5,7 @@ import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductReservatieCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
+import org.ehbproject.backend.dto.StatusAantalDTO;
 import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductReservatie;
@@ -273,14 +274,15 @@ public class ReservatieController {
     }
 
     @CrossOrigin
-    @GetMapping("/statusaantal={status}")
-    public int getAmountOfReservatiesByStatus(@PathVariable(name = "status") String status){
-        List<Reservatie> reservaties = new ArrayList<>(repoReservatie.findByStatus(status));
-        int aantalReservaties = 0;
-        for(Reservatie reservatie : reservaties){
-            aantalReservaties++;
-        }
-        System.out.println(aantalReservaties);
-        return aantalReservaties;
+    @GetMapping("/status-aantallen")
+    public List<StatusAantalDTO> getAmountOfReservatiesByStatus() {
+        List<StatusAantalDTO> statusAantallen = new ArrayList<>();
+
+        statusAantallen.add(new StatusAantalDTO("Te laat", repoReservatie.findByStatus("Te laat").size()));
+        statusAantallen.add(new StatusAantalDTO("In orde", repoReservatie.findByStatus("In orde").size()));
+        statusAantallen.add(new StatusAantalDTO("Bezig", repoReservatie.findByStatus("Bezig").size()));
+        statusAantallen.add(new StatusAantalDTO("Voorboeking", repoReservatie.findByStatus("Voorboeking").size()));
+
+        return statusAantallen;
     }
 }

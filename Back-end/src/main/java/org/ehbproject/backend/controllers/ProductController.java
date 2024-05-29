@@ -230,7 +230,7 @@ public class ProductController {
 
     @CrossOrigin
     @GetMapping("/model={model}/status")
-    public List<Product> getAllProductenByModelAndStatus(@PathVariable(name = "model") int model, @RequestParam List<String> statussen) {
+    public List<Product> getAllProductenByModelAndStatus(@PathVariable(name = "model") int model, @RequestParam(name="statussen") List<String> statussen) {
         List<ProductModel> productModellen = repoModel.findByProductModelNr(model);
 
         List<Product> products = new ArrayList<>();
