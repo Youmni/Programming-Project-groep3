@@ -90,6 +90,8 @@ const NavBar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("winkelmandje")
+    localStorage.removeItem("formData")
     navigate("/login");
   };
 
@@ -101,7 +103,8 @@ const NavBar = () => {
     }
     setSearch(
       productModellen.filter((productModel) =>
-        productModel.productModelNaam.toLowerCase().includes(zoekTerm.toLowerCase())
+        productModel.productModelNaam.toLowerCase().includes(zoekTerm.toLowerCase()) ||
+        productModel.productModelMerk.toLowerCase().includes(zoekTerm.toLowerCase())
       )
     );
   };
