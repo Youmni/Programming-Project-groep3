@@ -6,7 +6,6 @@ import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 

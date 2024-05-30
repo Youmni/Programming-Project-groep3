@@ -1,7 +1,6 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @IdClass(ProductReservatiesId.class)

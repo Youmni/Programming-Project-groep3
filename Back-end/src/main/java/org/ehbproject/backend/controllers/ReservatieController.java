@@ -12,7 +12,6 @@ import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
 import org.ehbproject.backend.services.emailservice.EmailService;
-import org.ehbproject.backend.services.exceptions.InvalidStatusException;
 import org.ehbproject.backend.services.exceptions.ProductUnavailableException;
 import org.ehbproject.backend.services.verificatie.ProductReservationVerifier;
 import org.ehbproject.backend.services.verificatie.ReservatieLimiet;

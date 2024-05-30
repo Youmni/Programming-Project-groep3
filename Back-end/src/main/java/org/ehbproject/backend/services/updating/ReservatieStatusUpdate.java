@@ -1,10 +1,6 @@
 package org.ehbproject.backend.services.updating;
 
-import org.ehbproject.backend.dao.ProductCrudRepository;
-import org.ehbproject.backend.dao.ProductReservatieCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
-import org.ehbproject.backend.modellen.Product;
-import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -5,7 +5,6 @@ import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.dto.StatisticsDTO;
-import org.ehbproject.backend.dto.StatusAantalDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
