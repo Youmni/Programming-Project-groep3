@@ -54,7 +54,8 @@ const inventarisCategorie = () => {
   };
 
   const filteredProductModels = productModels.filter((model) =>
-    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase())
+    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const openModal = (productModel) => {
