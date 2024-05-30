@@ -164,4 +164,6 @@ Post-request:
             bv: {"gebruikerId": "7",
                  "productId": "22",
                  "beschrijving": "kapoetski",
-                 "beschadigingsDatum": "2024-05-28"}
+                 "beschadigingsDatum": "2024-05-28",
+                 "beschadigingFoto": "foto.jpg"
+}
