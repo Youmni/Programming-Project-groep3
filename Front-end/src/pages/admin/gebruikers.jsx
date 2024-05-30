@@ -76,6 +76,8 @@ const Gebruikers = () => {
       gebruiker.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       String(gebruiker.gebruikerID).toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const sortedGebruikers = filteredGebruikers.sort((a, b) => a.gebruikerID - b.gebruikerID);
+
 
   const openUserPopup = (gebruiker) => {
     setSelectedGebruiker(gebruiker);
@@ -84,6 +86,18 @@ const Gebruikers = () => {
 
 const closeUserPopup = () => {
     setShowPopup(false);
+}
+
+const titelColor = (titel) => {
+  switch (titel) {
+    case "Student": return "bg-slate-300" ;	
+    
+    case "Docent": return "bg-lime-200";
+    	
+    case "Admin": return "bg-red-200";	
+    
+    default: return "bg-slate-300";
+  }
 }
 
   return (
@@ -163,7 +177,7 @@ const closeUserPopup = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredGebruikers.map((gebruiker) => (
+              {sortedGebruikers.map((gebruiker) => (
                 <tr key={gebruiker.gebruikerID} className="h-16 w-auto relative">
                   <td className="text-center">
                     {gebruiker.gebruikerID}
@@ -180,12 +194,8 @@ const closeUserPopup = () => {
                     </div>
                   </td>
                   <td className="ml-2">
-                    <div className="flex w-3/5 border h-10 bg-slate-300 items-center justify-center rounded-md">
-                      {gebruiker.titel === "student" ? (
-                        <p>student</p>
-                      ) : (
-                        <p>docent</p>
-                      )}
+                    <div className={`flex w-3/5 border h-10 items-center justify-center rounded-md ${titelColor(gebruiker.titel)}`}>
+                      <p>{gebruiker.titel}</p>
                     </div>
                   </td>
                   <td className="">{gebruiker.beschikbaar}</td>

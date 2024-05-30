@@ -75,6 +75,8 @@ const Leningen = () => {
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
   );
+  const sortedReservaties = filteredReservaties.sort((a, b) => a.reservatieNr - b.reservatieNr);
+
 
   const openModal = (reservatie) => {
     setSelectedReservatie(reservatie);
@@ -109,6 +111,16 @@ const Leningen = () => {
     return formattedName;
   };
 
+
+  const formatDateToDutch = (dateStr) => {
+    const date = new Date(dateStr);
+    const options = {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric'
+    };
+    return new Intl.DateTimeFormat('nl-NL', options).format(date);
+  };
   return (
     <div className="top-0 flex-grow">
       <main className="flex-grow p-10">
@@ -173,7 +185,7 @@ const Leningen = () => {
                 </td>
               </tr>
             ) : (
-              filteredReservaties.map((reservatie) => (
+              sortedReservaties.map((reservatie) => (
                 <tr key={reservatie.reservatieNr} className="text-center space-y-4">
                   <td className="px-2">{reservatie.reservatieNr}</td>
                   <td className="px-2 flex justify-center">
@@ -187,8 +199,8 @@ const Leningen = () => {
                   <td className="px-2">
                     {formatName(reservatie.gebruiker.email)}
                   </td>
-                  <td className="px-2">{reservatie.afhaalDatum}</td>
-                  <td className="px-2">{reservatie.retourDatum}</td>
+                  <td className="px-2">{formatDateToDutch(reservatie.afhaalDatum)}</td>
+                  <td className="px-2">{formatDateToDutch(reservatie.retourDatum)}</td>
                   <td className={getStatusColor(reservatie.status)}>{reservatie.status}</td>
                   <td className="">
                     <div className="flex justify-center items-center ">

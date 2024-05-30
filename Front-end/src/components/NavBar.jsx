@@ -23,7 +23,6 @@ const NavBar = () => {
   const [selectedProductModel, setSelectedProductModel] = useState(null);
   const node = useRef();
   const navigate = useNavigate();
-  const location = useLocation();
   const nodeSearchResults = useRef();
 
   const handleClickOutside = (e) => {
@@ -94,7 +93,6 @@ const NavBar = () => {
     navigate("/login");
   };
 
-  // Define categories
   const handleSearch = (e) => {
     const zoekTerm = e.target.value.toLowerCase();
     if (zoekTerm === "") {
@@ -112,6 +110,7 @@ const NavBar = () => {
     setSelectedProductModel(productModel);
     setShowModal(true);
     setSearch("");
+    navigate("/inventaris")
   };
 
   const closeModal = () => {

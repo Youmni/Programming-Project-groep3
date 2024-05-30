@@ -84,6 +84,9 @@ const Inventaris = () => {
     model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase()) ||
     String(model.productModelNr).toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
+  const sortedProductModellen = filteredProductModellen.sort((a, b) => a.productModelNr - b.productModelNr);
+  
 
   if (loading) {
     return (
@@ -194,7 +197,7 @@ const Inventaris = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredProductModellen.map((model) => (
+              {sortedProductModellen.map((model) => (
                 <tr key={model.productModelNr} className="h-16 w-auto">
                   <td className="text-center h-full">
                     {model.productModelNr}

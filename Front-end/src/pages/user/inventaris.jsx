@@ -14,7 +14,6 @@ const inventarisCategorie = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedProductModel, setSelectedProductModel] = useState(null);
-  const [categorieNaam, setCategorieNaam] = useState("");
 
   const navigate = useNavigate();
 

@@ -34,7 +34,7 @@ const App = () => {
 
   return (
     <div className="flex flex-col min-h-screen max-w-screen">
-      <Routes>
+      <Routes scrollRestoration={true}>
         <Route
           path="/admin/*"
           element={
@@ -65,7 +65,7 @@ const AdminRoutes = () => {
   return (
     <div className="flex">
       <AdminSideBar />
-      <Routes>
+      <Routes scrollRestoration={true}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/inventaris" element={<AdminInventaris />} />
@@ -92,7 +92,7 @@ const UserRoutes = () => {
       <div className="flex flex-col flex-grow">
         <NavBar />
         <div className="flex-grow">
-          <Routes>
+          <Routes scrollRestoration={true}>
             <Route path="/home" element={<Home />} />
             <Route path="/inventaris/*" element={<InventarisRoutes />} />
             <Route path="/FAQ" element={<FAQ />} />
@@ -109,7 +109,7 @@ const InventarisRoutes = () => {
   console.log("Rendering InventarisRoutes");
   return (
     <div>
-      <Routes>
+      <Routes scrollRestoration={true}>
         <Route path="/" element={<Inventaris />} />
         <Route path="/:categorieNr" element={<InventarisCategorie />} />
       </Routes>

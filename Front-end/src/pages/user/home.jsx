@@ -49,7 +49,7 @@ const Home = () => {
     <main className="flex p-12">
       <div className="flex w-full flex-col h-auto gap-7">
         <h1 className="h-auto  text-4xl font-medium">Onze Categorieen</h1>
-        <div className="flex flex-wrap h-auto flex-grow justify-evenly">
+        <div className="flex flex-wrap w-auto gap-8 h-auto justify-start">
           {categories.map((categorie) => (
             <Link
               to={`/inventaris/${categorie.categorieNr}`}
@@ -60,7 +60,7 @@ const Home = () => {
               <h2 className="text-3xl font-md">{categorie.categorieNaam}</h2>
             </Link>
           ))}
-          <Link to={`/inventaris`} className="w-full flex justify-end items-center mr-6 mt-5 hover:underline text-xl">
+          <Link to={`/inventaris`} className="w-full flex justify-start items-center mr-6 mt-5 hover:underline text-xl">
             <p>Ga naar inventaris</p>
             <IoIosArrowForward />
             </Link>

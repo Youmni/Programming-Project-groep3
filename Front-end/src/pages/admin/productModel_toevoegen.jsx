@@ -83,12 +83,6 @@ const ProductModelToevoegen = () => {
       .then(response => {
         enqueueSnackbar("Product Model toegevoegd", { variant: "success" });
         console.log("Product Model Toegevoegd", response.data);
-        navigate("/admin/inventaris");
-      })
-      .catch(error => {
-        console.error("Error adding product model: ", error);
-        enqueueSnackbar("Error: Product Model niet toegevoegd, probeer het opnieuw", { variant: "error" });
-
         setFormData({
           productModelNaam: "",
           productModelMerk: "",
@@ -96,6 +90,13 @@ const ProductModelToevoegen = () => {
           productModelBeschrijving: "",
           productModelFoto: "",
         });
+        navigate("/admin/inventaris");
+      })
+      .catch(error => {
+        console.error("Error adding product model: ", error);
+        enqueueSnackbar("Error: Product Model niet toegevoegd, probeer het opnieuw", { variant: "error" });
+
+        
       })
   }
 

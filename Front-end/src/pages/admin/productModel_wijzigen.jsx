@@ -115,6 +115,7 @@ const ProductModelWijzigen = () => {
       productModelBeschrijving: formData.productModelBeschrijving || "",
       productModelFoto: formData.productModelFoto || "",
     };
+    console.log("Dit is de productModelNr", productModelNr);
     console.log("Dit is de data dat wordt doorgestuurd", updatedFormData);
     axios
       .put(
@@ -160,10 +161,10 @@ const ProductModelWijzigen = () => {
   };
 
   return (
-    <div className="top-0 flex-grow">
-      <main className="flex-grow p-10 ">
-        <div className="flex justify-between items-center">
-          <h1 className=" flex text-3xl font-bold w-40 border-b justify-center">
+    <div className="top-0  flex-grow">
+      <main className="flex-grow  p-10 ">
+        <div className="flex justify-between items-center flex-wrap">
+          <h1 className=" flex text-3xl font-bold w-40 border-b justify-centr">
             Inventaris
           </h1>
           <div className="flex items-center gap-10">
@@ -182,7 +183,7 @@ const ProductModelWijzigen = () => {
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-2 mt-10 ml-5  justify-between">
+        <div className="flex items-center gap-2 mt-10 flex-wrap">
           <breadcrumb className="flex items-center gap-2">
             <TbBoxSeam className="text-rood" />
             <Link
@@ -194,7 +195,7 @@ const ProductModelWijzigen = () => {
             <breadcrumb-item>/ Product model wijzigen</breadcrumb-item>
           </breadcrumb>
         </div>
-        <div className="flex flex-grow h-full mt-5 ml-8 ">
+        <div className="flex w-full h-auto flex-wrap mt-5 px-8">
           <form onSubmit={onSubmit} className="flex w-full h-full gap-20">
             <div className="flex flex-col w-1/2 border rounded-lg gap-8 p-5">
               <div className="flex flex-col w-3/4 text-Grijs">
