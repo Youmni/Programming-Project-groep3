@@ -34,6 +34,7 @@ import static org.ehbproject.backend.services.verificatie.ReservatieLimiet.getAl
 @RequestMapping(value = "/reservatie")
 public class ReservatieController {
 
+    private EmailService emailService;
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
@@ -75,7 +76,7 @@ public class ReservatieController {
 
             int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
-            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),wekenTussen,reservatieDTO.getProducten());
+            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
             if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getIsGeblacklist().equalsIgnoreCase("False")){
             if(beschikbaarheidsControle){
                 throw new ProductUnavailableException("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
@@ -91,6 +92,11 @@ public class ReservatieController {
                 );
                 logger.info("tot voor het opslaan");
                 repoReservatie.save(reservatie);
+                String email = "vdborghtt2005@gmail.com";
+                String subject = "Nieuwe reservatie";
+                String body = "je hebt nieuwe producten gereserveerd. deze zijn: " + reservatie.getProducten();
+
+                emailService.SendMail(email, subject, body);
                 logger.info("tot na het opslaan");
 
 
