@@ -143,12 +143,12 @@ const NavBar = () => {
             onClick={handleButtonClick}
             className="flex items-center justify-center hover:bg-zinc-200 cursor-pointer rounded-lg p-2"
           >
-            <span className="text-Grijs font-semibold">Categoriëen</span>
+            <span className="text-Grijs font-semibold">Categorieën</span>
             <IoIosArrowDown className="size-4 text-Grijs " />
           </div>
           {clicked && (
             <div className="origin-bottom absolute left-0 mt-4 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
-              <h3 className="text-lg">Categoriëen</h3>
+              <h3 className="text-lg">Categorieën</h3>
               <div className="flex flex-col">
                 {categories.map((categorie, index) => (
                   <Link

@@ -14,7 +14,7 @@ import { MdOutlineAddCircle } from "react-icons/md";
 import { enqueueSnackbar } from "notistack";
 import Spinner from "react-bootstrap/esm/Spinner";
 import Leningen from "./leningen";
-import {BiCheckCircle,BiCircle,BiPauseCircle,BiArrowToRight,BiCheck,BiRun,BiTimeFive,BiBook,} from "react-icons/bi";
+import {BiCheckCircle,BiCircle,BiPauseCircle,BiArrowToRight,BiCheck, BiRun,BiTimeFive,BiBook,} from "react-icons/bi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 import Inventaris from "./inventaris";

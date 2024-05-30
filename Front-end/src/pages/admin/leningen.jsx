@@ -9,7 +9,7 @@ import { data } from "autoprefixer";
 import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
 import { PiKeyReturnFill } from "react-icons/pi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {enqueueSnackbar} from "notistack";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import ChooseProduct from "../../components/ChooseProduct";
@@ -26,6 +26,9 @@ const Leningen = () => {
 
 
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const url = location.state?.url || "http://localhost:8080/reservatie";
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -40,7 +43,7 @@ const Leningen = () => {
     setLoading(true);
     // fetch Reservaties
     axios
-      .get("http://localhost:8080/reservatie", {
+      .get(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -180,7 +183,7 @@ const Leningen = () => {
           <tbody>
             {reservaties.length === 0 ? (
               <tr>
-                <td colSpan="7" className="bg-grey-300 rounded p-4 text-white text-center">
+                <td colSpan="7" className="rounded p-4 text-black text-center">
                   Geen reservaties
                 </td>
               </tr>
