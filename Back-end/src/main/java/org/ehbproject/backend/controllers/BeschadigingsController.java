@@ -52,7 +52,8 @@ public class BeschadigingsController {
                     gebruiker,
                     product,
                     beschadigingDTO.getBeschrijving(),
-                    beschadigingDTO.getBeschadigingsDatum()
+                    beschadigingDTO.getBeschadigingsDatum(),
+                    beschadigingDTO.getBeschadigingFoto()
             );
             beschadigingrepo.save(beschadiging);
 

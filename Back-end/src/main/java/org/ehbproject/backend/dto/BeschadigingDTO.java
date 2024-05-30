@@ -3,47 +3,58 @@ package org.ehbproject.backend.dto;
 import java.time.LocalDate;
 
 public class BeschadigingDTO {
-    private int GebruikerId;
-    private int ProductId;
-    private String Beschrijving;
-    private LocalDate BeschadigingsDatum;
+    private int gebruikerId;
+    private int productId;
+    private String beschrijving;
+    private LocalDate beschadigingsDatum;
 
-    public BeschadigingDTO(int gebruikerId, int productId, String beschrijving, LocalDate beschadigingsDatum) {
-        GebruikerId = gebruikerId;
-        ProductId = productId;
-        Beschrijving = beschrijving;
-        BeschadigingsDatum = beschadigingsDatum;
+    private String beschadigingFoto;
+
+    public BeschadigingDTO(int gebruikerId, int productId, String beschrijving, LocalDate beschadigingsDatum, String beschadigingFoto) {
+        this.gebruikerId = gebruikerId;
+        this.productId = productId;
+        this.beschrijving = beschrijving;
+        this.beschadigingsDatum = beschadigingsDatum;
+        this.beschadigingFoto = beschadigingFoto;
     }
 
     public int getGebruikerId() {
-        return GebruikerId;
+        return gebruikerId;
     }
 
     public void setGebruikerId(int gebruikerId) {
-        GebruikerId = gebruikerId;
+        this.gebruikerId = gebruikerId;
     }
 
     public int getProductId() {
-        return ProductId;
+        return productId;
     }
 
     public void setProductId(int productId) {
-        ProductId = productId;
+        this.productId = productId;
     }
 
     public String getBeschrijving() {
-        return Beschrijving;
+        return beschrijving;
     }
 
     public void setBeschrijving(String beschrijving) {
-        Beschrijving = beschrijving;
+        this.beschrijving = beschrijving;
     }
 
     public LocalDate getBeschadigingsDatum() {
-        return BeschadigingsDatum;
+        return beschadigingsDatum;
     }
 
     public void setBeschadigingsDatum(LocalDate beschadigingsDatum) {
-        BeschadigingsDatum = beschadigingsDatum;
+        this.beschadigingsDatum = beschadigingsDatum;
+    }
+
+    public String getBeschadigingFoto() {
+        return beschadigingFoto;
+    }
+
+    public void setBeschadigingFoto(String beschadigingFoto) {
+        this.beschadigingFoto = beschadigingFoto;
     }
 }
