@@ -6,6 +6,7 @@ import org.ehbproject.backend.dao.ProductReservatieCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.modellen.ProductReservatie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,9 +28,11 @@ public class ProductReservationVerifier {
     ProductCrudRepository repoProduct;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
-    public boolean isProductGereserveerd(LocalDate datum,int aantalWeken, int[] products){
+    public boolean isProductGereserveerd(LocalDate beginDatum,LocalDate eindDatum, int[] products){
 
-        LocalDate eindDatum = datum.plusWeeks(aantalWeken);
+        if (eindDatum.isBefore(beginDatum) || LocalDate.now().isBefore(beginDatum)){
+            return true;
+        }
 
         for(int product : products){
             List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductID(product);
@@ -42,11 +45,11 @@ public class ProductReservationVerifier {
                 LocalDate afhaalDatumVorig = reservatie.getReservatie().getAfhaalDatum();
                 LocalDate terugbrengDatumVorig = reservatie.getReservatie().getRetourDatum();
 
-                logger.info(product+": "+afhaalDatumVorig+" datum om nu uit te lenen:"+ datum);
+                logger.info(product+": "+afhaalDatumVorig+" datum om nu uit te lenen:"+ beginDatum);
                 logger.info(product+": "+terugbrengDatumVorig+" datum om nu uit te lenen:"+ eindDatum);
                 boolean isOverlapping  =
-                        !(((eindDatum.isBefore(afhaalDatumVorig) &&  datum.isBefore(eindDatum))||
-                        (datum.isAfter(terugbrengDatumVorig) && eindDatum.isAfter(datum))));
+                        !(((eindDatum.isBefore(afhaalDatumVorig) &&  beginDatum.isBefore(eindDatum))||
+                        (beginDatum.isAfter(terugbrengDatumVorig) && eindDatum.isAfter(beginDatum))));
                 logger.info("overlapping: "+isOverlapping);
                 if (isOverlapping ) {
                     return true;
