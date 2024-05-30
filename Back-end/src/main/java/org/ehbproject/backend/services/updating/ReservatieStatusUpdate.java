@@ -20,7 +20,7 @@ public class ReservatieStatusUpdate {
     @Autowired
     ReservatieCrudRepository repoReservatie;
 
-    @Scheduled(cron = "0 0 0 ? * SAT")
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateProductStatus(){
         List<Reservatie> reservatieLijst = new ArrayList<>();
         List<Reservatie> reservatiesTegenVandaag = repoReservatie.findByRetourDatum(LocalDate.now().minusDays(1));
