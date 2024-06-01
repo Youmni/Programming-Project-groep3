@@ -96,7 +96,7 @@ public class BeschadigingsController {
     @CrossOrigin
     @GetMapping(value = "/beschadigingsdatum={beschadigingsdatum}")
     public List<Beschadiging> getBeschadigingByBeschadigingsDatum (@PathVariable(name = "beschadigingsdatum")LocalDate beschadigingsdatum){
-        return beschadigingrepo.findBeschadigingByBeschadigingsdatum(beschadigingsdatum);
+        return beschadigingrepo.findBeschadigingByBeschadigingsDatum(beschadigingsdatum);
     }
 
 

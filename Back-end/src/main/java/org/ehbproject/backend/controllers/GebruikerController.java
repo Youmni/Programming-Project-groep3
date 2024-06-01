@@ -50,7 +50,7 @@ public class GebruikerController {
                 String email = gebruikerObject.getEmail();
                 String titel = gebruikerObject.getTitel();
 
-                final String jwt = jwtUtil.generateToken(gebruikerID);
+                final String jwt = jwtUtil.generateToken(gebruikerObject.getEmail(), gebruikerObject.getGebruikerID(), gebruikerObject.getTitel());
                 return ResponseEntity.ok(jwt);
             }
             else{
