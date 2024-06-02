@@ -25,33 +25,35 @@ const Home = () => {
   const [teLaatReservaties, setTeLaatReservaties] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
 
     if (!token) {
-      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
+      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
+        variant: "error",
+      });
       navigate("/login");
       return;
     }
 
     axios
-      .get('http://localhost:8080/categorie', {
+      .get("http://localhost:8080/categorie", {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((response) => {
         setCategories(response.data);
-        enqueueSnackbar('Categorieën opgehaald', { variant: 'success' });
+        enqueueSnackbar("Categorieën opgehaald", { variant: "success" });
       })
       .catch((error) => {
-        console.error('Error fetching data: ', error);
-        enqueueSnackbar('Error', { variant: 'error' });
+        console.error("Error fetching data: ", error);
+        enqueueSnackbar("Error", { variant: "error" });
         if (error.response && error.response.status === 401) {
-          localStorage.removeItem('authToken');
+          localStorage.removeItem("authToken");
           navigate("/login");
         }
       });
@@ -83,11 +85,14 @@ const Home = () => {
     const id = jwtDecode(token).UserId;
 
     axios
-      .get(`http://localhost:8080/reservatie/gebruikerId=${id}/TelaatOnvolledig`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        `http://localhost:8080/reservatie/gebruikerId=${id}/TelaatOnvolledig`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setTeLaatReservaties(response.data);
@@ -97,11 +102,21 @@ const Home = () => {
       });
   }, []);
 
+  const openModal = (reservatie) => {
+    setSelectedReservatie(reservatie);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <main className="flex flex-col p-12">
       <div className="flex w-full flex-col h-auto gap-7">
-        <h1 className="h-auto w-full text-center text-4xl font-medium">Onze Categorieen</h1>
+        <h1 className="h-auto w-full text-center text-4xl font-medium">
+          Onze Categorieen
+        </h1>
         <div className="flex flex-wrap w-auto gap-8 h-auto justify-center">
           {categories.map((categorie) => (
             <Link
@@ -109,71 +124,123 @@ const Home = () => {
               className="flex flex-col h-[170px] w-[130px] border-2 rounded-xl items-center justify-center gap-6 hover:bg-gray-100 transform transition-transform duration-250 hover:scale-110"
               key={categorie.categorieNr}
             >
-              <SiAudioboom className="size-14"/>
+              <SiAudioboom className="size-14" />
               <h2 className="text-3xl font-md">{categorie.categorieNaam}</h2>
             </Link>
           ))}
-          <Link to={`/inventaris`} className="w-full flex justify-center items-center mr-6 mt-5 hover:underline text-xl">
+          <Link
+            to={`/inventaris`}
+            className="w-full flex justify-center items-center mr-6 mt-5 hover:underline text-xl"
+          >
             <p>Ga naar inventaris</p>
             <IoIosArrowForward />
           </Link>
         </div>
       </div>
+      <hr className="my-4" />
 
       <div className="m-8">
         <div className="flex items-center gap-5">
           <h1 className="text-xl font-semibold">
             Actieve reservaties
-            <sup className={actieveReservaties.length ? "text-red-600" : "text-green-600"}>
+            <sup
+              className={
+                actieveReservaties.length ? "text-red-600" : "text-green-600"
+              }
+            >
               {actieveReservaties.length}
             </sup>
           </h1>
-          <span onClick={() => setEyeToggleActief(!eyeToggleActief)} className="cursor-pointer">
+          <span
+            onClick={() => setEyeToggleActief(!eyeToggleActief)}
+            className="cursor-pointer"
+          >
             {eyeToggleActief ? <FaEye /> : <FaEyeSlash />}
           </span>
         </div>
-        <div className="w-full h-80 overflow-auto">
+        <div className="flex w-auto  h-auto">
           {eyeToggleActief && (
-            <table className="w-full">
-              <thead>
-                <tr className="text-gray-400">
-                  <th scope="col" className="px-1 font-semibold text-center">Reservatie ID</th>
-                  <th scope="col" className="px-1 font-semibold text-center py-4">Product details</th>
-                  <th scope="col" className="px-1 font-semibold text-center">Afhaaldatum</th>
-                  <th scope="col" className="px-1 font-semibold text-center">Retourdatum</th>
-                </tr>
-              </thead>
-              <tbody>
-                {actieveReservaties.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="bg-green-600 rounded p-4 text-white text-center">
-                      Geen reservaties te laat of onvolledig zijn
-                    </td>
+            <div className="w-full h-80 overflow-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-gray-400">
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Reservatie ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 font-semibold text-center py-4"
+                    >
+                      Product details
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Afhaaldatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Retourdatum
+                    </th>
                   </tr>
-                ) : (
-                  actieveReservaties.map((reservatie) => (
-                    <tr key={reservatie.reservatieNr} className="text-center space-y-4">
-                      <td className="px-2">{reservatie.reservatieNr}</td>
-                      <td className="px-2 flex justify-center">
-                        <div>
-                          <IoInformationCircleSharp
-                            onClick={() => openModal(reservatie)}
-                            className="w-8 h-8 p-1 rounded-full bg-black text-white cursor-pointer"
-                          />
-                        </div>
+                </thead>
+                <tbody>
+                  {actieveReservaties.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="bg-green-600 rounded p-4 text-white text-center"
+                      >
+                        Geen reservaties te laat of onvolledig zijn
                       </td>
-                      <td className="px-2">{reservatie.afhaalDatum}</td>
-                      <td className="px-2">{reservatie.retourDatum}</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    <>
+                      {actieveReservaties.map((reservatie) => (
+                        <tr
+                          key={reservatie.reservatieNr}
+                          className="text-center space-y-4 border-2"
+                        >
+                          <td className="px-2">{reservatie.reservatieNr}</td>
+                          <td className="px-2 flex justify-center">
+                            <div className=" flex flex-col justify-center items-center">
+                              {reservatie.producten.map((product) => (
+                                <div key={product.productNr}>
+                                  <p>{product.productNaam}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="px-2">{reservatie.afhaalDatum}</td>
+                          <td className="px-2">{reservatie.retourDatum}</td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
         {showModal && (
-          <ProductInfoStudent reservatie={selectedReservatie} closeModal={closeModal} />
+          <ProductInfoStudent
+            reservatie={selectedReservatie}
+            closeModal={closeModal}
+          />
         )}
+      </div>
+
+      <hr className="my-10 border-gray-200" />
+
+      <div className="m-8">
+        <div className="flex justify-center flex-col gap-5">
+          <h1 className="text-xl font-semibold">Voorboekingen</h1>
+          <div className="flex w-full justify-center">
+            <button
+              className="text-blue-500 hover:text-blue-700 cursor-pointer underline"
+              onClick={() => navigate("/leningen")}
+            >
+              Ga naar Voorboekingen
+            </button>
+          </div>
+        </div>
       </div>
 
       <hr className="my-4" />
@@ -182,55 +249,85 @@ const Home = () => {
         <div className="flex items-center gap-5">
           <h1 className="text-xl font-semibold">
             Te laat/ Onvolledig
-            <sup className={teLaatReservaties.length ? "text-red-600" : "text-green-600"}>
+            <sup
+              className={
+                teLaatReservaties.length ? "text-red-600" : "text-green-600"
+              }
+            >
               {teLaatReservaties.length}
             </sup>
           </h1>
-          <span onClick={() => setEyeToggleTeLaat(!eyeToggleTeLaat)} className="cursor-pointer">
+          <span
+            onClick={() => setEyeToggleTeLaat(!eyeToggleTeLaat)}
+            className="cursor-pointer"
+          >
             {eyeToggleTeLaat ? <FaEye /> : <FaEyeSlash />}
           </span>
         </div>
-        <div className="w-full h-80 overflow-auto">
+        <div className="flex w-auto  h-auto">
           {eyeToggleTeLaat && (
-            <table className="w-full">
-              <thead>
-                <tr className="text-gray-400">
-                  <th scope="col" className="px-1 font-semibold text-center">Reservatie ID</th>
-                  <th scope="col" className="px-1 font-semibold text-center py-4">Product details</th>
-                  <th scope="col" className="px-1 font-semibold text-center">Afhaaldatum</th>
-                  <th scope="col" className="px-1 font-semibold text-center">Retourdatum</th>
-                </tr>
-              </thead>
-              <tbody>
-                {teLaatReservaties.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="bg-green-600 rounded p-4 text-white text-center">
-                      Geen geschiedenis
-                    </td>
+            <div className="w-full h-80 overflow-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-gray-400">
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Reservatie ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 font-semibold text-center py-4"
+                    >
+                      Product details
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Afhaaldatum
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
+                      Retourdatum
+                    </th>
                   </tr>
-                ) : (
-                  teLaatReservaties.map((reservatie) => (
-                    <tr key={reservatie.reservatieNr} className="text-center space-y-4">
-                      <td className="px-2">{reservatie.reservatieNr}</td>
-                      <td className="px-2 flex justify-center">
-                        <div>
-                          <IoInformationCircleSharp
-                            onClick={() => openModal(reservatie)}
-                            className="w-8 h-8 p-1 rounded-full bg-black text-white cursor-pointer"
-                          />
-                        </div>
+                </thead>
+                <tbody>
+                  {teLaatReservaties.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="bg-green-600 rounded p-4 text-white text-center"
+                      >
+                        Geen geschiedenis
                       </td>
-                      <td className="px-2">{reservatie.afhaalDatum}</td>
-                      <td className="px-2">{reservatie.retourDatum}</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    teLaatReservaties.map((reservatie) => (
+                      <tr
+                        key={reservatie.reservatieNr}
+                        className="text-center space-y-4 border-2"
+                      >
+                        <td className="px-2">{reservatie.reservatieNr}</td>
+                        <td className="px-2 flex justify-center">
+                            <div className=" flex flex-col justify-center items-center">
+                              {reservatie.producten.map((product) => (
+                                <div key={product.productNr}>
+                                  <p>{product.productNaam}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        <td className="px-2">{reservatie.afhaalDatum}</td>
+                        <td className="px-2">{reservatie.retourDatum}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
         {showModal && (
-          <ProductInfoStudent reservatie={selectedReservatie} closeModal={closeModal} />
+          <ProductInfoStudent
+            reservatie={selectedReservatie}
+            closeModal={closeModal}
+          />
         )}
       </div>
 

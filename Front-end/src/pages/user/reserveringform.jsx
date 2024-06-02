@@ -291,6 +291,7 @@ const reserveringForm = ({ closeModal, product }) => {
               onChange={(date) =>
                 setFormData({ ...formData, afhaalDatum: date })
               }
+              minDate={new Date()}
               filterDate={isMonday}
               excludeDates={excludeDates}
               placeholderText="Kies een datum"
@@ -302,6 +303,7 @@ const reserveringForm = ({ closeModal, product }) => {
               onChange={(date) =>
                 setFormData({ ...formData, retourDatum: date })
               }
+              minDate={new Date()}
               filterDate={isFriday}
               excludeDates={excludeDates}
               placeholderText="Kies een datum"
