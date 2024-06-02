@@ -160,13 +160,12 @@ const reserveringForm = ({ closeModal, product }) => {
     }
   };
 
-  const checkDates = (afhaaldatum, retourdatum) => {
+  const checkDates =async (afhaaldatum, retourdatum) => {
     try {
       const authToken = localStorage.getItem("authToken");
 
       const decodedToken = jwtDecode(authToken);
-      const titel = getTitle(decodedToken.sub, authToken);
-      console.log(titel);
+      const titel = await getTitle(decodedToken.sub, authToken);
 
       const afhaalDate = new Date(afhaaldatum);
       const retourDate = new Date(retourdatum);
@@ -311,7 +310,8 @@ const reserveringForm = ({ closeModal, product }) => {
               onChange={(date) =>
                 setFormData({ ...formData, afhaalDatum: date })
               }
-              minDate={new Date()}
+              minDate={new Date(new Date().getTime() + 86400000)}
+              maxDate={new Date(new Date().setMonth(new Date().getMonth() + 2))}
               filterDate={isMonday}
               excludeDates={excludeDates}
               placeholderText="Kies een datum"
@@ -323,7 +323,8 @@ const reserveringForm = ({ closeModal, product }) => {
               onChange={(date) =>
                 setFormData({ ...formData, retourDatum: date })
               }
-              minDate={new Date()}
+              minDate={new Date(new Date().getTime() + 86400000)}
+              maxDate={new Date(new Date().setMonth(new Date().getMonth() + 2))}
               filterDate={isFriday}
               excludeDates={excludeDates}
               placeholderText="Kies een datum"
