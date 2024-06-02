@@ -8,6 +8,7 @@ import org.ehbproject.backend.dto.ProductModelDTO;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
+import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ProductModelController {
             List<Categorie> categories = categorieRepo.findByCategorieNr(productModelDTO.getCategorieNr());
 
             if (categories.isEmpty()) {
-                throw new RuntimeException("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
             }
 
             Categorie categorie = categories.getFirst();

@@ -69,7 +69,7 @@ public class ReservatieController {
         try {
             List<Gebruiker> gebruikers = gebruikerRepo.findByGebruikerId(reservatieDTO.getGebruikerId());
             if (gebruikers.isEmpty()) {
-                throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
             Gebruiker gebruiker = gebruikers.getFirst();
             int aantalProductenDezeWeek = studentLimiet.checkAantalReservatiesDezeWeek(reservatieDTO.getGebruikerId());
@@ -83,7 +83,7 @@ public class ReservatieController {
             boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
             if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getIsGeblacklist().equalsIgnoreCase("False")){
             if(beschikbaarheidsControle){
-                throw new ProductUnavailableException("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
+                ResponseEntity.status(HttpStatus.CONFLICT).body("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
             }
                 Reservatie reservatie = new Reservatie(
                         reservatieDTO.getAfhaalDatum(),
