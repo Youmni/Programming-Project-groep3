@@ -21,24 +21,15 @@ public class Gebruiker {
     private int gebruikerID;
 
     @Column(name="Email", nullable = false, unique = true)
-    @NotBlank
-    @Email
-    @Size(max = 70)
     private String email;
 
     @Column(name="Wachtwoord", nullable = false)
-    @NotBlank
-    @Size(max = 64)
     private String wachtwoord;
 
     @Column(name="Titel", nullable = false)
-    @NotBlank
-    @Size(max = 15)
     private String titel;
 
     @Column(name= "ISGEBLACKLIST", nullable = false)
-    @NotBlank
-    @Size(max = 10)
     private String  isGeblacklist;
 
 

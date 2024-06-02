@@ -2,13 +2,12 @@ package org.ehbproject.backend.controllers;
 
 
 import org.ehbproject.backend.config.JwtUtil;
+import org.ehbproject.backend.dto.TitelDTO;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.dto.AuthRequestDTO;
-import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Gebruiker;
-import org.ehbproject.backend.modellen.Reservatie;
-import org.ehbproject.backend.services.emailservice.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +30,9 @@ public class GebruikerController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<Gebruiker> getAllGebruikers(){
@@ -43,24 +45,20 @@ public class GebruikerController {
     @PostMapping("/login")
     public ResponseEntity<String> createAuthenticationToken(@RequestBody AuthRequestDTO authRequest) {
         try {
-            List<Gebruiker> gebruiker = repo.findByEmail(authRequest.getEmail());
-            if (gebruiker.isEmpty()) {
+            List<Gebruiker> gebruikerOpt = repo.findByEmail(authRequest.getEmail());
+            if (gebruikerOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
             }
-            Gebruiker gebruikerObject = gebruiker.getFirst();
-            if(gebruikerObject.getWachtwoord().equals(authRequest.getWachtwoord())){
+            Gebruiker gebruikerObject = gebruikerOpt.getFirst();
+            if(passwordEncoder.matches(authRequest.getWachtwoord(), gebruikerObject.getWachtwoord())){
                 int gebruikerID = gebruikerObject.getGebruikerID();
-                String email = gebruikerObject.getEmail();
-                String titel = gebruikerObject.getTitel();
-
-                final String jwt = jwtUtil.generateToken(email, gebruikerID,titel);
+                final String jwt = jwtUtil.generateToken(gebruikerID);
                 return ResponseEntity.ok(jwt);
-            }
-            else{
+            } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email or password");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("An error occurred: " + e.getMessage());
         }
     }
     @CrossOrigin
@@ -152,6 +150,19 @@ public class GebruikerController {
     public List<Gebruiker> getAllGebruikersByTitel(@PathVariable(name = "titel") String titel){
 
         return repo.findByTitel(titel);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/titel/id={id}")
+    public ResponseEntity<TitelDTO> getGebruikerTitelById(@PathVariable(name = "id") int id){
+        List<Gebruiker> gebruiker = repo.findByGebruikerID(id);
+        Gebruiker gebruikerObject = gebruiker.getFirst();
+        if (!gebruiker.isEmpty()) {
+            TitelDTO titelDTO = new TitelDTO(gebruikerObject.getTitel());
+            return ResponseEntity.ok(titelDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @CrossOrigin

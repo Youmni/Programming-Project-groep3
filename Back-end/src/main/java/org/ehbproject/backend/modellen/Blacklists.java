@@ -20,16 +20,11 @@ public class Blacklists {
     private Gebruiker gebruiker;
 
     @Column(name="Status", nullable = false)
-    @NotBlank
-    @Size(max = 20)
     private String blacklistStatus;
     @Column(name="Blacklistreden", nullable = false)
-    @NotBlank
-    @Size(max = 255)
     private String blacklistReden;
 
     @Column(name="Blacklistdatum", nullable = false)
-    @NotBlank
     private LocalDate blacklistDatum;
 
     public Blacklists(Gebruiker gebruiker, String blacklistReden, LocalDate blacklistDatum, String blacklistStatus) {

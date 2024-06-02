@@ -76,8 +76,12 @@ public class ReservatieController {
             int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
             boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),wekenTussen,reservatieDTO.getProducten());
-            if((gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12) && gebruiker.getIsGeblacklist().equalsIgnoreCase("False")){
-            if(beschikbaarheidsControle){
+            boolean isStudentEnOnderLimiet = gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12;
+            boolean isDocentOfAdmin = !gebruiker.getTitel().equalsIgnoreCase("Student");
+            boolean isNietGeblacklist = gebruiker.getIsGeblacklist().equalsIgnoreCase("False");
+
+            if((isStudentEnOnderLimiet || isDocentOfAdmin) && isNietGeblacklist){
+                if(beschikbaarheidsControle){
                 throw new ProductUnavailableException("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
             }
                 Reservatie reservatie = new Reservatie(
@@ -122,20 +126,20 @@ public class ReservatieController {
 
     @CrossOrigin
     @PutMapping("/{id}/opmerking")
-    public ResponseEntity<String> updateOpmerking(@PathVariable int id, @RequestParam String opmerking) {
+    public ResponseEntity<String> updateOpmerking(@PathVariable int id, @RequestBody String opmerking) {
         List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
 
-        if(!reservaties.isEmpty()){
+        if (!reservaties.isEmpty()) {
             Reservatie reservatie = reservaties.getFirst();
             reservatie.setOpmerking(opmerking);
             repoReservatie.save(reservatie);
 
             return ResponseEntity.ok("Opmerking van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + opmerking);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID " + id + " niet gevonden");
+        }
+    }
 
-        } else{
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID " + id + " niet gevonden");
-    }
-    }
     @CrossOrigin
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
@@ -214,6 +218,21 @@ public class ReservatieController {
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruikerAndStatusIn(gebruikerObject, List.of(new String[]{"Te laat", "Bezig", "Onvolledig", "Voorboeking"}));
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/gebruikerId={id}/TelaatOnvolledig")
+    public List<Reservatie> getReservatiesByGebruikerIdAndStatus(@PathVariable(name = "id") int id) {
+        List<Gebruiker> gebruikerList = repoGebruiker.findByGebruikerID(id);
+
+        if (gebruikerList.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        Gebruiker gebruiker = gebruikerList.getFirst();
+        return repoReservatie.findByGebruikerAndStatusIn(gebruiker, Arrays.asList("Te laat", "Onvolledig"));
+    }
+
+
 
     @CrossOrigin
     @GetMapping(value = "/afhaaldatum={date}")
