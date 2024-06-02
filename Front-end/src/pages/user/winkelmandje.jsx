@@ -5,10 +5,13 @@ import { BsArrowReturnLeft } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
 import BackupImage from "../../assets/backup.jpg";
 import { RiDeleteBinFill } from "react-icons/ri";
+import { useAuth } from "../../components/AuthToken";
 
 const winkelmandje = ({ closeWinkelMandje }) => {
   const { winkelmandje, removeFromWinkelmandje, clearWinkelmandje } =
     useContext(WinkelMandjeContext);
+
+  useAuth();
   useEffect(() => {});
 
   useEffect(() => {

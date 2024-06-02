@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { useAuth } from "./AuthToken";
 import { CiSearch } from "react-icons/ci";
 
 import { IoIosAddCircle } from "react-icons/io";
@@ -15,6 +15,8 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
   const [isMediumScreen, setIsMediumScreen] = useState(false);
   const [showBeschadigingToevoegen, setShowBeschadigingToevoegen] =
     useState(false);
+
+  useAuth();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");

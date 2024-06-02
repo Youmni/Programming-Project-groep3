@@ -4,6 +4,7 @@ import { MdOutlineAddCircle } from "react-icons/md";
 import { enqueueSnackbar } from "notistack";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useAuth } from "./AuthToken";
 
 const BeschadigingToevoegen = ({ onClose, product }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,6 +17,9 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
     beschrijving: "",
     beschadigingdDatum: "",
   });
+
+  useAuth();
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     axios

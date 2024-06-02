@@ -15,24 +15,19 @@ import { MdOutlineBrokenImage } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
 import BeschadigingPopup from "./BeschadigingPopup";
 import BackupImage from "../assets/backup.jpg";
+import { useAuth } from "./AuthToken";
 
 const PopupProduct = ({ onClose, model }) => {
   const [producten, setProducten] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [product, setProduct] = useState({});
   const [showBeschadigingPopup, setShowBeschadigingPopup] = useState(false);
+  
   const navigate = useNavigate();
+  useAuth();
 
   const fetchProducten = () => {
     const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
 
     axios
       .get(`http://localhost:8080/product/model=${model.productModelNr}`, {

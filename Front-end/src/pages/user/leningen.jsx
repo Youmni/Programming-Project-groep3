@@ -4,7 +4,7 @@ import { TbClockExclamation } from "react-icons/tb";
 import { FaArrowsSpin } from "react-icons/fa6";
 import { enqueueSnackbar } from "notistack";
 import ReservatieProductReserveren from "../../components/ReservatieProductenReserveren";
-
+import { useAuth } from "../../components/AuthToken";
 import { AiOutlineClose } from 'react-icons/ai';
 
 import {
@@ -44,14 +44,17 @@ const UserLeningen = () => {
   const [voorboekingen, setVoorboekingen] = useState([]);
   const [gebruikerID, setGebruikerID] = useState(localStorage.getItem("authToken").userId);
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
+
+  useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
 
-    const id = jwtDecode(token).UserId;
+
+    const decodedToken = jwtDecode(token).sub;
 
     axios
-      .get(`http://localhost:8080/reservatie/gebruikerId=${id}/status=Bezig`, {
+      .get(`http://localhost:8080/reservatie/gebruikerId=${decodedToken}/status=Bezig`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,13 +69,11 @@ const UserLeningen = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    const id = jwtDecode(token).UserId;
+    const decodedToken = jwtDecode(token).sub;
 
     axios
       .get(
-        `http://localhost:8080/reservatie/gebruikerId=${id}/TelaatOnvolledig`,
+        `http://localhost:8080/reservatie/gebruikerId=${decodedToken}/TelaatOnvolledig`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,12 +90,10 @@ const UserLeningen = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    const id = jwtDecode(token).UserId;
+    const decodedToken = jwtDecode(token).sub;
 
     axios
-      .get(`http://localhost:8080/reservatie/gebruikerId=${id}/status=Voorboeking`, {
+      .get(`http://localhost:8080/reservatie/gebruikerId=${decodedToken}/status=Voorboeking`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -109,12 +108,10 @@ const UserLeningen = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    const id = jwtDecode(token).UserId;
+    const decodedToken = jwtDecode(token).sub;
 
     axios
-      .get(`http://localhost:8080/reservatie/gebruikerId=${id}`, {
+      .get(`http://localhost:8080/reservatie/gebruikerId=${decodedToken}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -138,7 +135,7 @@ const UserLeningen = () => {
   };
 
   const handleAnnuleren = (id) => {
-    const token = localStorage.getItem("authToken");
+    useAuth();
     const status = "In orde";
 
     axios

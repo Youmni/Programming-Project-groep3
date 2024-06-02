@@ -16,6 +16,7 @@ import { FaUsers } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import {enqueueSnackbar} from "notistack";
 import PopupUser from "../../components/PopupUser";
+import { useAuth } from "../../components/AuthToken";
 
 const Gebruikers = () => {
   const [gebruikers, setGebruikers] = useState([]);
@@ -23,18 +24,14 @@ const Gebruikers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [selectedGebruiker, setSelectedGebruiker] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('authToken'));
   console.log(gebruikers);
 
   const navigate = useNavigate();
+  useAuth();
+
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
-      navigate("/login");
-      return;
-    }
     
     setLoading(true);
     axios

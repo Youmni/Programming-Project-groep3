@@ -14,6 +14,7 @@ import {enqueueSnackbar} from "notistack";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import ChooseProduct from "../../components/ChooseProduct";
 import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
+import { useAuth } from "../../components/AuthToken";
 
 
 const Leningen = () => {
@@ -22,26 +23,20 @@ const Leningen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [product, setProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [selectedReservatie, setSelectedReservatie] = useState(null);
 
 
   const navigate = useNavigate();
   const location = useLocation();
-  
+  useAuth();
+
+
   const url = location.state?.url || "http://localhost:8080/reservatie";
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
-      navigate("/login");
-      return;
-    }
-
     
     setLoading(true);
-    // fetch Reservaties
     axios
       .get(url, {
         headers: {

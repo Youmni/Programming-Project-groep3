@@ -8,11 +8,13 @@ import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useAuth } from "../../components/AuthToken";
 
 const ProductToevoegen = () => {
   const navigate = useNavigate();
   const [productModellen, setProductModellen] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -21,17 +23,10 @@ const ProductToevoegen = () => {
     productNaam: "",
     status: "Beschikbaar",
   });
+  useAuth();
+
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
     axios
       .get("http://localhost:8080/productmodel", {
         headers: {

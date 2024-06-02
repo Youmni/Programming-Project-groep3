@@ -2,11 +2,14 @@ import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 import { MdOutlineBrokenImage } from "react-icons/md";
 import BeschadigingPopup from "./BeschadigingPopup";
+import { useAuth } from "./AuthToken";
 
 const ProductDetailsReservatie = ({ reservatie, closeModal }) => {
   const [products, setProducts] = useState(reservatie);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  
+  useAuth();
 
   const openProductBeschadiging = (selectedProduct) => {
     setSelectedProduct(selectedProduct);

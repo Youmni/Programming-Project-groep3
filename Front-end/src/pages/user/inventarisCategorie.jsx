@@ -10,6 +10,7 @@ import ReserveringForm from "./reserveringform";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseProduct from "../../components/ChooseProduct";
 import BackUpImage from "../../assets/backup.jpg";
+import { useAuth } from "../../components/AuthToken";
 
 const inventarisCategorie = () => {
   const { categorieNr } = useParams();
@@ -19,18 +20,11 @@ const inventarisCategorie = () => {
   const [selectedProductModel, setSelectedProductModel] = useState(null);
   const [categorieNaam, setCategorieNaam] = useState("");
 
+  useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
 
     axios
       .get(`http://localhost:8080/productmodel/categorienr=${categorieNr}`, {

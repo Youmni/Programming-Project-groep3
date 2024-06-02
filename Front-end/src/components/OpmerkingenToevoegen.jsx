@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useAuth } from "./AuthToken";
 
 const OpmerkingenToevoegen = ({ reservatie, closeModal }) => {
   const [products, setProducts] = useState(reservatie.producten);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [opmerking, setOpmerking] = useState("");
   const [token] = useState(localStorage.getItem("authToken"));
+
+  useAuth();
 
   const handleAddOpmerking = (product) => {
     setSelectedProducts((prevSelectedProducts) => {

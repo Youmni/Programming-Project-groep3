@@ -6,10 +6,13 @@ import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import {FaRegUserCircle} from "react-icons/fa";
+import { useAuth } from "./AuthToken";
 
 const PopupUser = ({ onClose, gebruiker }) => {
   const [reservaties, setReservaties] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  useAuth();
+
 
   const formatNameFromEmail = (email) => {
     const localPart = email.split("@")[0];
@@ -35,14 +38,6 @@ const PopupUser = ({ onClose, gebruiker }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
 
     axios
       .get(

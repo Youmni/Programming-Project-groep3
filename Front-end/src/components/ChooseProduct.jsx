@@ -2,22 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaBasketShopping } from "react-icons/fa6";
 import ReserveringForm from "../pages/user/reserveringform"; 
+import { useAuth } from "./AuthToken";
 
 const ChooseProduct = ({ productModelNr, closeModal }) => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [reserverenOpen, setReserverenOpen] = useState(false); 
+  const [token] = useState(localStorage.getItem("authToken"));
+
+  useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
 
     axios
       .get(`http://localhost:8080/product/model=${productModelNr}/status?statussen=Beschikbaar&Gereserveerd`, {

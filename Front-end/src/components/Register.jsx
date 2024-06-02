@@ -15,8 +15,6 @@ const Register = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log(registerData)
-
   const titleCheck = (email) => {
     if (email.includes("@student.ehb.be")) {
       setRegisterData((prevData) => ({
@@ -33,15 +31,6 @@ const Register = () => {
 }
 }
 
-const generateHash = async (message) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-  return hashHex;
-};
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setRegisterData((prevData) => ({
@@ -51,6 +40,7 @@ const generateHash = async (message) => {
   };
 
   useEffect(() => {
+
     titleCheck(registerData.email);
   }, [registerData.email]);
 
@@ -70,8 +60,10 @@ const generateHash = async (message) => {
     }
 
     try {
-      const hashedPassword = await generateHash(wachtwoord);
-      const updatedData = { ...registerData, wachtwoord: hashedPassword };
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(wachtwoord, salt);
+      const updatedData = { ...registerData, wachtwoord: hashedPassword};
+
       console.log(updatedData);
       const response = await axios.post(
         "http://localhost:8080/gebruiker/toevoegen",

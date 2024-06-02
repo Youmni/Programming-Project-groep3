@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import ProductInfoStudent from "./ProductInfoStudent";
+import { useAuth } from "./AuthToken";
 
 const StudentReservatieOverzicht = ({ url, closeModal }) => {
   const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [reservatie, setReservatie] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedReservatie, setSelectedReservatie] = useState(null);
-
+  useAuth();
+  
   useEffect(() => {
     axios
       .get(url, {

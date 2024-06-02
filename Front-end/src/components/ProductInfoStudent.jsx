@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import BackupImage from "../assets/backup.jpg";
+import { useAuth } from "./AuthToken";
 
 const ProductInfoStudent = ({ reservatie, closeModal }) => {
   const [products, setProducts] = useState(reservatie);
-
+  
+  useAuth();
+  
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-10 rounded-lg min-h-[35%] w-1/4 relative shadow-md">

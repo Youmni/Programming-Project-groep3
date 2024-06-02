@@ -7,11 +7,13 @@ import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
 import CategorieToevoegen from "../../components/categorieToevoegen";
 import BackupImage from "../../assets/backup.jpg";
+import { useAuth } from "../../components/AuthToken";
 
 const ProductModelWijzigen = () => {
   const navigate = useNavigate();
   const { productModelNr } = useParams();
   const [categories, setCategories] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [formData, setFormData] = useState({
     productModelNaam: "",
     productModelMerk: "",
@@ -23,16 +25,9 @@ const ProductModelWijzigen = () => {
     productModelFoto: "",
   });
   const [openCategoriePopup, setOpenCategoriePopup] = useState(false);
-
+  useAuth();
+  
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
     const fetchCategories = () => {
       axios
         .get("http://localhost:8080/categorie", {

@@ -3,11 +3,13 @@ import axios from "axios";
 import { useState } from "react";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { enqueueSnackbar } from "notistack";
+import { useAuth } from "./AuthToken";
 
 const CategorieToevoegen = ({ onClose }) => {
   const [formData, setFormData] = useState({
     categorieNaam: "",
   });
+  useAuth();
 
   const handlechange = (event) => {
     const { name, value }= event.target;

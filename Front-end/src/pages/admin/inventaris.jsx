@@ -14,6 +14,7 @@ import { FaCircleInfo } from "react-icons/fa6";
 import PopupProduct from "../../components/PopupProduct";
 import BackupImage from "../../assets/backup.jpg";
 import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
+import { useAuth } from "../../components/AuthToken";
 
 const Inventaris = () => {
   const [productModellen, setProductModellen] = useState([]);
@@ -24,22 +25,17 @@ const Inventaris = () => {
   const [showKeuzePopup, setShowKeuzePopup] = useState(false);
   const [showProductPopup, setShowProductPopup] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('authToken'));
 
   const navigate = useNavigate();
   const location = useLocation();
-  
+  useAuth();
+
   const url = location.state?.url || "http://localhost:8080/productmodel";
 
 
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
-      navigate("/login");
-      return;
-    }
 
     setLoading(true);
     // Fetch product models

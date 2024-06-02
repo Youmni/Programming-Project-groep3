@@ -5,10 +5,12 @@ import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
 import CategorieToevoegen from "../../components/categorieToevoegen";
+import { useAuth } from "../../components/AuthToken";
 
 const ProductModelToevoegen = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [formData, setFormData] = useState({
     productModelNaam: "",
     productModelMerk: "",
@@ -17,16 +19,11 @@ const ProductModelToevoegen = () => {
     productModelFoto: "",
   });
   const [openCategoriePopup, setOpenCategoriePopup] = useState(false);
-  console.log(formData);
+  useAuth();
 
   useEffect(() => {
+
     const fetchCategories = () => {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
-        navigate("/login");
-        return;
-      }
       axios
         .get("http://localhost:8080/categorie", {
           headers: {
@@ -68,12 +65,12 @@ const ProductModelToevoegen = () => {
   }
 
   const onSubmit = (event) => {
+    useAuth();
     event.preventDefault();
     const token = localStorage.getItem('authToken');
     const updatedFormData = {
       ...formData,
     }
-    console.log(updatedFormData);
     axios
       .post("http://localhost:8080/productmodel/toevoegen", updatedFormData, {
         headers: {
@@ -111,11 +108,6 @@ const ProductModelToevoegen = () => {
 
   const refreshCategories = () => {
     const token = localStorage.getItem('authToken');
-    if (!token) {
-      enqueueSnackbar('Uw sessie is verlopen. Log opnieuw in.', { variant: 'error' });
-      navigate("/login");
-      return;
-    }
     axios
       .get("http://localhost:8080/categorie", {
         headers: {

@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate} from "react-router-dom";
+import { useAuth } from "./AuthToken";
 
 const keuzePopup = ({ onClose }) => {
     const navigate = useNavigate();
+    useAuth();
 
     const handleJa = () => {
       navigate('/admin/inventaris/product_toevoegen');

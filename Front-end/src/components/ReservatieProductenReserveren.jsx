@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaBasketShopping } from "react-icons/fa6";
 import ReserveringForm from "../pages/user/reserveringform"; 
+import { useAuth } from "./AuthToken";
 
 const ReservatieProductReserveren = ({ reservatie, closeModal }) => {
   const [products, setProducts] = useState(reservatie);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [reserverenOpen, setReserverenOpen] = useState(false); 
-
-    const token = localStorage.getItem("authToken");
-
+  
+  useAuth();
 
   const openReserveren = (product) => {
     console.log("Product clicked reservatie: ", product)

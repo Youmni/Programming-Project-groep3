@@ -8,6 +8,7 @@ import { enqueueSnackbar } from "notistack";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseProduct from "../../components/ChooseProduct";
 import BackUpImage from "../../assets/backup.jpg";
+import { useAuth } from "../../components/AuthToken";
 
 const inventarisCategorie = () => {
   const [productModels, setProductModels] = useState([]);
@@ -16,17 +17,9 @@ const inventarisCategorie = () => {
   const [selectedProductModel, setSelectedProductModel] = useState(null);
 
   const navigate = useNavigate();
-
+  useAuth();
   useEffect(() => {
     const token = localStorage.getItem("authToken");
- 
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
 
     axios
       .get(`http://localhost:8080/productmodel`, {

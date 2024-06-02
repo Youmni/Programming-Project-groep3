@@ -21,6 +21,7 @@ import {
 } from "react-icons/bi";
 import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 import OpmerkingenToevoegen from "../../components/OpmerkingenToevoegen";
+import { useAuth } from "../../components/AuthToken";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
@@ -56,6 +57,7 @@ const Dashboard = () => {
     gebruikers: "...",
   });
   const navigate = useNavigate();
+  useAuth();
 
   useEffect(() => {
     axios
@@ -247,6 +249,8 @@ const Dashboard = () => {
     setShowOpmerkingen(false);
   };
   const handleTerugbreng = (id, producten) => {
+    useAuth();
+
     console.log(id);
 
     axios
@@ -274,6 +278,8 @@ const Dashboard = () => {
   };
 
   const handleUitleen = (id, producten) => {
+    useAuth();
+
     console.log(id);
 
     axios
@@ -301,6 +307,7 @@ const Dashboard = () => {
   };
 
   const handleProductStatus = (id, status) => {
+    useAuth();
     axios
       .put(
         `http://localhost:8080/product/${id}/bewerk-status?newStatus=${status}`,

@@ -6,7 +6,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { enqueueSnackbar } from "notistack";
 import { WinkelMandjeContext } from "../../contexts/winkelmandjeContext";
 import { jwtDecode } from "jwt-decode";
-
+import { useAuth } from "../../components/AuthToken";
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,6 +16,8 @@ const reserveringForm = ({ closeModal, product }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [excludeDates, setExcludeDates] = useState(null);
   const [correctDates, setCorrectDates] = useState(false);
+
+  useAuth();
 
   const formatDate = (date) => {
     let dag = date.getDate();
@@ -49,7 +51,7 @@ const reserveringForm = ({ closeModal, product }) => {
       navigate("/login");
       return;
     } else {
-      setFormData({ ...formData, gebruikerId: jwtDecode(authToken).UserId });
+      setFormData({ ...formData, gebruikerId: jwtDecode(authToken).sub });
     }
   }, []);
 
@@ -98,6 +100,18 @@ const reserveringForm = ({ closeModal, product }) => {
     }
   };
 
+  const checkDatumTussen = (startDatum, eindDatum) => {
+
+    const startDate = new Date(startDatum);
+    const endDate = new Date(eindDatum);
+
+    return excludeDates.some(date => {
+      const excludedDate = new Date(date);
+      return (startDate <= excludedDate && excludedDate <= endDate);
+    })
+  }
+    
+
   const formatDates = () => {
     let geformatteerdeStartDatum, geformatteerdeEindDatum;
 
@@ -132,19 +146,27 @@ const reserveringForm = ({ closeModal, product }) => {
     });
   };
 
+  const getTitle = async (id, token) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/gebruiker/titel/id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console
+      return response.data.titel;
+    } catch (error) {
+      console.error("Er is iets fout gegaan bij het ophalen van de gebruiker", error);
+    }
+  };
+
   const checkDates = (afhaaldatum, retourdatum) => {
     try {
       const authToken = localStorage.getItem("authToken");
 
-      if (!authToken) {
-        enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-          variant: "error",
-        });
-        navigate("/login");
-        return;
-      }
-
       const decodedToken = jwtDecode(authToken);
+      const titel = getTitle(decodedToken.sub, authToken);
+      console.log(titel);
 
       const afhaalDate = new Date(afhaaldatum);
       const retourDate = new Date(retourdatum);
@@ -161,10 +183,15 @@ const reserveringForm = ({ closeModal, product }) => {
         enqueueSnackbar("De startdatum mag niet later zijn dan de einddatum! En ook niet in het verleden", {
           variant: "error",
         });
+      } else if (checkDatumTussen(afhaaldatum, retourdatum)) {
+        setCorrectDates(false);
+        enqueueSnackbar("Deze datums zijn niet beschikbaar", {
+          variant: "error",
+        });
       } else if (
-        decodedToken.Titel.toLowerCase() === "student" &&
-        verschilInDagen > 5 ||
-        afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden) {
+        (titel  === "student" || titel === "Student")&&
+        (verschilInDagen > 5 ||
+        afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden)) {
         setCorrectDates(false);
         enqueueSnackbar(
           "De limiet voor een student is van maandag tot vrijdag! En maar 1 week vooruit!",
@@ -234,13 +261,6 @@ const reserveringForm = ({ closeModal, product }) => {
       const authToken = localStorage.getItem("authToken");
       console.log(formData.gebruikerId);
       console.log("formData:", formData);
-      if (!authToken) {
-        enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-          variant: "error",
-        });
-        navigate("/login");
-        return;
-      }
 
       console.log("Sending formData:", formData);
 
@@ -260,7 +280,7 @@ const reserveringForm = ({ closeModal, product }) => {
 
       closeModal();
     } catch (error) {
-      enqueueSnackbar("Er is een fout opgetreden bij het reserveren" + error, {
+      enqueueSnackbar("Er is een fout opgetreden bij het reserveren: " + error.response.data , {
         variant: "error",
       });
     }
@@ -367,16 +387,6 @@ const reserveringForm = ({ closeModal, product }) => {
                   Andere
                 </option>
               </select>
-            </div>
-            <div className="flex flex-col w-full gap-1">
-              <label className="text-lg">Opmerkingen</label>
-              <textarea
-                type="text"
-                placeholder="Eventuele opmerkingen."
-                className="p-3 rounded-xl border border-gray-300 text-gray-500"
-                value={formData.opmerking}
-                onChange={handleChange}
-              />
             </div>
           </div>
 

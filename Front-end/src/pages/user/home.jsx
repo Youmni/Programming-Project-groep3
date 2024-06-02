@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import ProductInfoStudent from "../../components/ProductInfoStudent";
 import { IoInformationCircleSharp } from "react-icons/io5";
+import { useAuth } from "../../components/AuthToken";
 
 import {
   FaCheckCircle,
@@ -24,21 +25,13 @@ const Home = () => {
   const [selectedReservatie, setSelectedReservatie] = useState({});
   const [teLaatReservaties, setTeLaatReservaties] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
-        variant: "error",
-      });
-      navigate("/login");
-      return;
-    }
-
     axios
       .get("http://localhost:8080/categorie", {
         headers: {
@@ -59,10 +52,9 @@ const Home = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
 
-    const id = jwtDecode(token).UserId;
+  useEffect(() => {
+    const id = jwtDecode(token).sub;
 
     axios
       .get(`http://localhost:8080/reservatie/gebruikerId=${id}/status=Bezig`, {
@@ -80,9 +72,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    const id = jwtDecode(token).UserId;
+  const id = jwtDecode(token).sub;
 
     axios
       .get(
@@ -101,11 +91,6 @@ const Home = () => {
         console.error("Error fetching data: ", error);
       });
   }, []);
-
-  const openModal = (reservatie) => {
-    setSelectedReservatie(reservatie);
-    setShowModal(true);
-  };
 
   const closeModal = () => {
     setShowModal(false);

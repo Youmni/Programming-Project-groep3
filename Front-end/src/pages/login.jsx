@@ -23,43 +23,44 @@ const Login = () => {
     }));
   };
 
-  const redirectToPage = (titel) => {
-    if (titel === "Admin") {
-      navigate("/admin");
-    } else {
-      navigate("/home");
+
+  const getTitle = async (id, token) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/gebruiker/titel/id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console
+      if (response.data.titel === "Admin") {
+        navigate("/admin");
+      } else {
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Er is iets fout gegaan bij het ophalen van de gebruiker", error);
     }
   };
-
-  const generateHash = async (message) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  };
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const hashedWachtwoord = await generateHash(loginData.wachtwoord);
       
       const response = await axios.post('http://localhost:8080/gebruiker/login', {
         email: loginData.email,
-        wachtwoord: hashedWachtwoord
+        wachtwoord: loginData.wachtwoord
       });
 
       if (response.status === 200) {
         localStorage.setItem('authToken', response.data);
         const decoded = jwtDecode(response.data);
-        console.log(decoded.Titel);
-        redirectToPage(decoded.Titel);
+        getTitle(decoded.sub, response.data);
         enqueueSnackbar("Succesvol ingelogd", { variant: "success"});
       }
       else{
-       
+        enqueueSnackbar("Fout bij inloggen", { variant: "error"});
       }
 
       setLoading(false);
