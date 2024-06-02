@@ -3,7 +3,6 @@ package org.ehbproject.backend.controllers;
 
 import org.ehbproject.backend.config.JwtUtil;
 import org.ehbproject.backend.dao.GebruikerCrudRepository;
-import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.dto.AuthRequestDTO;
 import org.ehbproject.backend.modellen.Gebruiker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,7 @@ public class GebruikerController {
 
 
     @Autowired
-    GebruikerCrudRepository repo;
-    @Autowired
-    ReservatieCrudRepository reservatierepo;
+    GebruikerCrudRepository gebruikerRepo;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -32,7 +29,7 @@ public class GebruikerController {
     @RequestMapping(method = RequestMethod.GET)
     public List<Gebruiker> getAllGebruikers(){
         ArrayList<Gebruiker> gebruikerMandje = new ArrayList<>();
-        repo.findAll().forEach(gebruikerMandje::add);
+        gebruikerRepo.findAll().forEach(gebruikerMandje::add);
         return gebruikerMandje;
     }
 
@@ -40,7 +37,7 @@ public class GebruikerController {
     @PostMapping("/login")
     public ResponseEntity<String> createAuthenticationToken(@RequestBody AuthRequestDTO authRequest) {
         try {
-            List<Gebruiker> gebruiker = repo.findByEmail(authRequest.getEmail());
+            List<Gebruiker> gebruiker = gebruikerRepo.findByEmail(authRequest.getEmail());
             if (gebruiker.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
             }
@@ -64,7 +61,7 @@ public class GebruikerController {
     @PostMapping("/toevoegen")
     public ResponseEntity<String> toevoegenGebruiker(@Validated @RequestBody Gebruiker gebruiker) {
         try {
-            repo.save(gebruiker);
+            gebruikerRepo.save(gebruiker);
             return ResponseEntity.status(HttpStatus.CREATED).body("Gebruiker succesvol toegevoegd");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Er is een fout opgetreden bij het toevoegen van de gebruiker: " + e.getMessage());
@@ -73,9 +70,9 @@ public class GebruikerController {
     @CrossOrigin
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteGebruiker(@PathVariable int id) {
-        List<Gebruiker> gebruiker = repo.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = gebruikerRepo.findByGebruikerId(id);
         if (!gebruiker.isEmpty()) {
-            repo.deleteById(id);
+            gebruikerRepo.deleteById(id);
             return ResponseEntity.ok("Gebruiker met ID " + id + " is succesvol verwijderd");
 
         } else {
@@ -87,13 +84,13 @@ public class GebruikerController {
     @GetMapping(value = "/email={email}")
     public List<Gebruiker> getAllGebruikersByEmail(@PathVariable(name = "email") String email){
 
-        return repo.findByEmailContainingIgnoreCase(email);
+        return gebruikerRepo.findByEmailContainingIgnoreCase(email);
     }
 
     @CrossOrigin
     @GetMapping(value = "/studentaantal")
     public int getAllStudententenNumber(){
-        Iterable<Gebruiker> aantalStudenten = repo.findByTitel("student");
+        Iterable<Gebruiker> aantalStudenten = gebruikerRepo.findByTitel("student");
         int aantal = 0;
         for(Gebruiker student: aantalStudenten){
             aantal++;
@@ -104,7 +101,7 @@ public class GebruikerController {
     @CrossOrigin
     @GetMapping(value = "/docentaantal")
     public int getAllDocentenNumber(){
-        Iterable<Gebruiker> aantalDocenten = repo.findByTitel("docent");
+        Iterable<Gebruiker> aantalDocenten = gebruikerRepo.findByTitel("docent");
         int aantal = 0;
         for(Gebruiker docent: aantalDocenten){
             aantal++;
@@ -115,7 +112,7 @@ public class GebruikerController {
     @CrossOrigin
     @GetMapping(value = "/gebruikersaantal")
     public int getAllGebruikersNumber(){
-        Iterable<Gebruiker> aantalGebruikers = repo.findAll();
+        Iterable<Gebruiker> aantalGebruikers = gebruikerRepo.findAll();
         int aantal = 0;
         for(Gebruiker gebruik: aantalGebruikers){
             aantal++;
@@ -127,35 +124,35 @@ public class GebruikerController {
     @GetMapping(value = "/voornaam={voornaam}")
     public List<Gebruiker> getAllGebruikersByVoornaam(@PathVariable(name = "voornaam") String voornaam){
 
-        return repo.findByEmailContainingIgnoreCase(voornaam);
+        return gebruikerRepo.findByEmailContainingIgnoreCase(voornaam);
     }
 
     @CrossOrigin
     @GetMapping(value = "/achternaam={achternaam}")
     public List<Gebruiker> getAllGebruikersByAchternaam(@PathVariable(name = "achternaam") String achternaam){
 
-        return repo.findByEmailContainingIgnoreCase(achternaam);
+        return gebruikerRepo.findByEmailContainingIgnoreCase(achternaam);
     }
 
     @CrossOrigin
     @GetMapping(value = "/naam={naam}")
     public List<Gebruiker> getAllGebruikersByName(@PathVariable(name = "naam") String naam){
 
-        return repo.findByEmail(naam);
+        return gebruikerRepo.findByEmail(naam);
     }
 
     @CrossOrigin
     @GetMapping(value = "/titel={titel}")
     public List<Gebruiker> getAllGebruikersByTitel(@PathVariable(name = "titel") String titel){
 
-        return repo.findByTitel(titel);
+        return gebruikerRepo.findByTitel(titel);
     }
 
     @CrossOrigin
     @GetMapping(value = "/id={id}")
     public List<Gebruiker> getAllGebruikersById(@PathVariable(name = "id") int id){
 
-        return repo.findByGebruikerID(id);
+        return gebruikerRepo.findByGebruikerId(id);
     }
 
 }

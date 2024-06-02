@@ -34,7 +34,7 @@ public class ProductReservationVerifier {
         }
 
         for(int product : products){
-            List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductID(product);
+            List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductId(product);
             logger.info(product+": "+"komt tot hier");
             if(productReservaties.isEmpty()){
                 logger.info("beschikbaar");

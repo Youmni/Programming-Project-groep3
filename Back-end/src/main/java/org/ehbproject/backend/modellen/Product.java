@@ -16,7 +16,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Productid" )
-    private int productID;
+    private int productId;
 
     @ManyToOne
     @JoinColumn(name = "Productmodelnr", nullable = false)
@@ -52,11 +52,11 @@ public class Product {
 
 
     public int getProductID() {
-        return productID;
+        return productId;
     }
 
     public void setProductID(int productID) {
-        this.productID = productID;
+        this.productId = productID;
     }
 
     public ProductModel getProductModelNr() {

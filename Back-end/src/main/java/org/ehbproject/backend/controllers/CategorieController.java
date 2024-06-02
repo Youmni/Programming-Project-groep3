@@ -15,13 +15,13 @@ import java.util.List;
 public class CategorieController {
 
     @Autowired
-    CategorieCrudRepository repo;
+    CategorieCrudRepository CategorieRepo;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<Categorie> getAllCategories(){
         ArrayList<Categorie> categorieMandje = new ArrayList<>();
-        repo.findAll().forEach(categorieMandje::add);
+        CategorieRepo.findAll().forEach(categorieMandje::add);
         return categorieMandje;
     }
     
@@ -29,7 +29,7 @@ public class CategorieController {
     @PostMapping("/toevoegen")
     public ResponseEntity<String> toevoegenCategorie(@RequestBody Categorie categorie) {
         try {
-            repo.save(categorie);
+            CategorieRepo.save(categorie);
             return ResponseEntity.status(HttpStatus.CREATED).body("Categorie succesvol toegevoegd");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Er is een fout opgetreden bij het toevoegen van de categorie: " + e.getMessage());
@@ -38,10 +38,10 @@ public class CategorieController {
     @CrossOrigin
     @DeleteMapping("/id={id}/delete")
     public ResponseEntity<String> deleteCategorie(@PathVariable int id) {
-        List<Categorie> categorie = repo.findByCategorieNr(id);
+        List<Categorie> categorie = CategorieRepo.findByCategorieNr(id);
         if (!categorie.isEmpty()) {
 
-            repo.deleteById(id);
+            CategorieRepo.deleteById(id);
             return ResponseEntity.ok("Categorie met ID " + id + " is succesvol verwijderd");
 
         } else {
@@ -54,13 +54,13 @@ public class CategorieController {
     @GetMapping(value = "/name={name}")
     public List<Categorie> getAllCategoriesByName(@PathVariable(name = "name") String name){
 
-        return repo.findByCategorieNaam(name);
+        return CategorieRepo.findByCategorieNaam(name);
     }
 
     @CrossOrigin
     @GetMapping(value = "/id={id}")
     public List<Categorie> getAllCategoriesById(@PathVariable(name = "id") int id){
 
-        return repo.findByCategorieNr(id);
+        return CategorieRepo.findByCategorieNr(id);
     }
 }

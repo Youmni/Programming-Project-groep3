@@ -38,7 +38,7 @@ public class EmailService {
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
-    private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
     @Scheduled(cron = "0 0 6 ? * SAT", zone = "Europe/Brussels")
     public void findGebruikersWhoAreLate() {
         EmailService emailService = new EmailService();
@@ -53,7 +53,7 @@ public class EmailService {
 
         for (String gebruikerEmail : TeLateGebruikers) {
             String Subject = "Te laat";
-            String body = "U bent te laat met het inleveren van uw producten, zie de website voor meer  info over uw reservatie.";
+            String body = "U bent te laat met het inleveren van uw producten, zie de website voor meer info over uw reservatie.";
             emailService.SendMail(gebruikerEmail, Subject, body);
             logger.info("mail successvol verzonden");
 
@@ -75,7 +75,7 @@ public class EmailService {
                 String Subject = "Vergeet niet terug te brengen";
                 String body = "U heb producten uitgeleend die tegen morgen binnen moeten worden gebracht. " +
                         " Vergeet niet langs Gwendoline Van den Putten te gaan. " +
-                        " Zie de website voor meer  info over uw reservatie.";
+                        " Zie de website voor meer info over uw reservatie.";
                 emailService.SendMail(gebruikerEmail, Subject, body);
                 logger.info("mail successvol verzonden");
 

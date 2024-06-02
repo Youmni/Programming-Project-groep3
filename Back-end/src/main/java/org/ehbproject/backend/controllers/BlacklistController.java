@@ -17,28 +17,28 @@ import java.util.List;
 public class BlacklistController {
 
     @Autowired
-    BlacklistCrudRepository repoBlacklist;
+    BlacklistCrudRepository blacklistRepo;
     @Autowired
-    GebruikerCrudRepository repoGebruiker;
+    GebruikerCrudRepository gebruikerRepo;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<Blacklists> getAllBlacklists(){
         ArrayList<Blacklists> blacklistMandje = new ArrayList<>();
-        repoBlacklist.findAll().forEach(blacklistMandje::add);
+        blacklistRepo.findAll().forEach(blacklistMandje::add);
         return blacklistMandje;
     }
 
     @CrossOrigin
     @GetMapping("/gebruikerId={id}")
     public List<Blacklists> getAllBlacklistsByGebruikerId(@PathVariable int id) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = gebruikerRepo.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
-        return repoBlacklist.findByGebruiker(gebruikerObject);
+        return blacklistRepo.findByGebruiker(gebruikerObject);
     }
     @CrossOrigin
     @GetMapping("/blacklistDatum={datum}")
     public List<Blacklists> getAllBlacklistsByBlacklistDatum(@PathVariable LocalDate datum) {
-        return repoBlacklist.findByBlacklistDatum(datum);
+        return blacklistRepo.findByBlacklistDatum(datum);
     }
 }

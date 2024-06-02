@@ -34,15 +34,18 @@ import static org.ehbproject.backend.services.verificatie.ReservatieLimiet.getAl
 public class ReservatieController {
 
     private EmailService emailService;
+    public ReservatieController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @Autowired
-    ReservatieCrudRepository repoReservatie;
+    ReservatieCrudRepository reservatieRepo;
     @Autowired
-    GebruikerCrudRepository repoGebruiker;
+    GebruikerCrudRepository gebruikerRepo;
     @Autowired
-    ProductCrudRepository repoProduct;
+    ProductCrudRepository productRepo;
     @Autowired
-    ProductReservatieCrudRepository repoProductReservatie;
+    ProductReservatieCrudRepository productReservatieRepo;
     @Autowired
     private ReservatieLimiet studentLimiet;
     @Autowired
@@ -50,11 +53,13 @@ public class ReservatieController {
 
     private static final Logger logger = LoggerFactory.getLogger(ReservatieController.class);
 
+
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<Reservatie> getAllReservaties() {
         ArrayList<Reservatie> reservatieMandje = new ArrayList<>();
-        repoReservatie.findAll().forEach(reservatieMandje::add);
+        reservatieRepo.findAll().forEach(reservatieMandje::add);
         return reservatieMandje;
     }
 
@@ -62,7 +67,7 @@ public class ReservatieController {
     @PostMapping(value="/toevoegen")
     public ResponseEntity<String> addReservatie(@Validated @RequestBody ReservatieDTO reservatieDTO) {
         try {
-            List<Gebruiker> gebruikers = repoGebruiker.findByGebruikerID(reservatieDTO.getGebruikerId());
+            List<Gebruiker> gebruikers = gebruikerRepo.findByGebruikerId(reservatieDTO.getGebruikerId());
             if (gebruikers.isEmpty()) {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
@@ -90,7 +95,7 @@ public class ReservatieController {
                         gebruiker
                 );
                 logger.info("tot voor het opslaan");
-                repoReservatie.save(reservatie);
+                reservatieRepo.save(reservatie);
                 String email = "vdborghtt2005@gmail.com";
                 String subject = "Nieuwe reservatie";
                 String body = "je hebt nieuwe producten gereserveerd. deze zijn: " + reservatie.getProducten();
@@ -99,15 +104,15 @@ public class ReservatieController {
                 logger.info("tot na het opslaan");
 
 
-                List<Reservatie> reservatieObject = repoReservatie.findByReservatieNr(reservatie.getReservatieNr());
+                List<Reservatie> reservatieObject = reservatieRepo.findByReservatieNr(reservatie.getReservatieNr());
                 Reservatie reservatieObjectResult = reservatieObject.getFirst();
                 for(int product: reservatieDTO.getProducten()){
                     logger.info("tot hier");
-                    List<Product> productObject = repoProduct.findByProductID(product);
+                    List<Product> productObject = productRepo.findByProductId(product);
                     Product productObjectResult = productObject.getFirst();
                     ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
                     logger.info("tot net voor hier");
-                    repoProductReservatie.save(productReservatie);
+                    productReservatieRepo.save(productReservatie);
                     logger.info("tot hier");
                 }
                 return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie succesvol toegevoegd"+aantalProductenDezeWeek);
@@ -128,12 +133,12 @@ public class ReservatieController {
     @CrossOrigin
     @PutMapping("/{id}/opmerking")
     public ResponseEntity<String> updateOpmerking(@PathVariable int id, @RequestParam String opmerking) {
-        List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
+        List<Reservatie> reservaties = reservatieRepo.findByReservatieNr(id);
 
         if(!reservaties.isEmpty()){
             Reservatie reservatie = reservaties.getFirst();
             reservatie.setOpmerking(opmerking);
-            repoReservatie.save(reservatie);
+            reservatieRepo.save(reservatie);
 
             return ResponseEntity.ok("Opmerking van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + opmerking);
 
@@ -144,7 +149,7 @@ public class ReservatieController {
     @CrossOrigin
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable int id, @RequestParam String newStatus) {
-        List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
+        List<Reservatie> reservaties = reservatieRepo.findByReservatieNr(id);
         String[] statussen = {"Te laat", "Bezig", "Onvolledig", "In orde", "Voorboeking"};
 
 
@@ -154,7 +159,7 @@ public class ReservatieController {
             if (geldigeStatus) {
                 Reservatie reservatie = reservaties.getFirst();
                 reservatie.setStatus(newStatus);
-                repoReservatie.save(reservatie);
+                reservatieRepo.save(reservatie);
                 return ResponseEntity.ok("Status van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + newStatus);
             } else {
                 logger.info("Ongeldige status: "+newStatus);
@@ -173,18 +178,18 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/id={id}")
     public List<Reservatie> getReservatieByReservatieId(@PathVariable(name = "id") int id) {
-        return repoReservatie.findByReservatieNr(id);
+        return reservatieRepo.findByReservatieNr(id);
     }
 
     @CrossOrigin
     @GetMapping(value = "/niet-beschikbare-datums/{id}")
     public List<LocalDate> getProductenByProductId(@PathVariable(name = "id") int id) {
-        Set<Product> product = repoProduct.findProductByProductID(id);
+        Set<Product> product = productRepo.findProductByProductId(id);
         if(product.isEmpty()){
             return List.of();
         }
 
-        List<Reservatie> reservatiesVoorProduct = repoReservatie.findByProducten(product);
+        List<Reservatie> reservatiesVoorProduct = reservatieRepo.findByProducten(product);
 
 
         List<LocalDate> nietBeschikbareDagen = new ArrayList<>();
@@ -199,67 +204,67 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}")
     public List<Reservatie> getReservatiesByGebruikerId(@PathVariable(name = "id") int id) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = gebruikerRepo.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
-        return repoReservatie.findByGebruiker(gebruikerObject);
+        return reservatieRepo.findByGebruiker(gebruikerObject);
     }
 
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}/status={status}")
     public List<Reservatie> getReservatiesByGebruikerIdAndStatus(@PathVariable(name = "id") int id, @PathVariable(name = "status") String status) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = gebruikerRepo.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
-        return repoReservatie.findByGebruikerAndStatus(gebruikerObject, status);
+        return reservatieRepo.findByGebruikerAndStatus(gebruikerObject, status);
     }
 
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}/actief")
     public List<Reservatie> getReservatiesByGebruikerIdAndActief(@PathVariable(name = "id") int id) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = gebruikerRepo.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
-        return repoReservatie.findByGebruikerAndStatusIn(gebruikerObject, List.of(new String[]{"Te laat", "Bezig", "Onvolledig", "Voorboeking"}));
+        return reservatieRepo.findByGebruikerAndStatusIn(gebruikerObject, List.of(new String[]{"Te laat", "Bezig", "Onvolledig", "Voorboeking"}));
     }
 
     @CrossOrigin
     @GetMapping(value = "/afhaaldatum={date}")
     public List<Reservatie> getProductenByAfhaalDatum(@PathVariable(name = "date") LocalDate date) {
-        return repoReservatie.findByAfhaalDatum(date);
+        return reservatieRepo.findByAfhaalDatum(date);
     }
 
     @CrossOrigin
     @GetMapping(value = "/afhaaldatum={date}/status={status}")
     public List<Reservatie> getProductenByAfhaalDatumAndStatus(@PathVariable(name = "date") LocalDate date, @PathVariable(name = "status") String status) {
-        return repoReservatie.findByAfhaalDatumAndStatus(date, "Voorboeking");
+        return reservatieRepo.findByAfhaalDatumAndStatus(date, "Voorboeking");
     }
 
     @CrossOrigin
     @GetMapping(value = "/retourdatum={date}/status={status}")
     public List<Reservatie> getProductenByRetourDatumAndStatus(@PathVariable(name = "date") LocalDate date, @PathVariable(name = "status") String status) {
-        return repoReservatie.findByRetourDatumAndStatus(date, "Bezig");
+        return reservatieRepo.findByRetourDatumAndStatus(date, "Bezig");
     }
 
     @CrossOrigin
     @GetMapping(value = "/retourDatum={date}")
     public List<Reservatie> getReservatiesByRetourDatum(@PathVariable(name = "date") LocalDate date) {
-        return repoReservatie.findByRetourDatum(date);
+        return reservatieRepo.findByRetourDatum(date);
     }
 
     @CrossOrigin
     @GetMapping(value = "/status")
     public List<Reservatie> getReservatiesByStatus(@RequestParam List<String> status) {
-        return repoReservatie.findByStatusIn(status);
+        return reservatieRepo.findByStatusIn(status);
     }
     @CrossOrigin
     @GetMapping(value = "/boekingDatum={date}")
     public List<Reservatie> getReservatieByBoekingDatum(@PathVariable(name = "date") LocalDate date) {
-        return repoReservatie.findByBoekingDatum(date);
+        return reservatieRepo.findByBoekingDatum(date);
     }
 
 
     @CrossOrigin
     @GetMapping(value = "/in-orde")
     public int getAllInOrde(){
-        Iterable<Reservatie> aantalInOrde = repoReservatie.findByStatus("in orde");
+        Iterable<Reservatie> aantalInOrde = reservatieRepo.findByStatus("in orde");
         int aantal = 0;
         for(Reservatie inOrde: aantalInOrde){
             aantal++;
@@ -270,7 +275,7 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/te-laat")
     public int getAllTeLaat(){
-        Iterable<Reservatie> aantalTeLaat = repoReservatie.findByStatus("te laat");
+        Iterable<Reservatie> aantalTeLaat = reservatieRepo.findByStatus("te laat");
         int aantal = 0;
         for(Reservatie teLaat: aantalTeLaat){
             aantal++;
@@ -283,10 +288,10 @@ public class ReservatieController {
     public List<StatusAantalDTO> getAmountOfReservatiesByStatus() {
         List<StatusAantalDTO> statusAantallen = new ArrayList<>();
 
-        statusAantallen.add(new StatusAantalDTO("Te laat", repoReservatie.findByStatus("Te laat").size()));
-        statusAantallen.add(new StatusAantalDTO("In orde", repoReservatie.findByStatus("In orde").size()));
-        statusAantallen.add(new StatusAantalDTO("Bezig", repoReservatie.findByStatus("Bezig").size()));
-        statusAantallen.add(new StatusAantalDTO("Voorboeking", repoReservatie.findByStatus("Voorboeking").size()));
+        statusAantallen.add(new StatusAantalDTO("Te laat", reservatieRepo.findByStatus("Te laat").size()));
+        statusAantallen.add(new StatusAantalDTO("In orde", reservatieRepo.findByStatus("In orde").size()));
+        statusAantallen.add(new StatusAantalDTO("Bezig", reservatieRepo.findByStatus("Bezig").size()));
+        statusAantallen.add(new StatusAantalDTO("Voorboeking", reservatieRepo.findByStatus("Voorboeking").size()));
 
         return statusAantallen;
     }

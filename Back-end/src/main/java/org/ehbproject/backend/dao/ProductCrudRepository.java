@@ -9,8 +9,8 @@ import java.util.Set;
 
 public interface ProductCrudRepository extends CrudRepository<Product, Integer> {
 
-    public List<Product> findByProductID(int productID);
-    public Set<Product> findProductByProductID(int productID);
+    public List<Product> findByProductId(int productId);
+    public Set<Product> findProductByProductId(int productID);
     public List<Product> findByProductNaamContainingIgnoreCase(String productNaam);
     public List<Product> findByStatusIgnoreCase(String status);
     public List<Product> findProductsByStatusIn(List<String> status);

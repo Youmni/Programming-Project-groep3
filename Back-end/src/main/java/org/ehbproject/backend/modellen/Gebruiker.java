@@ -17,7 +17,7 @@ public class Gebruiker {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Gebruikerid")
-    private int gebruikerID;
+    private int gebruikerId;
 
     @Column(name="Email", nullable = false, unique = true)
     @NotBlank
@@ -62,11 +62,11 @@ public class Gebruiker {
     }
 
     public int getGebruikerID() {
-        return gebruikerID;
+        return gebruikerId;
     }
 
     public void setGebruikerID(int gebruikerID) {
-        this.gebruikerID = gebruikerID;
+        this.gebruikerId = gebruikerID;
     }
 
     public String getEmail() {
