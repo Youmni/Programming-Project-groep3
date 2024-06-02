@@ -14,25 +14,25 @@ import java.util.List;
 public class ProductReservatieController {
 
     @Autowired
-    ProductReservatieCrudRepository repo;
+    ProductReservatieCrudRepository productReservatieRepo;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<ProductReservatie> getAllProductReservaties() {
         ArrayList<ProductReservatie> productReservatieMandje = new ArrayList<>();
-        repo.findAll().forEach(productReservatieMandje::add);
+        productReservatieRepo.findAll().forEach(productReservatieMandje::add);
         return productReservatieMandje;
     }
 
     @CrossOrigin
     @GetMapping(value = "/producten/id={id}")
     public List<ProductReservatie> getAllProductenById(@PathVariable(name = "id") int id) {
-        return repo.findByProduct_ProductID(id);
+        return productReservatieRepo.findByProduct_ProductId(id);
     }
 
     @CrossOrigin
     @GetMapping(value = "/reservaties/id={id}")
     public List<ProductReservatie> getAllReservatiesById(@PathVariable(name = "id") int id) {
-        return repo.findByReservatie_ReservatieNr(id);
+        return productReservatieRepo.findByReservatie_ReservatieNr(id);
     }
 }

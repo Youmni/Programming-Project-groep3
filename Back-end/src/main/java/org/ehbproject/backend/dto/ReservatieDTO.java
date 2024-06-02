@@ -1,10 +1,6 @@
 package org.ehbproject.backend.dto;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReservatieDTO {
     private int gebruikerId;

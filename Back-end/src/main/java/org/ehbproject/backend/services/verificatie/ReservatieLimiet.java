@@ -31,7 +31,7 @@ public class ReservatieLimiet {
     private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
     public List<Gebruiker> getGebruikerObject(int studentId) {
 
-        return repoGebruiker.findByGebruikerID(studentId);
+        return repoGebruiker.findByGebruikerId(studentId);
     }
 
     public List<Reservatie> getReservatie(int studentId) throws Exception {

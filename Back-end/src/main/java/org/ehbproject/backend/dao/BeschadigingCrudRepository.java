@@ -12,5 +12,5 @@ public interface BeschadigingCrudRepository extends CrudRepository<Beschadiging,
     public  List<Beschadiging> findBeschadigingByBeschadigingId(int beschadigingId);
     public List<Beschadiging> findByGebruiker(Gebruiker gebruiker);
     public List<Beschadiging> findByProduct(Product product);
-    public List<Beschadiging> findBeschadigingByBeschadigingsdatum(LocalDate beschadigingsdatum);
+    public List<Beschadiging> findBeschadigingByBeschadigingsDatum(LocalDate beschadigingsDatum);
 }

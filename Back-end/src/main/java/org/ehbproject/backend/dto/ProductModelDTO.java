@@ -1,7 +1,5 @@
 package org.ehbproject.backend.dto;
 
-import org.ehbproject.backend.modellen.Categorie;
-
 public class ProductModelDTO {
 
     private int categorieNr;

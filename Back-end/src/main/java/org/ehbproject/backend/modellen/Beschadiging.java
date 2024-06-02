@@ -1,8 +1,7 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 
 import java.time.LocalDate;
 @Entity
@@ -23,16 +22,20 @@ public class Beschadiging {
     private Product product;
 
     @Column(name="Beschrijving", nullable = false)
-    private String Beschrijving;
+    private String beschrijving;
 
     @Column(name="Beschadigingsdatum", nullable = false)
-    private LocalDate beschadigingsdatum;
+    private LocalDate beschadigingsDatum;
 
-    public Beschadiging(Gebruiker gebruiker, Product product, String beschrijving, LocalDate beschadigingsdatum) {
+    @Column(name="Beschadigingfoto", nullable = false)
+    private String beschadigingFoto;
+
+    public Beschadiging(Gebruiker gebruiker, Product product, String beschrijving, LocalDate beschadigingsDatum, String beschadigingFoto) {
         this.gebruiker = gebruiker;
         this.product = product;
-        Beschrijving = beschrijving;
-        this.beschadigingsdatum = beschadigingsdatum;
+        this.beschrijving = beschrijving;
+        this.beschadigingsDatum = beschadigingsDatum;
+        this.beschadigingFoto = beschadigingFoto;
     }
 
     protected Beschadiging(){}
@@ -62,18 +65,26 @@ public class Beschadiging {
     }
 
     public String getBeschrijving() {
-        return Beschrijving;
+        return beschrijving;
     }
 
     public void setBeschrijving(String beschrijving) {
-        Beschrijving = beschrijving;
+        this.beschrijving = beschrijving;
     }
 
     public LocalDate getBeschadigingsdatum() {
-        return beschadigingsdatum;
+        return beschadigingsDatum;
     }
 
     public void setBeschadigingsdatum(LocalDate beschadigingsdatum) {
-        this.beschadigingsdatum = beschadigingsdatum;
+        this.beschadigingsDatum = beschadigingsdatum;
+    }
+
+    public String getBeschadigingFoto() {
+        return beschadigingFoto;
+    }
+
+    public void setBeschadigingFoto(String beschadigingFoto) {
+        this.beschadigingFoto = beschadigingFoto;
     }
 }
