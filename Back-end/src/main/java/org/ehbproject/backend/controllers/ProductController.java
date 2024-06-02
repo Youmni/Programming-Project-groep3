@@ -47,9 +47,8 @@ public class ProductController {
             List <ProductModel> productModelen = productmodelRepo.findByProductModelNr(productDTO.getProductModelNr());
 
             if (productModelen.isEmpty()) {
-                ResponseEntity.status( HttpStatus.NOT_FOUND).body("ProductModel met nummer " + productDTO.getProductModelNr() + " niet gevonden.");
+                return ResponseEntity.status( HttpStatus.NOT_FOUND).body("ProductModel met nummer " + productDTO.getProductModelNr() + " niet gevonden.");
             }
-
 
             ProductModel productModel = productModelen.getFirst();
             String productnaam = productDTO.getProductNaam();

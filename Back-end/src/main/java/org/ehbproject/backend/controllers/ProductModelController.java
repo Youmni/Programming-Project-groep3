@@ -45,7 +45,7 @@ public class ProductModelController {
             List<Categorie> categories = categorieRepo.findByCategorieNr(productModelDTO.getCategorieNr());
 
             if (categories.isEmpty()) {
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
             }
 
             Categorie categorie = categories.getFirst();
