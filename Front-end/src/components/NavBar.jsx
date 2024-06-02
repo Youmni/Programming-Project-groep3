@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link, useNavigate, useLocation} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
-import { IoIosMenu } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { BiShoppingBag } from "react-icons/bi";
 import WinkelMandje from "../pages/user/winkelmandje";
 import axios from "axios";
-import { IoIosArrowDown } from "react-icons/io";
-import { WinkelMandjeContext } from "../contexts/winkelmandjeContext";
 import { IoLogOut } from "react-icons/io5";
 import ChooseProduct from "./ChooseProduct";
+import { WinkelMandjeContext } from "../contexts/winkelmandjeContext";
 
 const NavBar = () => {
   const [clicked, setClicked] = useState(false);
@@ -28,7 +27,8 @@ const NavBar = () => {
   const handleClickOutside = (e) => {
     if (
       (node.current && node.current.contains(e.target)) ||
-      (nodeSearchResults.current && nodeSearchResults.current.contains(e.target))
+      (nodeSearchResults.current &&
+        nodeSearchResults.current.contains(e.target))
     ) {
       return;
     }
@@ -90,8 +90,8 @@ const NavBar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.removeItem("winkelmandje")
-    localStorage.removeItem("formData")
+    localStorage.removeItem("winkelmandje");
+    localStorage.removeItem("formData");
     navigate("/login");
   };
 
@@ -102,9 +102,14 @@ const NavBar = () => {
       return;
     }
     setSearch(
-      productModellen.filter((productModel) =>
-        productModel.productModelNaam.toLowerCase().includes(zoekTerm.toLowerCase()) ||
-        productModel.productModelMerk.toLowerCase().includes(zoekTerm.toLowerCase())
+      productModellen.filter(
+        (productModel) =>
+          productModel.productModelNaam
+            .toLowerCase()
+            .includes(zoekTerm.toLowerCase()) ||
+          productModel.productModelMerk
+            .toLowerCase()
+            .includes(zoekTerm.toLowerCase())
       )
     );
   };
@@ -113,38 +118,28 @@ const NavBar = () => {
     setSelectedProductModel(productModel);
     setShowModal(true);
     setSearch("");
-    navigate("/inventaris")
+    navigate("/inventaris");
   };
 
   const closeModal = () => {
     setShowModal(false);
   };
 
-
   return (
-    <>
-      <nav className="border flex items-center h-auto gap-7 w-full shadow-lg">
+    <nav className="border flex flex-col lg:flex-row items-center h-auto gap-7 w-full shadow-lg">
+      <div className="flex items-center justify-between w-full lg:w-auto">
         <a href="/home">
-          <header className="flex w-full h-20 gap-x-3 items-center">
-            <img
-              src={ehbLogo}
-              alt="ehb Logo"
-              className="h-full ml-2 items-center object-cover flex"
-            />
-            <div className="lg:block hidden border h-12 border-red-500"></div>
-            <h1 className="lg:block hidden flex-col -space-y-8 pr-8">
-              <span className="text-2xl text-red-500">Medialab</span>
-              <br />
-              <span className="text-xs text-Lichtgrijs}">Uitleendienst</span>
-            </h1>
-          </header>
+          <img
+            src={ehbLogo}
+            alt="ehb Logo"
+            className="h-16 ml-2 object-contain cursor-pointer"
+          />
         </a>
 
-        {/* Category button + pop up */}
         <div className="relative z-50" ref={node}>
           <div
             onClick={handleButtonClick}
-            className="flex items-center justify-center hover:bg-zinc-200 cursor-pointer rounded-lg p-2"
+            className="flex items-center justify-center hover:bg-zinc-200 cursor-pointer rounded-lg  p-2"
           >
             <span className="text-Grijs font-semibold">Categorieën</span>
             <IoIosArrowDown className="size-4 text-Grijs " />
@@ -167,62 +162,65 @@ const NavBar = () => {
             </div>
           )}
         </div>
+      </div>
 
-        <div className="flex w-full h-full items-center justify-between">
-          <div className="flex flex-grow h-12 border-2 items-center rounded-lg gap-1 mr-5 relative">
-            <IoSearchOutline className="size-7 text-Grijs ml-2 transform transition-transform duration-250 hover:scale-110" />
-            <input
-              type="search"
-              name="search-bar"
-              id=""
-              placeholder="Zoek hier naar een productmodel..."
-              className="h-full w-full rounded-lg border-Lichtgrijs p-2 overflow-hidden"
-              onChange={handleSearch}
-            />
+      <div className="flex flex-grow w-full lg:w-auto justify-between items-center lg:ml-5">
+        <div className="flex flex-grow h-12 border-2 items-center rounded-lg gap-1 relative">
+          <IoSearchOutline className="size-7 text-Grijs ml-2 transform transition-transform duration-250 hover:scale-110" />
+          <input
+            type="search"
+            name="search-bar"
+            id=""
+            placeholder="Zoek hier naar een productmodel..."
+            className="h-full w-full rounded-lg border-Lichtgrijs p-2 overflow-hidden"
+            onChange={handleSearch}
+          />
 
-            {search.length > 0 && (
-              <div
-                ref={nodeSearchResults}
-                className="absolute top-16 p-4 bg-white text-black w-full max-h-[600px] overflow-auto rounded-xl flex flex-col z-10 border"
-              >
-                <label className="font-semibold mb-2">Product Modellen</label>
-                {search.map((productModel, index) => (
-                  <span
-                    onClick={() => openModal(productModel)}
-                    className="cursor-pointer p-2 hover:bg-blue-500 hover:text-white rounded-lg"
-                    key={index}
-                  >
-                    {productModel.productModelNaam}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex h-full w-1/5 ml-5 items-center  mr-5 justify-evenly">
-            <Link to={"/leningen"}>
-              <FaUser
-                className="size-14 text-Grijs p-2 transform transition-transform duration-250 hover:scale-110"
-              />
-            </Link>
-
-            <button
-              className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 "
-              onClick={openWinkelMandje}
+          {search.length > 0 && (
+            <div
+              ref={nodeSearchResults}
+              className="absolute top-16 p-4 bg-white text-black w-full max-h-[600px] overflow-auto rounded-xl flex flex-col z-10 border"
             >
-              <BiShoppingBag className="text-5xl text-Grijs" />
-              <div className="absolute w-5 h-5 rounded-full z-10 right-[-3px] bottom-[-3px] flex items-center justify-center text-[14px] bg-red-500 text-white">
-                <span>{winkelmandje.length}</span>
-              </div>
-            </button>
+              <label className="font-semibold mb-2">Product Modellen</label>
+              {search.map((productModel, index) => (
+                <span
+                  onClick={() => openModal(productModel)}
+                  className="cursor-pointer p-2 hover:bg-blue-500 hover:text-white rounded-lg flex gap-4"
+                  key={index}
+                >
+                  <p>{productModel.productModelMerk}</p>
+                  <p>{productModel.productModelNaam}</p>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="flex h-full w-1/5 ml-5 items-center justify-evenly">
+          <Link to={"/leningen"}>
+            <FaUser className="size-14 text-Grijs p-2 transform transition-transform duration-250 hover:scale-110" />
+          </Link>
+
+          <button
+            className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 "
+            onClick={openWinkelMandje}
+          >
+            <BiShoppingBag className="text-5xl text-Grijs" />
+            <div className="absolute w-5 h-5 rounded-full z-10 right-[-3px] bottom-[-3px] flex items-center justify-center text-[14px] bg-red-500 text-white">
+              <span>{winkelmandje.length}</span>
+            </div>
+          </button>
+          <div
+            className="flex h-full items-center justify-evenly"
+            style={{ width: "60px" }}
+          >
             <IoLogOut
-              className="size-14 text-Grijs p-2 cursor-pointer rounded-xl hover:text-rood
-              transform transition-transform duration-250 hover:scale-110"
+              className="size-14 text-Grijs p-2 cursor-pointer rounded-xl hover:text-rood transform transition-transform duration-250 hover:scale-110"
               onClick={handleLogout}
             />
           </div>
         </div>
-      </nav>
+      </div>
       {winkelMandje && <WinkelMandje closeWinkelMandje={closeWinkelMandje} />}
       {showModal && (
         <ChooseProduct
@@ -230,7 +228,7 @@ const NavBar = () => {
           closeModal={closeModal}
         />
       )}
-    </>
+    </nav>
   );
 };
 

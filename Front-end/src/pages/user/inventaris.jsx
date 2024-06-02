@@ -21,6 +21,14 @@ const inventarisCategorie = () => {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
 
+    if (!token) {
+      enqueueSnackbar("Uw sessie is verlopen. Log opnieuw in.", {
+        variant: "error",
+      });
+      navigate("/login");
+      return;
+    }
+
     axios
       .get(`http://localhost:8080/productmodel`, {
         headers: {
@@ -45,10 +53,12 @@ const inventarisCategorie = () => {
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
-
-  const filteredProductModels = productModels.filter((model) =>
-    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProductModels = productModels.filter(
+    (model) =>
+      model.productModelNaam
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const openModal = (productModel) => {
@@ -92,20 +102,25 @@ const inventarisCategorie = () => {
           <figure
             key={productModel.productModelNr}
             onClick={() => openModal(productModel)}
-            className="border  bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16 transition-transform transform hover:scale-110 cursor-pointer"
+            className="border bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-hidden pb-16 transition-transform transform hover:scale-110 cursor-pointer group"
           >
             <img
-              src={productModel.productModelFoto ? `/src/assets/ProductModelFotos/${productModel.productModelFoto}` : BackUpImage}
-              alt={productModel.productModelNaam}
+              src={
+                productModel.productModelFoto
+                  ? `/src/assets/ProductModelFotos/${productModel.productModelFoto}`
+                  : BackUpImage
+              }
+              alt=""
               className="w-full h-24 object-contain shadow-md"
             />
-            <div className="flex flex-col flex-wrap ">
-              <h1 className="text-2xl font-semibold overflow-hidden">
+            <div className="flex flex-col flex-wrap">
+              <h1 className="text-2xl font-semibold max-h-8 w-full overflow-hidden text-ellipsis">
                 {productModel.productModelNaam}
               </h1>
-              <div className="flex flex-col w-3/5 flex-wrap">
-                <h2 className="text-Lichtgrijs">ProductModelBeschrijving</h2>
-                <p className="text-sm">
+              <h2 className="text-gray-500">{productModel.productModelMerk}</h2>
+              <div className="flex flex-col w-1/2 flex-wrap opacity-0 transition-opacity duration-100 group-hover:opacity-100">
+                <h2 className="text-Lichtgrijs">Beschrijving</h2>
+                <p className="text-sm max-h-24 overflow-hidden">
                   {productModel.productModelBeschrijving === null
                     ? "geen beschrijving beschikbaar"
                     : productModel.productModelBeschrijving}
@@ -123,13 +138,12 @@ const inventarisCategorie = () => {
       </section>
 
       {showModal && (
-  <ChooseProduct
-    productModelNr={selectedProductModel.productModelNr}
-    closeModal={closeModal}
-    
-  />
-)}
-
+        <ChooseProduct
+          productModelNr={selectedProductModel.productModelNr}
+          productModelFoto={selectedProductModel.productModelFoto}
+          closeModal={closeModal}
+        />
+      )}
     </main>
   );
 };

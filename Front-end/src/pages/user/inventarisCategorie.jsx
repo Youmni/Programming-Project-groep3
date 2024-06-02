@@ -50,8 +50,12 @@ const inventarisCategorie = () => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredProductModels = productModels.filter((model) =>
-    model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProductModels = productModels.filter(
+    (model) =>
+      model.productModelNaam
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const openModal = (productModel) => {
@@ -86,6 +90,7 @@ const inventarisCategorie = () => {
           />
         </div>
       </header>
+
       <section className="flex flex-wrap mt-5 gap-10 justify-center">
         {filteredProductModels.map((productModel) => (
           <figure
@@ -94,7 +99,7 @@ const inventarisCategorie = () => {
             }}
             key={productModel.productModelNr}
             onClick={() => openModal(productModel)}
-            className="border bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-auto pb-16 transition-transform transform hover:scale-110 cursor-pointer"
+            className="border bg-white w-[269px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-md overflow-hidden pb-16 transition-transform transform hover:scale-110 cursor-pointer group"
           >
             <img
               src={
@@ -105,13 +110,14 @@ const inventarisCategorie = () => {
               alt=""
               className="w-full h-24 object-contain shadow-md"
             />
-            <div className="flex flex-col flex-wrap ">
-              <h1 className="text-2xl font-semibold overflow-hidden">
+            <div className="flex flex-col flex-wrap">
+              <h1 className="text-2xl font-semibold max-h-8 w-full overflow-hidden text-ellipsis">
                 {productModel.productModelNaam}
               </h1>
-              <div className="flex flex-col w-3/5 flex-wrap">
-                <h2 className="text-Lichtgrijs">ProductModelBeschrijving</h2>
-                <p className="text-sm">
+              <h2 className="text-gray-500">{productModel.productModelMerk}</h2>
+              <div className="flex flex-col w-1/2 flex-wrap opacity-0 transition-opacity duration-100 group-hover:opacity-100">
+                <h2 className="text-Lichtgrijs">Beschrijving</h2>
+                <p className="text-sm max-h-24 overflow-hidden">
                   {productModel.productModelBeschrijving === null
                     ? "geen beschrijving beschikbaar"
                     : productModel.productModelBeschrijving}
@@ -131,6 +137,7 @@ const inventarisCategorie = () => {
       {showModal && (
         <ChooseProduct
           productModelNr={selectedProductModel.productModelNr}
+          productModelFoto={selectedProductModel.productModelFoto}
           closeModal={closeModal}
         />
       )}

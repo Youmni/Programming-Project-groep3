@@ -76,9 +76,10 @@ const reserveringForm = ({ closeModal, product }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const productData = {
-      ...formData, product: product
+      ...formData,
+      product: product,
     };
-    console.log(productData)
+    console.log(productData);
     addToWinkelmandje(productData);
     closeModal();
     enqueueSnackbar("Product toegevoegd aan winkelmandje", {
@@ -177,7 +178,10 @@ const reserveringForm = ({ closeModal, product }) => {
 
       const eenWeekInMiliSeconden = 7 * 24 * 60 * 60 * 1000;
 
-      if (afhaaldatum.getTime() > retourdatum.getTime() ||  afhaaldatum.getTime() < Date.now()) {
+      if (
+        afhaaldatum.getTime() > retourdatum.getTime() ||
+        afhaaldatum.getTime() < Date.now()
+      ) {
         setCorrectDates(false);
         enqueueSnackbar("De startdatum mag niet later zijn dan de einddatum! En ook niet in het verleden", {
           variant: "error",
@@ -191,6 +195,17 @@ const reserveringForm = ({ closeModal, product }) => {
         (titel  === "student" || titel === "Student")&&
         (verschilInDagen > 5 ||
         afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden)) {
+        enqueueSnackbar(
+          "De startdatum mag niet later zijn dan de einddatum! En ook niet in het verleden",
+          {
+            variant: "error",
+          }
+        );
+      } else if (
+        (decodedToken.Titel.toLowerCase() === "student" &&
+          verschilInDagen > 5) ||
+        afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden
+      ) {
         setCorrectDates(false);
         enqueueSnackbar(
           "De limiet voor een student is van maandag tot vrijdag! En maar 1 week vooruit!",
@@ -231,7 +246,6 @@ const reserveringForm = ({ closeModal, product }) => {
       .catch((error) => console.error("Error fetching dates:", error));
   }, []);
 
-  // deze functie is voorlopig niet nodig. Later indien dat er op andere dagen mag gereserveerd worden wel.
   const isWeekday = (date) => {
     const day = date.getDay();
 
@@ -494,22 +508,25 @@ const reserveringForm = ({ closeModal, product }) => {
               <IoIosArrowBack className="text-xl" />
               <p>Terug</p>
             </button>
-            <button
-              type="submit"
-              className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
-              onClick={handleSubmit}
-            >
-              <FaCheckCircle className="text-xl" />
-              <p>In winkelmandje</p>
-            </button>
-            <button
-              type="submit"
-              className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
-              onClick={handleNuReserveren}
-            >
-              <FaCheckCircle className="text-xl" />
-              <p>Nu reservereren</p>
-            </button>
+
+            <div className="flex flex-col gap-2">
+              <button
+                type="submit"
+                className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
+                onClick={handleSubmit}
+              >
+                <FaCheckCircle className="text-xl" />
+                <p>In winkelmandje</p>
+              </button>
+              <button
+                type="submit"
+                className="gap-2 h-auto w-auto p-3 bg-Groen rounded-xl  text-black flex justify-center items-center text-lg transform transition-transform duration-250 hover:scale-110"
+                onClick={handleNuReserveren}
+              >
+                <FaCheckCircle className="text-xl" />
+                <p>Nu reservereren</p>
+              </button>
+            </div>
           </div>
         </div>
       );

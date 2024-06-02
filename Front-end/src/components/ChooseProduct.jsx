@@ -3,14 +3,17 @@ import axios from "axios";
 import { FaBasketShopping } from "react-icons/fa6";
 import ReserveringForm from "../pages/user/reserveringform"; 
 import { useAuth } from "./AuthToken";
+import { BiShoppingBag } from "react-icons/bi";
 
-const ChooseProduct = ({ productModelNr, closeModal }) => {
+const ChooseProduct = ({ productModelNr, closeModal, productModelFoto }) => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [reserverenOpen, setReserverenOpen] = useState(false); 
+  const [reserverenOpen, setReserverenOpen] = useState(false);
   const [token] = useState(localStorage.getItem("authToken"));
 
   useAuth();
+
+  console.log("ProductModelNr: ", productModelNr);
 
   useEffect(() => {
 
@@ -27,87 +30,94 @@ const ChooseProduct = ({ productModelNr, closeModal }) => {
         console.error("Error fetching products:", error);
       });
   }, [productModelNr]);
-   useEffect(() => {
-    // Disable scrolling when the component mounts
-    document.body.style.overflow = 'hidden';
 
-    // Re-enable scrolling when the component unmounts
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     };
   }, []);
 
   const openReserveren = (product) => {
-    console.log("Product clicked reservatie: ", product)
+    console.log("Product clicked reservatie: ", product);
     setSelectedProduct(product);
     setReserverenOpen(true);
-    console.log(reserverenOpen)
+    console.log(reserverenOpen);
   };
 
   const handleProductClick = (product) => {
-    console.log("Product clicked: ", product)
+    console.log("Product clicked: ", product);
     openReserveren(product);
   };
 
-  if(reserverenOpen){
-    return <ReserveringForm closeModal={closeModal} product={selectedProduct}/>
-  } ;
+  if (reserverenOpen) {
+    return <ReserveringForm closeModal={closeModal} product={selectedProduct} />;
+  }
 
-  
+  const handleClickOutside = (event) => {
+    if (event.target === event.currentTarget) {
+      console.log("Clicked outside modal");
+      closeModal();
+    }
+  };
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Beschikbaar":
+        return "text-green-500";
+      case "Gepauzeerd":
+        return "text-blue-500";
+      case "Beschadigd":
+        return "text-red-700";
+      case "Gereserveerd":
+        return "text-yellow-500";
+      default:
+        return "text-black";
+    }
+  };
 
   return (
-    <div
-      className="fixed z-10 inset-0 overflow-y-auto"
+    <main
+      className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50"
+      onClick={handleClickOutside}
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          aria-hidden="true"
-        ></div>
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-        >
-        </span>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h3
-              className="text-lg leading-6 font-bold text-gray-900"
-              id="modal-title"
+      <div className="bg-white p-6 rounded-lg w-[35%] h-1/2 relative shadow-md">
+        <div className="flex justify-between mb-4">
+          <h1 className="text-2xl">Kies een product</h1>
+        </div>
+        <div className="absolute top-4 right-4 w-16 h-16">
+          <img
+            src={`/src/assets/ProductModelFotos/${productModelFoto}`}
+            alt="Product"
+            className="w-full h-full object-cover rounded-full"
+          />
+        </div>
+        <div className="mt-10 h-[65%] overflow-auto">
+          {products.map((product) => (
+            <div
+              key={product.productID}
+              className="flex justify-between items-start h-auto p-2 border-b"
             >
-              Kies een product
-            </h3>
-            <hr className="border border-gray-400" />
-            <br />
-            <div className="mt-2">
-              {products.map((product) => (
-                <div
-                  key={product.productID}
-                  className="flex flex-row justify-between items-center h-full mb-2"
-                >
-                  <p className="text-left w-1/3">{product.productNaam}</p>
-                  <span className="text-center w-1/3">{product.status}</span>
-                  <FaBasketShopping
-                    onClick={() => handleProductClick(product)}
-                    className="text-right w-8 h-8 cursor-pointer"
-                  />
-                </div>
-              ))}
-              <hr />
+              <p className="text-left w-[35%] h-[25px] overflow-hidden">{product.productNaam}</p>
+              <span className={`text-center w-1/3 ${getStatusColor(product.status)}`}>{product.status}</span>
+              <BiShoppingBag
+                onClick={() => handleProductClick(product)}
+                className="text-right w-6 h-6 cursor-pointer transition-transform transform hover:scale-110"
+              />
             </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              onClick={closeModal}
-              type="button"
-              className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Sluiten
-            </button>
-          </div>
+          ))}
+        </div>
+        <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-end">
+          <button
+            onClick={closeModal}
+            type="button"
+            className="text-white h-14 w-20 border rounded-xl bg-blue-800 justify-center absolute bottom-4 right-4 items-center flex p-2 shadow-lg hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Sluiten
+          </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

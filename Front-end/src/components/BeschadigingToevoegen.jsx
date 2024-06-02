@@ -50,10 +50,10 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
     const token = localStorage.getItem("authToken");
     const beschadigingdDatum = new Date().toLocaleDateString('nl-NL');
     const updatedFormData = {
-      gebruikerID: selected.gebruikerID,
-      productID: product.productID,
-      beschrijving: formData.beschrijving,
-      beschadigingdDatum: beschadigingdDatum,
+      GebruikerId: selected.gebruikerID,
+      ProductId: product.productID,
+      Beschrijving: formData.beschrijving,
+      BeschadigingsDatum: beschadigingdDatum,
     };
     console.log(updatedFormData);
     try {
