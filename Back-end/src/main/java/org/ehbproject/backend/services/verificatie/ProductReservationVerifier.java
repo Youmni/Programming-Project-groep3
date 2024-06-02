@@ -27,11 +27,7 @@ public class ProductReservationVerifier {
     ProductCrudRepository repoProduct;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
-    public boolean isProductGereserveerd(LocalDate beginDatum,LocalDate eindDatum, int[] products){
-
-        if (eindDatum.isBefore(beginDatum) || LocalDate.now().isBefore(beginDatum)){
-            return true;
-        }
+    public boolean isProductGereserveerd(LocalDate begindatum ,LocalDate einddatum, int[] products){
 
         for(int product : products){
             List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductId(product);
@@ -44,11 +40,11 @@ public class ProductReservationVerifier {
                 LocalDate afhaalDatumVorig = reservatie.getReservatie().getAfhaalDatum();
                 LocalDate terugbrengDatumVorig = reservatie.getReservatie().getRetourDatum();
 
-                logger.info(product+": "+afhaalDatumVorig+" datum om nu uit te lenen:"+ beginDatum);
-                logger.info(product+": "+terugbrengDatumVorig+" datum om nu uit te lenen:"+ eindDatum);
+                logger.info(product+": "+afhaalDatumVorig+" datum om nu uit te lenen:"+ begindatum);
+                logger.info(product+": "+terugbrengDatumVorig+" datum om nu uit te lenen:"+ einddatum);
                 boolean isOverlapping  =
-                        !(((eindDatum.isBefore(afhaalDatumVorig) &&  beginDatum.isBefore(eindDatum))||
-                        (beginDatum.isAfter(terugbrengDatumVorig) && eindDatum.isAfter(beginDatum))));
+                        !(((einddatum.isBefore(afhaalDatumVorig) &&  begindatum.isBefore(einddatum))||
+                                (begindatum.isAfter(terugbrengDatumVorig) && einddatum.isAfter(begindatum))));
                 logger.info("overlapping: "+isOverlapping);
                 if (isOverlapping ) {
                     return true;

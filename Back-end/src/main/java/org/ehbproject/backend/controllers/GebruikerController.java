@@ -74,7 +74,7 @@ public class GebruikerController {
     @CrossOrigin
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteGebruiker(@PathVariable int id) {
-        List<Gebruiker> gebruiker = repo.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = repo.findByGebruikerId(id);
         if (!gebruiker.isEmpty()) {
             repo.deleteById(id);
             return ResponseEntity.ok("Gebruiker met ID " + id + " is succesvol verwijderd");
@@ -155,7 +155,7 @@ public class GebruikerController {
     @CrossOrigin
     @GetMapping(value = "/titel/id={id}")
     public ResponseEntity<TitelDTO> getGebruikerTitelById(@PathVariable(name = "id") int id){
-        List<Gebruiker> gebruiker = repo.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = repo.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         if (!gebruiker.isEmpty()) {
             TitelDTO titelDTO = new TitelDTO(gebruikerObject.getTitel());
@@ -169,7 +169,7 @@ public class GebruikerController {
     @GetMapping(value = "/id={id}")
     public List<Gebruiker> getAllGebruikersById(@PathVariable(name = "id") int id){
 
-        return repo.findByGebruikerID(id);
+        return repo.findByGebruikerId(id);
     }
 
 }

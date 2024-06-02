@@ -62,7 +62,7 @@ public class ReservatieController {
     @PostMapping(value="/toevoegen")
     public ResponseEntity<String> addReservatie(@Validated @RequestBody ReservatieDTO reservatieDTO) {
         try {
-            List<Gebruiker> gebruikers = repoGebruiker.findByGebruikerID(reservatieDTO.getGebruikerId());
+            List<Gebruiker> gebruikers = repoGebruiker.findByGebruikerId(reservatieDTO.getGebruikerId());
             if (gebruikers.isEmpty()) {
                 throw new RuntimeException("Gebruiker met ID " + reservatieDTO.getGebruikerId() + " niet gevonden.");
             }
@@ -75,7 +75,7 @@ public class ReservatieController {
 
             int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
-            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),wekenTussen,reservatieDTO.getProducten());
+            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
             boolean isStudentEnOnderLimiet = gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12;
             boolean isDocentOfAdmin = !gebruiker.getTitel().equalsIgnoreCase("Student");
             boolean isNietGeblacklist = gebruiker.getIsGeblacklist().equalsIgnoreCase("False");
@@ -102,7 +102,7 @@ public class ReservatieController {
                 Reservatie reservatieObjectResult = reservatieObject.getFirst();
                 for(int product: reservatieDTO.getProducten()){
                     logger.info("tot hier");
-                    List<Product> productObject = repoProduct.findByProductID(product);
+                    List<Product> productObject = repoProduct.findByProductId(product);
                     Product productObjectResult = productObject.getFirst();
                     ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
                     logger.info("tot net voor hier");
@@ -178,7 +178,7 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/niet-beschikbare-datums/{id}")
     public List<LocalDate> getProductenByProductId(@PathVariable(name = "id") int id) {
-        Set<Product> product = repoProduct.findProductByProductID(id);
+        Set<Product> product = repoProduct.findProductByProductId(id);
         if(product.isEmpty()){
             return List.of();
         }
@@ -198,7 +198,7 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}")
     public List<Reservatie> getReservatiesByGebruikerId(@PathVariable(name = "id") int id) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruiker(gebruikerObject);
     }
@@ -206,7 +206,7 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}/status={status}")
     public List<Reservatie> getReservatiesByGebruikerIdAndStatus(@PathVariable(name = "id") int id, @PathVariable(name = "status") String status) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruikerAndStatus(gebruikerObject, status);
     }
@@ -214,7 +214,7 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}/actief")
     public List<Reservatie> getReservatiesByGebruikerIdAndActief(@PathVariable(name = "id") int id) {
-        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruiker = repoGebruiker.findByGebruikerId(id);
         Gebruiker gebruikerObject = gebruiker.getFirst();
         return repoReservatie.findByGebruikerAndStatusIn(gebruikerObject, List.of(new String[]{"Te laat", "Bezig", "Onvolledig", "Voorboeking"}));
     }
@@ -222,7 +222,7 @@ public class ReservatieController {
     @CrossOrigin
     @GetMapping(value = "/gebruikerId={id}/TelaatOnvolledig")
     public List<Reservatie> getReservatiesByGebruikerIdAndStatus(@PathVariable(name = "id") int id) {
-        List<Gebruiker> gebruikerList = repoGebruiker.findByGebruikerID(id);
+        List<Gebruiker> gebruikerList = repoGebruiker.findByGebruikerId(id);
 
         if (gebruikerList.isEmpty()) {
             return new ArrayList<>();

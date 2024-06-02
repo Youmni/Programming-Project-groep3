@@ -193,7 +193,7 @@ public class ProductController {
         public List<Product> getAllProductenByIdAndStatus(@PathVariable(name = "id") int id,
                                                             @PathVariable(name = "status") String status) {
 
-            return productRepo.findByProductIDAndStatusContainingIgnoreCase(id, status);
+            return productRepo.findByProductIdAndStatusContainingIgnoreCase(id, status);
         }
 
     @CrossOrigin
