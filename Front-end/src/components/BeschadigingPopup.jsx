@@ -52,7 +52,7 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
     return () => {
       window.removeEventListener("resize", checkScreenSize);
     };
-  }, []);
+  }, [beschadigingen]);
 
   const checkScreenSize = () => {
     setIsMediumScreen(window.innerWidth <= 800);
