@@ -126,8 +126,8 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="border flex flex-col lg:flex-row items-center h-auto gap-7 w-full shadow-lg">
-      <div className="flex items-center justify-between w-full lg:w-auto">
+    <nav className="border flex flex-col lg:flex-row justify-center items-center h-auto gap-7 w-full shadow-lg">
+      <div className="flex items-center justify-center gap-2 w-full lg:w-auto">
         <a href="/home">
           <img
             src={ehbLogo}
@@ -164,8 +164,8 @@ const NavBar = () => {
         </div>
       </div>
 
-      <div className="flex flex-grow w-full lg:w-auto justify-between items-center lg:ml-5">
-        <div className="flex flex-grow h-12 border-2 items-center rounded-lg gap-1 relative">
+      <div className="flex lg:flex-grow w-full lg:w-auto justify-center items-center">
+        <div className="flex lg:flex-grow sm:w-[350px]  h-12 border-2 items-center lg:justify-between rounded-lg gap-1 relative">
           <IoSearchOutline className="size-7 text-Grijs ml-2 transform transition-transform duration-250 hover:scale-110" />
           <input
             type="search"

@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
-import canonFoto from "../assets/canon-eos-200d.jpg";
-import { FaCheckCircle } from "react-icons/fa";
-import { TiDelete } from "react-icons/ti";
 import { FaPause } from "react-icons/fa";
-import { GiBrokenBone } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
-import { FaCircleInfo } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";

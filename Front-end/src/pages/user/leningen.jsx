@@ -160,17 +160,17 @@ const UserLeningen = () => {
   };
 
   return (
-    <main className="flex flex-col p-12 w-full flex-wrap gap-">
+    <main className="flex flex-col p-4 lg:p-12 w-full gap-4">
       <h1 className="flex h-auto text-4xl font-medium">
         <span className="border-b">Leningen</span>
       </h1>
 
       <div className="flex flex-col items-center gap-1 flex-wrap ">
       <h2 className="mt-8 font-bold text-xl">Shortcuts</h2>
-        <div className="flex gap-8 h-44 mt-6 border ">
+        <div className="flex gap-8 h-auto  mt-6 flex-wrap justify-center">
           <a href="#telaat-onvolledig">
           <figure
-            className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-red-100 flex-col justify-center gap-4"
+            className="flex h-44  w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-red-100 flex-col justify-center gap-4"
           >
             <BiTime className="size-16 ml-4 text-red-700" />
             <h1 className="flex flex-col-space-y-7 ml-4">
@@ -184,7 +184,7 @@ const UserLeningen = () => {
           </a>
           <a href="#lopend">
           <figure
-            className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-blue-200 flex-col justify-center gap-4"
+            className="flex h-44  w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-blue-200 flex-col justify-center gap-4"
           >
             <BiCircle className="size-16 ml-4 text-blue-600" />
             <h1 className="flex flex-col-space-y-7 ml-4">
@@ -196,7 +196,7 @@ const UserLeningen = () => {
           </a>
           <a href="#geschiedenis">
           <figure
-            className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4"
+            className="flex h-44  w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-green-100 flex-col justify-center gap-4"
           >
             <BiCheckCircle className="size-16 ml-4 text-green-600" />
             <h1 className="flex flex-col-space-y-7 ml-4">
@@ -210,7 +210,7 @@ const UserLeningen = () => {
           </a>
           <a href="#voorboeking">
           <figure
-            className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4"
+            className="flex h-44  w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-amber-100 flex-col justify-center gap-4"
           >
             <BiBook className="size-16 ml-4 text-amber-600" />
             <h1 className="flex flex-col-space-y-7 ml-4">

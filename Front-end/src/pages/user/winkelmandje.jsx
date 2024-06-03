@@ -4,10 +4,8 @@ import { BsArrowReturnLeft } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
 import BackupImage from "../../assets/backup.jpg";
 import { RiDeleteBinFill } from "react-icons/ri";
-import { useAuth } from "../../components/AuthToken";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { enqueueSnackbar } from "notistack";
 
 const Winkelmandje = ({ closeWinkelMandje }) => {
   const { winkelmandje, removeFromWinkelmandje, clearWinkelmandje } =
@@ -39,12 +37,12 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
           opmerking: product.opmerking,
           status: product.status,
           producten: [],
-          gebruikerId: id,
+          gebruikerId: Number(id),
         };
       }
       groupedProducts[key].producten.push(product.product.productID);
     });
-    
+
     const groupRequests = Object.values(groupedProducts).map(async (group) => {
       console.log("Group:", group);
       try {
@@ -61,7 +59,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
         console.error("Error submitting group request:", error);
       }
     });
-  
+
     const individualRequests = winkelmandje
       .filter((product) => !groupedProducts[product.retourDatum])
       .map(async (product) => {
@@ -93,39 +91,39 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
           console.error("Error submitting individual request:", error);
         }
       });
-      await Promise.all([...groupRequests, ...individualRequests]);
+    await Promise.all([...groupRequests, ...individualRequests]);
   };
-  
 
   const handleClickOutside = (event) => {
     if (event.target === event.currentTarget) {
       closeWinkelMandje();
     }
   };
+
   return (
     <main
       onClick={handleClickOutside}
       className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50"
     >
-      <div className="bg-white p-10 rounded-lg h-[75%] w-1/2 relative shadow-md">
+      <div className="bg-white p-10 rounded-lg w-full max-w-md h-[80%] relative shadow-md overflow-hidden">
         <h1 className="text-3xl font-semibold text-center">Winkelmandje</h1>
         {winkelmandje.length === 0 ? (
-          <div className="flex justify-center items-center h-full relative">
+          <div className="flex flex-col justify-center items-center h-full relative">
             <p className="text-3xl mb-24">Je winkelmandje is momenteel leeg</p>
             <button
               onClick={closeWinkelMandje}
               className="absolute bottom-5 left-0 ml-4 px-4 place-items-center flex gap-2 justify-center h-auto w-auto p-3 rounded-xl bg-blue-200 text-black transform transition-transform duration-250 hover:scale-110 text-lg"
             >
               <BsArrowReturnLeft className="size-6" />
-              <p>Verder zoeken</p>
+              <p className="hidden sm:block">Verder zoeken</p>
             </button>
           </div>
         ) : (
-          <div className="flex flex-wrap justify-center gap-5 h-[78%] overflow-auto mt-2 border">
+          <div className="flex flex-col gap-5 h-[78%] overflow-auto mt-2">
             {winkelmandje.map((product) => (
               <figure
                 key={product.productID}
-                className="border-2 h-[250px] overflow-auto bg-white w-[350px] rounded-2xl flex flex-col gap-2 p-5 relative shadow-lg"
+                className="border-2 h-[200px] bg-white w-full rounded-2xl flex flex-col gap-2 p-5 relative shadow-lg"
               >
                 <img
                   src={
@@ -147,14 +145,14 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
                       <h2 className="">{" " + product.retourDatum}</h2>
                     </div>
                   </div>
-
+  
                   <button
-                    className="border absolute text-white right-3 top-2  rounded-xl bg-red-500 justify-center  items-center flex p-3 hover:bg-red-800"
+                    className=" absolute right-3 top-2 text-red-500 justify-center  items-center flex transform transition-transform duration-250 hover:scale-110"
                     onClick={() =>
                       removeFromWinkelmandje(product.product.productID)
                     }
                   >
-                    <RiDeleteBinFill size={20} />
+                    <RiDeleteBinFill size={25} />
                   </button>
                 </div>
               </figure>
@@ -168,7 +166,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
               className="flex gap-2 px-4 place-items-center justify-center h-auto w-auto p-3 rounded-xl bg-blue-200 text-black transform transition-transform duration-250 hover:scale-110 text-lg"
             >
               <BsArrowReturnLeft className="size-6" />
-              <p>Verder zoeken</p>
+              <p className="hidden sm:block">Verder zoeken</p>
             </button>
             <button
               type="submit"
@@ -176,13 +174,14 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
               onClick={onSubmit}
             >
               <FaCheckCircle className="size-6" />
-              <p>Reserveren</p>
+              <p className="hidden sm:block">Reserveren</p>
             </button>
           </div>
         )}
       </div>
     </main>
   );
+  
 };
 
 export default Winkelmandje;
