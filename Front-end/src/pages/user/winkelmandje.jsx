@@ -25,7 +25,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const authToken = localStorage.getItem("authToken");
-    const id = jwtDecode(authToken).UserId;
+    const id = jwtDecode(authToken).sub;
     const groupedProducts = {};
     winkelmandje.forEach((product) => {
       const key = product.retourDatum;
@@ -70,7 +70,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
               retourDatum: product.retourDatum,
               boekingDatum: product.boekingDatum,
               reden: product.reden,
-              opmerking: product.opmerking,
+              opmerking: null,
               status: product.status,
               producten: [product.product.productID],
               gebruikerId: id,

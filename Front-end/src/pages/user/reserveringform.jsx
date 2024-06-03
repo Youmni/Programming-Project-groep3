@@ -196,24 +196,12 @@ const reserveringForm = ({ closeModal, product }) => {
         (verschilInDagen > 5 ||
         afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden)) {
         enqueueSnackbar(
-          "De startdatum mag niet later zijn dan de einddatum! En ook niet in het verleden",
-          {
-            variant: "error",
-          }
-        );
-      } else if (
-        (decodedToken.Titel.toLowerCase() === "student" &&
-          verschilInDagen > 5) ||
-        afhaaldatum.getTime() > Date.now() + eenWeekInMiliSeconden
-      ) {
-        setCorrectDates(false);
-        enqueueSnackbar(
           "De limiet voor een student is van maandag tot vrijdag! En maar 1 week vooruit!",
           {
             variant: "error",
           }
         );
-      } else {
+      }else {
         setCorrectDates(true);
         enqueueSnackbar("Datums succesvol geselecteerd", {
           variant: "success",
@@ -245,19 +233,6 @@ const reserveringForm = ({ closeModal, product }) => {
       })
       .catch((error) => console.error("Error fetching dates:", error));
   }, []);
-
-  const isWeekday = (date) => {
-    const day = date.getDay();
-
-    if (day === 0 || day === 6) {
-      return false;
-    }
-
-    if (day === 2 || day === 3 || day === 4) {
-      return false;
-    }
-    return true;
-  };
 
   const isMonday = (date) => {
     const day = date.getDay();
@@ -487,16 +462,6 @@ const reserveringForm = ({ closeModal, product }) => {
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col w-full gap-1">
-              <label className="text-lg">Opmerkingen</label>
-              <textarea
-                type="text"
-                placeholder="Eventuele opmerkingen."
-                className="p-3 rounded-xl border border-gray-300 text-gray-500"
-                value={formData.opmerking}
-                disabled="true"
-              />
             </div>
           </div>
 
