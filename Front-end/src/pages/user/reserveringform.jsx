@@ -497,7 +497,7 @@ const reserveringForm = ({ closeModal, product }) => {
 
   return (
   <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
-    <div className="bg-white p-8 rounded-lg w-full max-w-2xl h-full overflow-y-auto">
+    <div className="bg-white p-8 rounded-lg w-full max-w-2xl h-[80%] overflow-y-auto">
       {stepContent}
     </div>
   </div>
