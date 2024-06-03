@@ -55,7 +55,7 @@
 -- Retourdatum DATE NOT NULL,
 -- Boekingdatum DATE NOT NULL,
 -- Reservatiereden VARCHAR2(100) NOT NULL,
--- Reservatieopmerking VARCHAR2(100),
+-- Reservatieopmerking VARCHAR2(255),
 -- Status VARCHAR2(20),
 -- Gebruikerid NUMBER(6),
 -- CONSTRAINT pk_reservaties_reservatienr PRIMARY KEY (Reservatienr),
