@@ -7,8 +7,6 @@ import org.ehbproject.backend.dto.StatusAantalDTO;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,6 @@ public class ProductController {
         @Autowired
         ProductModelCrudRepository productmodelRepo;
 
-    private static final Logger logger = LoggerFactory.getLogger(ReservatieController.class);
 
         @CrossOrigin
         @RequestMapping(method = RequestMethod.GET)
@@ -89,8 +86,6 @@ public class ProductController {
 
             if (!reservaties.isEmpty()) {
                 boolean geldigeStatus = Arrays.asList(statussen).contains(newStatus);
-                logger.info("status"+ Arrays.toString(statussen));
-                logger.info("new status"+ newStatus);
                 if (geldigeStatus) {
                     Product status = reservaties.getFirst();
                     status.setStatus(newStatus);

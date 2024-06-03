@@ -5,7 +5,6 @@ import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductReservatieCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
-import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.ProductReservatie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

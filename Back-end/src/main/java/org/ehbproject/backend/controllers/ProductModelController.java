@@ -8,7 +8,6 @@ import org.ehbproject.backend.dto.ProductModelDTO;
 import org.ehbproject.backend.modellen.Categorie;
 import org.ehbproject.backend.modellen.Product;
 import org.ehbproject.backend.modellen.ProductModel;
-import org.ehbproject.backend.modellen.Reservatie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
