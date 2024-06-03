@@ -151,6 +151,28 @@ public class ReservatieController {
         }
     }
 
+    @CrossOrigin
+    @DeleteMapping("/verwijder/id={id}")
+    public ResponseEntity<String> verwijderReservatie(@PathVariable int id){
+        List<Reservatie> reservaties = repoReservatie.findByReservatieNr(id);
+        if (reservaties.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("reservatie met id " + id + " bestaat niet");
+        }
+        List<ProductReservatie> productReservaties = repoProductReservatie.findByReservatie_ReservatieNr(id);
+        if (productReservaties.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("productreservatie met reservatie id " + id + " bestaat niet");
+
+        }
+        Reservatie reservatie = reservaties.getFirst();
+
+        for (ProductReservatie productReservatie: productReservaties){
+            repoProductReservatie.delete(productReservatie);
+        }
+        repoReservatie.delete(reservatie);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie verwijderd");
+    }
+
 
     @CrossOrigin
     @PutMapping("/{id}/opmerking")
