@@ -11,6 +11,7 @@ import { useAuth } from "./AuthToken";
 const PopupUser = ({ onClose, gebruiker }) => {
   const [reservaties, setReservaties] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   useAuth();
 
 
@@ -30,11 +31,19 @@ const PopupUser = ({ onClose, gebruiker }) => {
     setSearchQuery(event.target.value);
   };
 
+  const handleStatusChange = (e) => { 
+    setSelectedStatus(e.target.value);
+    console.log(selectedStatus)
+  };
+
   const filteredReservaties = reservaties.filter((reservatie) =>
     String(reservatie.reservatieNr)
       .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+      .includes(searchQuery.toLowerCase())&&
+      (selectedStatus === "" || reservatie.status.toLowerCase() === selectedStatus.toLowerCase())
   );
+
+
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -142,7 +151,7 @@ const PopupUser = ({ onClose, gebruiker }) => {
             </div>
 
             <div className="flex items-center border border-gray-700 rounded-lg">
-              <select className="p-2 rounded-lg  text-black outline-none text-lg">
+              <select onChange={handleStatusChange} className="p-2 rounded-lg  text-black outline-none text-lg">
                 <option value="">status</option>
                 <option value="In orde">In orde</option>
                 <option value="Bezig">Bezig</option>
