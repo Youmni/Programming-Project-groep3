@@ -45,6 +45,8 @@ const UserLeningen = () => {
   const [gebruikerID, setGebruikerID] = useState(localStorage.getItem("authToken").userId);
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("authToken"));
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+
 
   useAuth();
 
@@ -102,7 +104,7 @@ const UserLeningen = () => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  }, [voorboekingen]);
+  }, [voorboekingen, shouldUpdate]);
 
   useEffect(() => {
     const decodedToken = jwtDecode(token).sub;
@@ -142,6 +144,7 @@ const UserLeningen = () => {
         }
       )
       .then((response) => {
+        setShouldUpdate(!shouldUpdate);
         enqueueSnackbar("Reservatie is succesvol geannuleerd!", {
           variant: "success",
         });
@@ -408,7 +411,7 @@ const UserLeningen = () => {
             {eyeToggleTeLaat ? <FaEye /> : <FaEyeSlash />}
           </span>
         </div>
-        <div className="flex w-auto  h-auto">
+        <div className="De inhoud van deze file is terug te vinden op de Teams van groep 3 w-auto  h-auto">
           {eyeToggleTeLaat ? (
             <div className="w-full h-80 overflow-auto">
               <table className="w-full">
@@ -443,7 +446,6 @@ const UserLeningen = () => {
                     </tr>
                   ) : (
                     actieveReservaties.map((reservatie) => (
-                      <div className="w-full h-80 overflow-auto">
                         <tr
                           key={reservatie.reservatieNr}
                           className="text-center space-y-4 border-2"
@@ -461,7 +463,7 @@ const UserLeningen = () => {
                           <td className="px-2">{reservatie.afhaalDatum}</td>
                           <td className="px-2">{reservatie.retourDatum}</td>
                         </tr>
-                      </div>
+
                     ))
                   )}
                 </tbody>
