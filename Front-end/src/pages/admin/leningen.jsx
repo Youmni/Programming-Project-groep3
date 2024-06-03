@@ -54,7 +54,7 @@ const Leningen = () => {
         console.error("Error fetching data: ", error);
         setLoading(false);
       });
-  }, []);
+  }, [reservaties]);
 
   const closeOpmerkingen = () => {
     setShowOpmerkingen(false);
@@ -258,7 +258,7 @@ const Leningen = () => {
                       Uitgeleend door
                     </th>
                     <th scope="col" className="px-1 font-semibold text-center">
-                    Onvolledig
+                    Onvolledig / In orde
                     </th>
                     <th scope="col" className="px-1 font-semibold text-center">
                       Afhaaldatum
@@ -278,7 +278,7 @@ const Leningen = () => {
                         colSpan="7"
                         className="bg-green-600 rounded p-4 text-white text-center"
                       >
-                        Geen reservaties die vandaag worden afgehaald
+                        Geen reservaties gevonden
                       </td>
                     </tr>
                   ) : (
