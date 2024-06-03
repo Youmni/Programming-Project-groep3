@@ -144,6 +144,9 @@ Put-requests:
     -Om de opmerking van een reservatie bij te werken: "http://localhost:8080/reservatie/{id}/opmerking"
     -Om de status van een reservatie bij te werken: "http://localhost:8080/reservatie/{id}/status"
 
+Delete-requests:
+-om reservaties te verwijderen: "http://localhost:8080/reservatie/verwijder/id={VulIn}"
+
 
 ## Blacklists
 Get-requests:
