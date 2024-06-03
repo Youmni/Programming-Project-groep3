@@ -125,9 +125,13 @@ public class ReservatieController {
                     productnaam.add(product.getProductNaam());
                 }
 
+                String email = reservatie.getGebruiker().getEmail();
+                String firstPart = email.split("\\.")[0];
+                String capitalizedFirstPart = firstPart.substring(0, 1).toUpperCase() + firstPart.substring(1);
+
                 String to = reservatie.getGebruiker().getEmail();
                 String subject = "Bevestiging van uw nieuwe reservering";
-                String body = "Geachte " + reservatie.getGebruiker().getEmail().split("\\.")[0] + "\n\n" +
+                String body = "Geachte " + capitalizedFirstPart + "\n\n" +
                         "Wij willen u informeren dat uw nieuwe reservering succesvol is verwerkt. U heeft de volgende producten gereserveerd:\n\n" +
                         String.join(", ", productnaam) + "\n\n" +
                         "Wij verzoeken u vriendelijk om deze producten op te halen op " + reservatie.getAfhaalDatum() + ".\n\n" +
