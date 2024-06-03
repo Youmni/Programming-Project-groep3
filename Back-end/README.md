@@ -1,7 +1,9 @@
 Om de backend aan te zetten open je het github project best in intellij. 
 Na het openen van het project mag je niet vergeten de GRADLE te builden.
-Vergeet ook niet de applications.properties toe te voegen onder back-end/src/main/resources en voeg onderstaande code toe
-en pas waar nodig aan.
+Indien je je niet op erasmus campus Kaai bevindt,
+en niet verbonden bent met de wifi op deze campus moet je de vpn aanzetten van erasmus hogeschool.
+Vergeet ook niet de applications.properties toe te voegen onder back-end/src/main/resources.
+voeg onderstaande code toe aan applications.properties en pas waar nodig aan.
 
 de code:
 #database
@@ -34,7 +36,6 @@ password: Zie groep 3 op teams voor database wachtwoord
 Zodra de gradle gebuild is en de application.properties aangemaakt is kan je de BackEndApplication starten.
 
 bronnen:
-
 spring boot: https://docs.spring.io/spring-boot/documentation.html
 nimbus jwt token: https://connect2id.com/products/nimbus-jose-jwt
 mede mogelijk door cursus Java Spring + hibernate van David Van Steertegem
