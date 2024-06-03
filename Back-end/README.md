@@ -1,41 +1,69 @@
-Om de backend aan te zetten open je het github project best in intellij. 
-Na het openen van het project mag je niet vergeten de GRADLE te builden.
-Indien je je niet op erasmus campus Kaai bevindt,
-en niet verbonden bent met de wifi op deze campus moet je de vpn aanzetten van erasmus hogeschool.
-Vergeet ook niet de applications.properties toe te voegen onder back-end/src/main/resources.
-voeg onderstaande code toe aan applications.properties en pas waar nodig aan.
+# MediaLabEhb
 
-de code:
-#database
-spring.application.name=Back-end
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.url=jdbc: zie teams groep 3 voor datasource url
-spring.datasource.username=groep3
-spring.datasource.password=Zie groep 3 op teams voor database wachtwoord
+## Overzicht
+Een platform voor het eenvoudig reserveren van producten en efficiënte administratie. Ons platform biedt zowel efficiëntie voor de admin als voor de gebruiker.
 
-#mail
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=uitleendienst.ehb.kaai@gmail.com
-spring.mail.password=Zie groep 3 op teams voor email pass wachtwoord
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
+## Functies
+- **Reservatie van producten**: We bieden aan de gebruikers een vlotte, simpele en duidelijke manier van reserveren.
+- **Efficiente manier van werken voor de administartor**: De admin krijgt een 
+- **Beveiliging en privacy**: Uw gegevens worden met de grootste zorg behandeld en beveiligd.
 
-#jwt secret
-jwt.secret=Zie groep 3 op teams voor jwt secret
+## Installatie
 
-vergeet ook niet de database toe te voegen in intellij onder database, oracle, service name
+1. **Clone de repo:**
 
-host: 10.2.16.21
-port: 1521
-service: orclpdb.ehb.local
-driver: thin
-username: groep 3
-password: Zie groep 3 op teams voor database wachtwoord
+### Back-end
 
-Zodra de gradle gebuild is en de application.properties aangemaakt is kan je de BackEndApplication starten.
+1. Ga naar /Back-end
+2. Build gradle
+3. Voeg een applictation.properties file toe onder Programming-Project-groep3\Back-end\src\main\resources --> de inhoud van deze file is terug te vinden op de Teams van groep 3
+4. Als deze application.properties file is toegevoegd en Gradle is ingeladen, kan de BackEndApplication gestart worden en dan draait de server (Indien u zich niet op Campus Kaai (Erasmushogeschool Brussel) bevindt, dient u een vpn connectie aan te zetten)
 
-bronnen:
-spring boot: https://docs.spring.io/spring-boot/documentation.html
-nimbus jwt token: https://connect2id.com/products/nimbus-jose-jwt
-mede mogelijk door cursus Java Spring + hibernate van David Van Steertegem
+### Front-end
+
+1. Ga naar /Front-end
+2. Open de terminal
+3. Type: npm install
+4. Type: npm run dev
+5. U kan nu via het gegeven domein het project bekijken
+
+## Hoe werkt het?
+
+### Admin
+
+1. Log in
+2. U bevind zich op het dashboard waar u een overzicht krijgt van wat er allemaal binnen moet vandaag
+3. U kan u via de sidebar naar de gewenste pagina gaan
+
+### User
+
+1. Log in
+2. Via de search bar in de header kan u direct producten opzoeken en reserveren
+3. Via de homepage kan u uw actieve reservaties zien, het inventaris bekijken (alles of via categorie) en via daar dan ook reservereren
+4. Via u profiel kan u voorboekingen annuleren en over het algemeen alle info over u reservaties zien
+5. Via u gesschiedenis die bereikbaar is via u profile kan u items opnieuw reserveren
+
+## Technologiën
+
+**Client:** React JS, Tailwind CSS
+
+**Server:** Oracle DB, Spring boot
+
+## Gebruikte documentatie
+- [JWT-token](https://connect2id.com/products/nimbus-jose-jwt)
+- [Bcrypt](https://www.baeldung.com/spring-security-registration-password-encoding-bcrypt)
+- [Spring boot](https://spring.io/projects/spring-boot)
+- [Tailwind](https://tailwindcss.com/docs/)
+- [React JS](https://react.dev/learn)
+
+## Bronnen
+- [ChatGPT JWT-token hulp](https://chatgpt.com/share/c8861603-c97a-44e1-a80b-cc83cbc150d5)
+- [ChatGPT React JS route security hulp](https://chatgpt.com/share/a0268d33-7462-4fb6-9c37-643fb92d03d4)
+- 
+
+## Auteurs
+- [@Youmni Malha](https://github.com/Youmni)
+- [@Thomas Van der Borght](https://github.com/ThomasVanderBorght)
+- [@Senne Clauwaert](https://github.com/clauwaesenne)
+
+

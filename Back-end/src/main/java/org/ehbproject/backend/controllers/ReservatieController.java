@@ -350,6 +350,8 @@ public class ReservatieController {
         statusAantallen.add(new StatusAantalDTO("In orde", repoReservatie.findByStatus("In orde").size()));
         statusAantallen.add(new StatusAantalDTO("Bezig", repoReservatie.findByStatus("Bezig").size()));
         statusAantallen.add(new StatusAantalDTO("Voorboeking", repoReservatie.findByStatus("Voorboeking").size()));
+        statusAantallen.add(new StatusAantalDTO("Onvolledig", repoReservatie.findByStatus("Onvolledig").size()));
+
 
         return statusAantallen;
     }
