@@ -7,6 +7,7 @@ import { RiDeleteBinFill } from "react-icons/ri";
 import { useAuth } from "../../components/AuthToken";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { enqueueSnackbar } from "notistack";
 
 const Winkelmandje = ({ closeWinkelMandje }) => {
   const { winkelmandje, removeFromWinkelmandje, clearWinkelmandje } =
@@ -52,7 +53,10 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
             Authorization: `Bearer ${authToken}`,
           },
         });
-        console.log("Group response:", response.data);
+        enqueueSnackbar("Reservatie succesvol, check je mail voor verdere info!", {
+          variant: "success",
+        });
+        clearWinkelmandje();
       } catch (error) {
         console.error("Error submitting group request:", error);
       }
@@ -73,7 +77,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
               opmerking: null,
               status: product.status,
               producten: [product.product.productID],
-              gebruikerId: id,
+              gebruikerId: Number(id),
             },
             {
               headers: {
@@ -81,7 +85,9 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
               },
             }
           );
-          console.log("Individual response:", response.data);
+          enqueueSnackbar("Reservatie succesvol, check je mail voor verdere info!", {
+            variant: "success",
+          });
           clearWinkelmandje();
         } catch (error) {
           console.error("Error submitting individual request:", error);

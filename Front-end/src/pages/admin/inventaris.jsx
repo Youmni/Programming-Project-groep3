@@ -171,22 +171,6 @@ const Inventaris = () => {
                 <th scope="col" className="text-left">
                   Categorie
                 </th>
-                <th
-                  scope="col"
-                  className=" flex h-full justify-center items-center  gap-1"
-                >
-                  Beschikbaar
-                  <IoMdArrowDropdown className="size-4 text-Grijs" />
-                </th>
-                <th scope="col" className="">
-                  Uitgeleend
-                </th>
-                <th scope="col" className=" ">
-                  Gereserveerd
-                </th>
-                <th scope="col" className=" ">
-                  Gepauzeerd
-                </th>
                 <th scope="col" className="text-right">
                   Actie
                 </th>
@@ -219,10 +203,6 @@ const Inventaris = () => {
                       </h2>
                     </div>
                   </td>
-                  <td className="">{model.beschikbaar}</td>
-                  <td className="">{model.uitgeleend}</td>
-                  <td className="">{model.gereserveerd}</td>
-                  <td className="">{model.gepauzeerd}</td>
                   <td className="">
                     <div className="flex justify-end items-center gap-2">
                       <Link
