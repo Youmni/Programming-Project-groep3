@@ -99,12 +99,13 @@ const UserLeningen = () => {
         },
       })
       .then((response) => {
+
         setVoorboekingen(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  }, [voorboekingen, shouldUpdate]);
+  }, [token , shouldUpdate]);
 
   useEffect(() => {
     const decodedToken = jwtDecode(token).sub;
@@ -445,7 +446,7 @@ const UserLeningen = () => {
                       </td>
                     </tr>
                   ) : (
-                    actieveReservaties.map((reservatie) => (
+                    teLaatReservaties.map((reservatie) => (
                         <tr
                           key={reservatie.reservatieNr}
                           className="text-center space-y-4 border-2"

@@ -620,6 +620,9 @@ const Dashboard = () => {
                       Uitgeleend door
                     </th>
                     <th scope="col" className="px-1 font-semibold text-center">
+                      Onvolledig
+                    </th>
+                    <th scope="col" className="px-1 font-semibold text-center">
                       Afhaaldatum
                     </th>
                     <th scope="col" className="px-1 font-semibold text-center">
@@ -637,7 +640,7 @@ const Dashboard = () => {
                         colSpan="7"
                         className="bg-green-600 rounded p-4 text-white text-center"
                       >
-                        Geen reservaties die vandaag worden afgehaald
+                        Geen reservaties die vandaag worden teruggebracht
                       </td>
                     </tr>
                   ) : (
@@ -659,6 +662,14 @@ const Dashboard = () => {
                           {`${reservatie.gebruiker.email
                             .split("@")[0]
                             .replace(".", " ")}`}
+                        </td>
+                        <td className="px-2 flex justify-center">
+                          <div>
+                            <FaComment
+                              onClick={() => handleOpmerking(reservatie)}
+                              className="w-8 h-8 p-1 mb-4 mt-auto text-neutral cursor-pointer"
+                            />
+                          </div>
                         </td>
                         <td className="px-2">{reservatie.afhaalDatum}</td>
                         <td className="px-2">{reservatie.retourDatum}</td>
@@ -725,9 +736,6 @@ const Dashboard = () => {
                       Uitgeleend door
                     </th>
                     <th scope="col" className="px-1 font-semibold text-center">
-                    Onvolledig
-                    </th>
-                    <th scope="col" className="px-1 font-semibold text-center">
                       Afhaaldatum
                     </th>
                     <th scope="col" className="px-1 font-semibold text-center">
@@ -767,14 +775,6 @@ const Dashboard = () => {
                           {`${reservatie.gebruiker.email
                             .split("@")[0]
                             .replace(".", " ")}`}
-                        </td>
-                        <td className="px-2 flex justify-center">
-                          <div>
-                            <FaComment
-                              onClick={() => handleOpmerking(reservatie)}
-                              className="w-8 h-8 p-1 mb-4 mt-auto text-neutral cursor-pointer"
-                            />
-                          </div>
                         </td>
                         <td className="px-2">{reservatie.afhaalDatum}</td>
                         <td className="px-2">{reservatie.retourDatum}</td>
