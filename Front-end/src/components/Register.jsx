@@ -3,6 +3,7 @@ import { IoInformationCircleSharp, IoEye, IoEyeOff } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -68,13 +69,13 @@ const Register = () => {
         "http://localhost:8080/gebruiker/toevoegen",
         updatedData
       );
-      console.log(response.data);
+      enqueueSnackbar("Succesvol geregistreerd", { variant: "success" });
+      navigate("/login");
     } catch (error) {
       console.error("Error registering user", error);
+      enqueueSnackbar("Fout bij registreren: Probeer opnieuw " + error, { variant: "error" });
       setError(error);
     }
-
-    error !== '' ? navigate("/login") : alert(error);
   };
 
   const togglePasswordVisibility = () => {

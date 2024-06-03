@@ -225,6 +225,7 @@ const NavBar = () => {
       {showModal && (
         <ChooseProduct
           productModelNr={selectedProductModel.productModelNr}
+          productModelFoto={selectedProductModel.productModelFoto}
           closeModal={closeModal}
         />
       )}

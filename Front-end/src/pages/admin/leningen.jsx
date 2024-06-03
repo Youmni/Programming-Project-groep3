@@ -211,6 +211,8 @@ const Leningen = () => {
     };
     return new Intl.DateTimeFormat('nl-NL', options).format(date);
   };
+
+  
   return (
     <div className="top-0 flex-grow">
       <main className="flex-grow p-10">
@@ -309,7 +311,7 @@ const Leningen = () => {
                         </td>
                         <td className="px-2">{reservatie.afhaalDatum}</td>
                         <td className="px-2">{reservatie.retourDatum}</td>
-                        <td className="px-2">
+                        <td className={`px-2 font-medium  ${getStatusColor(reservatie.status)}`}>
                             {reservatie.status}
                         </td>
                       </tr>

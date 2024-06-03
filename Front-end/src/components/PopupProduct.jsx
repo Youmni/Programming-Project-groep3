@@ -17,6 +17,7 @@ const PopupProduct = ({ onClose, model }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [product, setProduct] = useState({});
   const [showBeschadigingPopup, setShowBeschadigingPopup] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
   
   const navigate = useNavigate();
   useAuth();
@@ -52,13 +53,17 @@ const PopupProduct = ({ onClose, model }) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleStatusChange = (e) => { 
+    setSelectedStatus(e.target.value);
+    console.log(selectedStatus)
+  };
+
   const filteredProducten = producten.filter(
     (product) =>
-      product.productNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(product.productID)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+      (product.productNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(product.productID).toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedStatus === "" || product.status.toLowerCase() === selectedStatus.toLowerCase())
   );
 
   const pauzeerProduct = (product) => {
@@ -91,29 +96,6 @@ const PopupProduct = ({ onClose, model }) => {
         );
       });
   };
-
-  const deleteProduct = (product) => {
-    const token = localStorage.getItem("authToken");
-
-    axios
-      .delete(`http://localhost:8080/product/${product.productID}/delete`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        enqueueSnackbar("Product verwijderd", { variant: "success" });
-        console.log(response.data);
-        fetchProducten(); // Refetch the product data to update the UI
-      })
-      .catch((error) => {
-        console.error("Error verwijderen product: ", error);
-        enqueueSnackbar("Error: Product niet verwijderd, probeer het opnieuw", {
-          variant: "error",
-        });
-      });
-  };
-
   const beschadigingToevoegen = (product) => {
     setProduct(product);
     setShowBeschadigingPopup(true);
@@ -122,6 +104,14 @@ const PopupProduct = ({ onClose, model }) => {
   const closeBeschadigingPopup = () => {
     setShowBeschadigingPopup(false);
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -215,13 +205,11 @@ const PopupProduct = ({ onClose, model }) => {
             </div>
 
             <div className="flex items-center border border-gray-700 rounded-lg">
-              <select className="p-2 rounded-lg  text-black outline-none text-lg">
+              <select onChange={handleStatusChange} className="p-2 rounded-lg  text-black outline-none text-lg">
                 <option value="">status</option>
-                <option value="beschikbaar">Beschikbaar</option>
-                <option value="gepauzeerd">Gepauzeerd</option>
-                <option value="gereserveerd">Gereserveerd</option>
-                <option value="uitgeleend">Uitgeleend</option>
-                <option value="beschadigd">Beschadigd</option>
+                <option value="Beschikbaar">Beschikbaar</option>
+                <option value="Gepauzeerd">Gepauzeerd</option>
+                <option value="Gereserveerd">Gereserveerd</option>
               </select>
             </div>
           </section>
@@ -283,15 +271,6 @@ const PopupProduct = ({ onClose, model }) => {
                       className="bg-red-900 p-2 rounded-xl transform transition-transform duration-250 hover:scale-110"
                     >
                       <MdOutlineBrokenImage className="text-white" />
-                    </button>
-                    <button
-                      title="delete"
-                      onClick={() => {
-                        deleteProduct(product);
-                      }}
-                      className="bg-red-500 p-2 rounded-xl transform transition-transform duration-250 hover:scale-110"
-                    >
-                      <MdDelete className="text-white" />
                     </button>
                   </td>
                 </tr>

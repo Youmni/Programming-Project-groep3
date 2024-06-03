@@ -249,7 +249,7 @@ const ProductModelWijzigen = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-1/2 border ">
+            {/* <div className="flex flex-col w-1/2 border ">
               <div className="flex flex-col w-ful gap-2 mt-5 ml-8 ">
                 <label htmlFor="">Foto Toevoegen</label>
                 <input
@@ -273,7 +273,7 @@ const ProductModelWijzigen = () => {
                   className="w-40 h-auto object-cover"
                 />
               </div>
-            </div>
+            </div> */}
           </form>
         </div>
         {openCategoriePopup && (

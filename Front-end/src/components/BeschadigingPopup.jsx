@@ -17,6 +17,7 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
     useState(false);
 
   useAuth();
+  console.log(beschadigingen);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -54,12 +55,13 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
   }, []);
 
   const checkScreenSize = () => {
-    // Update de staat van isMediumScreen afhankelijk van de schermgrootte
-    setIsMediumScreen(window.innerWidth <= 800); // Bijvoorbeeld 768px als medium grootte
+    setIsMediumScreen(window.innerWidth <= 800);
   };
 
   const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
+    const query = event.target.value.toLowerCase()
+    setSearchQuery(query);
+    console.log(searchQuery )
   };
 
   const beschadigingToevoegen = (product) => {
@@ -71,6 +73,25 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
     setShowBeschadigingToevoegen(false);
   };
 
+  const filteredBeschadigingen = beschadigingen.filter((beschadiging) => {
+    const beschadigingIdMatch = beschadiging.beschadigingId.toString().toLowerCase().includes(searchQuery);
+    const gebruikerMatch = beschadiging.gebruiker.email.toLowerCase().includes(searchQuery);
+    
+      
+    return beschadigingIdMatch || gebruikerMatch
+  });
+  
+  
+
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+  
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full z-50">
       <div className="bg-white p-10 rounded-2xl h-[90%] w-[60%] relative shadow-md">
@@ -103,7 +124,7 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
               <input
                 className="outline-none text-lg w-full"
                 type="text"
-                placeholder="Product-ID"
+                placeholder="Zoek op id, gebruiker"
                 value={searchQuery}
                 onChange={handleSearch}
               />
@@ -124,15 +145,12 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
                 <th scope="col" className="text-center">
                   Registratie beschadiging
                 </th>
-                <th scope="col" className="text-right">
-                  Actie
-                </th>
               </tr>
             </thead>
             <tbody>
-              {beschadigingen.map((beschadiging, index) => (
+              {filteredBeschadigingen.map((beschadiging, index) => (
                 <tr className="h-12 w-auto ">
-                  <td className="text-center h-full">{index}</td>
+                  <td className="text-center h-full">{index+1}</td>
                   <td className="text-center">
                     #{beschadiging.beschadigingId}
                   </td>
@@ -141,15 +159,6 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
                   </td>
                   <td className="text-center">
                     {beschadiging.beschadigingsdatum}
-                  </td>
-                  <td className="text-end">
-                    <button
-                      title="Beschadiging info"
-                      onClick={() => {
-                        beschadigingToevoegen();
-                      }}
-                      className="p-2 bg-gray-800 rounded-xl"
-                    ></button>
                   </td>
                 </tr>
               ))}

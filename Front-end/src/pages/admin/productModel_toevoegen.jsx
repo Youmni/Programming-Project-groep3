@@ -212,7 +212,7 @@ const ProductModelToevoegen = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-1/2 border ">
+            {/* <div className="flex flex-col w-1/2 border ">
               <div className="flex flex-col w-ful gap-2 mt-5 ml-8 ">
                 <label htmlFor="">Foto Toevoegen</label>
                 <input
@@ -222,9 +222,10 @@ const ProductModelToevoegen = () => {
                   placeholder="Foto Toevoegen"
                   className="w-96 h-7 pl-2"         
                   onChange={handlechange}
+                  disabled
                 />
               </div>
-            </div>
+            </div> */}
           </form>
         </div>
         {openCategoriePopup && (

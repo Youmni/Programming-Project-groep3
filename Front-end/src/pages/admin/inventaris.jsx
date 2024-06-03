@@ -78,6 +78,7 @@ const Inventaris = () => {
   const filteredProductModellen = productModellen.filter((model) =>
     model.productModelNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
     model.productModelMerk.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    model.categorie.categorieNaam.toLowerCase().includes(searchQuery.toLowerCase()) ||
     String(model.productModelNr).toLowerCase().includes(searchQuery.toLowerCase())
   );
   
@@ -134,23 +135,17 @@ const Inventaris = () => {
             <breadcrumb-item>Inventaris</breadcrumb-item>
           </breadcrumb>
           <div className="items-center flex h-12 gap-4">
-            <div className="items-center flex h-full border-2 w-56 gap-2 rounded-xl border-Lichtgrijs hover:border-black">
+            <div className="items-center flex h-full border-2 w-80 gap-2 rounded-xl border-Lichtgrijs hover:border-black">
               <IoSearchOutline className="ml-2 size-6" />
               <input
                 type="search"
                 name=""
                 id=""
-                placeholder="Zoek hier"
+                placeholder="Zoek op naam, merk, categorie of Nr"
                 className="h-full w-full rounded-xl p-2 outline-none"
                 value={searchQuery}
                 onChange={handleSearch}
               />
-            </div>
-            <div className="flex h-full border-2 rounded-xl items-end justify-center border-Lichtgrijs w-28 hover:cursor-pointer">
-              <div className="flex h-full items-center justify-center gap-2">
-                <FaFilter className="size-4 text-black-600" />
-                <h2 className="text-xl font-semibold">Filter</h2>
-              </div>
             </div>
           </div>
         </div>

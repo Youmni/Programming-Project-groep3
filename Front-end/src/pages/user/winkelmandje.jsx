@@ -6,6 +6,7 @@ import BackupImage from "../../assets/backup.jpg";
 import { RiDeleteBinFill } from "react-icons/ri";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { enqueueSnackbar } from "notistack";
 
 const Winkelmandje = ({ closeWinkelMandje }) => {
   const { winkelmandje, removeFromWinkelmandje, clearWinkelmandje } =
@@ -34,7 +35,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
           retourDatum: product.retourDatum,
           boekingDatum: product.boekingDatum,
           reden: product.reden,
-          opmerking: product.opmerking,
+          opmerking: null,
           status: product.status,
           producten: [],
           gebruikerId: Number(id),
@@ -57,6 +58,9 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
         clearWinkelmandje();
       } catch (error) {
         console.error("Error submitting group request:", error);
+        enqueueSnackbar("Reservatie gefaald, probeer het opnieuw!"+ error.response.body, {
+          variant: "error",
+        });
       }
     });
 
@@ -89,6 +93,9 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
           clearWinkelmandje();
         } catch (error) {
           console.error("Error submitting individual request:", error);
+          enqueueSnackbar("Reservatie gefaald, probeer het opnieuw!"+ error.response.body, {
+            variant: "error",
+          });
         }
       });
     await Promise.all([...groupRequests, ...individualRequests]);

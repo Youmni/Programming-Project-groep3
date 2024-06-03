@@ -16,6 +16,7 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
     productID: "",
     beschrijving: "",
     beschadigingdDatum: "",
+
   });
 
   useAuth();
@@ -45,15 +46,27 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const formatDate = (date) => {
+    let dag = date.getDate();
+    let maand = date.getMonth() + 1;
+    let jaar = date.getFullYear();
+
+    dag = dag < 10 ? "0" + dag : dag;
+    maand = maand < 10 ? "0" + maand : maand;
+
+    return `${jaar}-${maand}-${dag}`;
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
     const token = localStorage.getItem("authToken");
-    const beschadigingdDatum = new Date().toLocaleDateString('nl-NL');
+    const beschadigingdDatum = formatDate(new Date());
     const updatedFormData = {
-      GebruikerId: selected.gebruikerID,
-      ProductId: product.productID,
-      Beschrijving: formData.beschrijving,
-      BeschadigingsDatum: beschadigingdDatum,
+      gebruikerId: selected.gebruikerID,
+      productId: product.productID,
+      beschrijving: formData.beschrijving,
+      beschadigingsDatum: beschadigingdDatum,
+      beschadigingsFoto: "default.jpg",
     };
     console.log(updatedFormData);
     try {
