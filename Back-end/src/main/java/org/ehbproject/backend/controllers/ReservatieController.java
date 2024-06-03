@@ -14,6 +14,7 @@ import org.ehbproject.backend.dto.ReservatieDTO;
 import org.ehbproject.backend.services.emailservice.EmailService;
 import org.ehbproject.backend.services.exceptions.InvalidStatusException;
 import org.ehbproject.backend.services.exceptions.ProductUnavailableException;
+import org.ehbproject.backend.services.verificatie.DateValidator;
 import org.ehbproject.backend.services.verificatie.ProductReservationVerifier;
 import org.ehbproject.backend.services.verificatie.ReservatieLimiet;
 import org.slf4j.Logger;
@@ -46,6 +47,9 @@ public class ReservatieController {
     @Autowired
     private ReservatieLimiet studentLimiet;
     @Autowired
+    private DateValidator isDatumCorrect;
+
+    @Autowired
     private ProductReservationVerifier beschikbaar;
 
     private static final Logger logger = LoggerFactory.getLogger(ReservatieController.class);
@@ -69,19 +73,27 @@ public class ReservatieController {
             Gebruiker gebruiker = gebruikers.getFirst();
             int aantalProductenDezeWeek = studentLimiet.checkAantalReservatiesDezeWeek(reservatieDTO.getGebruikerId());
 
-            WeekFields weekFields = WeekFields.of(Locale.getDefault());
-            int weekAfhaalDatum = reservatieDTO.getAfhaalDatum().get(weekFields.weekOfWeekBasedYear());
-            int weekRetourDatum = reservatieDTO.getRetourDatum().get(weekFields.weekOfWeekBasedYear());
+           // WeekFields weekFields = WeekFields.of(Locale.getDefault());
+          //  int weekAfhaalDatum = reservatieDTO.getAfhaalDatum().get(weekFields.weekOfWeekBasedYear());
+            //int weekRetourDatum = reservatieDTO.getRetourDatum().get(weekFields.weekOfWeekBasedYear());
 
-            int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
+           // int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
-            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
+            boolean isProductNietBeschikbaar = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
             boolean isStudentEnOnderLimiet = gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12;
             boolean isDocentOfAdmin = !gebruiker.getTitel().equalsIgnoreCase("Student");
             boolean isNietGeblacklist = gebruiker.getIsGeblacklist().equalsIgnoreCase("False");
 
+            if(!(isDatumCorrect.validateDates(reservatieDTO.getAfhaalDatum(), reservatieDTO.getBoekingDatum(), reservatieDTO.getRetourDatum(), gebruiker.getTitel()))){
+                return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE ).body("De datums die zijn geselecteerd zijn niet correct volgens de regels");
+            }
+
+            if (!(reservatieDTO.getStatus().equalsIgnoreCase("voorboeking") || reservatieDTO.getStatus().equalsIgnoreCase("bezig"))) {
+                return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE ).body("De status die is meegegeven is niet correct!");
+            }
+
             if((isStudentEnOnderLimiet || isDocentOfAdmin) && isNietGeblacklist){
-                if(beschikbaarheidsControle){
+                if(isProductNietBeschikbaar){
                 return  ResponseEntity.status(HttpStatus.CONFLICT).body("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
             }
                 Reservatie reservatie = new Reservatie(
@@ -93,21 +105,15 @@ public class ReservatieController {
                         reservatieDTO.getStatus(),
                         gebruiker
                 );
-                logger.info("tot voor het opslaan");
                 repoReservatie.save(reservatie);
-                logger.info("tot na het opslaan");
-
 
                 List<Reservatie> reservatieObject = repoReservatie.findByReservatieNr(reservatie.getReservatieNr());
                 Reservatie reservatieObjectResult = reservatieObject.getFirst();
                 for(int product: reservatieDTO.getProducten()){
-                    logger.info("tot hier");
                     List<Product> productObject = repoProduct.findByProductId(product);
                     Product productObjectResult = productObject.getFirst();
                     ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
-                    logger.info("tot net voor hier");
                     repoProductReservatie.save(productReservatie);
-                    logger.info("tot hier");
                 }
                 return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie succesvol toegevoegd"+aantalProductenDezeWeek);
             }
