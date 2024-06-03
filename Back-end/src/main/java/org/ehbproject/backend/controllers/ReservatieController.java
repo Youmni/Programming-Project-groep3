@@ -13,6 +13,7 @@ import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
 import org.ehbproject.backend.services.emailservice.EmailService;
 import org.ehbproject.backend.services.exceptions.ProductUnavailableException;
+import org.ehbproject.backend.services.verificatie.DateValidator;
 import org.ehbproject.backend.services.verificatie.ProductReservationVerifier;
 import org.ehbproject.backend.services.verificatie.ReservatieLimiet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.ehbproject.backend.services.verificatie.ReservatieLimiet.getAlleDatumsTussen;
 
@@ -46,6 +46,8 @@ public class ReservatieController {
     private ReservatieLimiet studentLimiet;
     @Autowired
     private ProductReservationVerifier beschikbaar;
+    @Autowired
+    private DateValidator isDatumCorrect;
 
     public ReservatieController(EmailService emailService) {
         this.emailService = emailService;
@@ -77,14 +79,25 @@ public class ReservatieController {
             int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
             boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
+            boolean isProductNietBeschikbaar = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
             boolean isStudentEnOnderLimiet = gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12;
             boolean isDocentOfAdmin = !gebruiker.getTitel().equalsIgnoreCase("Student");
             boolean isNietGeblacklist = gebruiker.getIsGeblacklist().equalsIgnoreCase("False");
 
+            if(!(isDatumCorrect.validateDates(reservatieDTO.getAfhaalDatum(), reservatieDTO.getBoekingDatum(), reservatieDTO.getRetourDatum(), gebruiker.getTitel()))){
+                return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE ).body("De datums die zijn geselecteerd zijn niet correct volgens de regels");
+            }
+
+            if (!(reservatieDTO.getStatus().equalsIgnoreCase("voorboeking") || reservatieDTO.getStatus().equalsIgnoreCase("bezig"))) {
+                return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE ).body("De status die is meegegeven is niet correct!");
+            }
+
             if((isStudentEnOnderLimiet || isDocentOfAdmin) && isNietGeblacklist){
                 if(beschikbaarheidsControle){
-                return  ResponseEntity.status(HttpStatus.CONFLICT).body("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
-            }
+                    if(isProductNietBeschikbaar){
+                        return  ResponseEntity.status(HttpStatus.CONFLICT).body("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
+                    }
+                }
                 Reservatie reservatie = new Reservatie(
                         reservatieDTO.getAfhaalDatum(),
                         reservatieDTO.getRetourDatum(),
@@ -112,7 +125,7 @@ public class ReservatieController {
                     productnaam.add(product.getProductNaam());
                 }
 
-                String to = "vdborghtt2005@gmail.com";
+                String to = reservatie.getGebruiker().getEmail();
                 String subject = "Bevestiging van uw nieuwe reservering";
                 String body = "Geachte " + reservatie.getGebruiker().getEmail().split("\\.")[0] + "\n\n" +
                         "Wij willen u informeren dat uw nieuwe reservering succesvol is verwerkt. U heeft de volgende producten gereserveerd:\n\n" +
