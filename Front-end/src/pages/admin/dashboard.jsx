@@ -573,7 +573,7 @@ const Dashboard = () => {
               </figure>
             </div>
             <footer className="flex justify-end">
-              <Link to={`/admin/inventaris`} className="flex items-center">
+              <Link to={`/admin/leningen`} className="flex items-center">
                 <p>Ga naar Leningen</p>
                 <MdKeyboardArrowRight className="size-5" />
               </Link>
