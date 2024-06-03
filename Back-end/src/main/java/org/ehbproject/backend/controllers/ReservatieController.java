@@ -12,13 +12,9 @@ import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
 import org.ehbproject.backend.dto.ReservatieDTO;
 import org.ehbproject.backend.services.emailservice.EmailService;
-import org.ehbproject.backend.services.exceptions.InvalidStatusException;
 import org.ehbproject.backend.services.exceptions.ProductUnavailableException;
-import org.ehbproject.backend.services.verificatie.DateValidator;
 import org.ehbproject.backend.services.verificatie.ProductReservationVerifier;
 import org.ehbproject.backend.services.verificatie.ReservatieLimiet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.ehbproject.backend.services.verificatie.ReservatieLimiet.getAlleDatumsTussen;
 
@@ -35,6 +32,7 @@ import static org.ehbproject.backend.services.verificatie.ReservatieLimiet.getAl
 @RequestMapping(value = "/reservatie")
 public class ReservatieController {
 
+    private EmailService emailService;
 
     @Autowired
     ReservatieCrudRepository repoReservatie;
@@ -47,12 +45,11 @@ public class ReservatieController {
     @Autowired
     private ReservatieLimiet studentLimiet;
     @Autowired
-    private DateValidator isDatumCorrect;
-
-    @Autowired
     private ProductReservationVerifier beschikbaar;
 
-    private static final Logger logger = LoggerFactory.getLogger(ReservatieController.class);
+    public ReservatieController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
@@ -73,27 +70,19 @@ public class ReservatieController {
             Gebruiker gebruiker = gebruikers.getFirst();
             int aantalProductenDezeWeek = studentLimiet.checkAantalReservatiesDezeWeek(reservatieDTO.getGebruikerId());
 
-           // WeekFields weekFields = WeekFields.of(Locale.getDefault());
-          //  int weekAfhaalDatum = reservatieDTO.getAfhaalDatum().get(weekFields.weekOfWeekBasedYear());
-            //int weekRetourDatum = reservatieDTO.getRetourDatum().get(weekFields.weekOfWeekBasedYear());
+            WeekFields weekFields = WeekFields.of(Locale.getDefault());
+            int weekAfhaalDatum = reservatieDTO.getAfhaalDatum().get(weekFields.weekOfWeekBasedYear());
+            int weekRetourDatum = reservatieDTO.getRetourDatum().get(weekFields.weekOfWeekBasedYear());
 
-           // int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
+            int wekenTussen = weekRetourDatum - weekAfhaalDatum + 1;
 
-            boolean isProductNietBeschikbaar = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
+            boolean beschikbaarheidsControle = beschikbaar.isProductGereserveerd(reservatieDTO.getAfhaalDatum(),reservatieDTO.getRetourDatum(),reservatieDTO.getProducten());
             boolean isStudentEnOnderLimiet = gebruiker.getTitel().equalsIgnoreCase("Student") && (aantalProductenDezeWeek+reservatieDTO.getProducten().length) <= 12;
             boolean isDocentOfAdmin = !gebruiker.getTitel().equalsIgnoreCase("Student");
             boolean isNietGeblacklist = gebruiker.getIsGeblacklist().equalsIgnoreCase("False");
 
-            if(!(isDatumCorrect.validateDates(reservatieDTO.getAfhaalDatum(), reservatieDTO.getBoekingDatum(), reservatieDTO.getRetourDatum(), gebruiker.getTitel()))){
-                return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE ).body("De datums die zijn geselecteerd zijn niet correct volgens de regels");
-            }
-
-            if (!(reservatieDTO.getStatus().equalsIgnoreCase("voorboeking") || reservatieDTO.getStatus().equalsIgnoreCase("bezig"))) {
-                return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE ).body("De status die is meegegeven is niet correct!");
-            }
-
             if((isStudentEnOnderLimiet || isDocentOfAdmin) && isNietGeblacklist){
-                if(isProductNietBeschikbaar){
+                if(beschikbaarheidsControle){
                 return  ResponseEntity.status(HttpStatus.CONFLICT).body("Er liep iets mis bij het reserveren van het product. Het lijkt erop dat het product niet beschikbaar is");
             }
                 Reservatie reservatie = new Reservatie(
@@ -106,15 +95,35 @@ public class ReservatieController {
                         gebruiker
                 );
                 repoReservatie.save(reservatie);
-
                 List<Reservatie> reservatieObject = repoReservatie.findByReservatieNr(reservatie.getReservatieNr());
                 Reservatie reservatieObjectResult = reservatieObject.getFirst();
+                ProductReservatie productReservatie = null;
                 for(int product: reservatieDTO.getProducten()){
                     List<Product> productObject = repoProduct.findByProductId(product);
                     Product productObjectResult = productObject.getFirst();
-                    ProductReservatie productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
+                    productReservatie = new ProductReservatie(productObjectResult, reservatieObjectResult);
                     repoProductReservatie.save(productReservatie);
                 }
+
+                ArrayList<String> productnaam = new ArrayList<>();
+                List<ProductReservatie> productReservaties = repoProductReservatie.findByReservatie_ReservatieNr(reservatie.getReservatieNr());
+                for(ProductReservatie productReservatieproducten : productReservaties) {
+                    Product product = productReservatieproducten.getProduct();
+                    productnaam.add(product.getProductNaam());
+                }
+
+                String to = "vdborghtt2005@gmail.com";
+                String subject = "Bevestiging van uw nieuwe reservering";
+                String body = "Geachte " + reservatie.getGebruiker().getEmail().split("\\.")[0] + "\n\n" +
+                        "Wij willen u informeren dat uw nieuwe reservering succesvol is verwerkt. U heeft de volgende producten gereserveerd:\n\n" +
+                        String.join(", ", productnaam) + "\n\n" +
+                        "Wij verzoeken u vriendelijk om deze producten op te halen op " + reservatie.getAfhaalDatum() + ".\n\n" +
+                        "Mocht u nog vragen hebben, aarzel dan niet om contact met ons op te nemen.\n\n" +
+                        "Met vriendelijke groeten,\n" +
+                        "Het medialab";
+
+                emailService.SendMail(to, subject, body);
+
                 return ResponseEntity.status(HttpStatus.CREATED).body("Reservatie succesvol toegevoegd"+aantalProductenDezeWeek);
             }
             else{
@@ -162,7 +171,6 @@ public class ReservatieController {
                 repoReservatie.save(reservatie);
                 return ResponseEntity.ok("Status van de reservatie met ID " + id + " is succesvol bijgewerkt naar " + newStatus);
             } else {
-                logger.info("Ongeldige status: "+newStatus);
                 return ResponseEntity.badRequest().body("Ongeldige status: " + newStatus);
 
             }
