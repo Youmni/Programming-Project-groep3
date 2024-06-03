@@ -202,7 +202,7 @@ const Dashboard = () => {
   }, [reservatiesRetourneren]);
 
   useEffect(() => {
-    const status = "Te laat&Onvolledig";
+    const status = "Te laat,Onvolledig";
 
     axios
       .get(`http://localhost:8080/reservatie/status?status=${status}`, {
@@ -590,7 +590,7 @@ const Dashboard = () => {
         <div className="m-8">
           <div className="flex items-center gap-5">
             <h1 className="text-xl font-semibold">
-              Reservaties die vandaag worden afgehaald
+            Reservaties die vandaag worden teruggebracht
               <sup
                 className={
                   reservatiesRetourneren.length
@@ -697,7 +697,7 @@ const Dashboard = () => {
         <div className="m-8">
           <div className="flex items-center gap-5">
             <h1 className="text-xl font-semibold">
-              Reservaties die vandaag worden teruggebracht
+            Reservaties die vandaag worden afgehaald
               <sup
                 className={
                   reservatiesAfhalen.length ? "text-red-600" : "text-green-600"

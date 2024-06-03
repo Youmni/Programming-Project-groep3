@@ -173,7 +173,7 @@ const Home = () => {
                         colSpan="6"
                         className="bg-green-600 rounded p-4 text-white text-center"
                       >
-                        Geen reservaties te laat of onvolledig zijn
+                        Geen actieve reservaties
                       </td>
                     </tr>
                   ) : (

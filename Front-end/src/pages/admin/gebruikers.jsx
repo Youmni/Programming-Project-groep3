@@ -110,21 +110,17 @@ const titelColor = (titel) => {
             <breadcrumb-item>Gebruikers</breadcrumb-item>
           </breadcrumb>
           <div className="items-center flex h-12 gap-4">
-            <div className="items-center flex h-full border-2 w-56 gap-1 rounded-xl border-Lichtgrijs">
+            <div className="items-center flex h-full border-2 w-80 gap-1 rounded-xl border-Lichtgrijs">
               <IoSearchOutline className="ml-2 size-6" />
               <input
                 type="search"
                 name=""
                 id=""
-                placeholder="Zoek hier"
+                placeholder="Zoek op nummer, naam/email of titel"
                 className="h-full w-full rounded-xl p-2"
                 value={searchQuery}
                 onChange={handleSearch}
               />
-            </div>
-            <div className="flex h-full border-2 items-center justify-center gap-3 rounded-xl border-Lichtgrijs w-28 hover:cursor-pointer">
-              <FaFilter className="size-4 text-black-600" />
-              <h2 className="text-xl font-semibold">Filter</h2>
             </div>
           </div>
         </div>
@@ -152,30 +148,18 @@ const titelColor = (titel) => {
                     <IoMdArrowDropdown className="size-4 text-Grijs" />
                   </div>
                 </th>
-                <th scope="col" className="text-left">
-                  Statuut
+                <th scope="col" className="text-center">
+                  Titel
                 </th>
-                <th scope="col" className="">
-                  <div className="flex items-center">
-                    # Leningen
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                <th scope="col" className="text-left">
-                  <div className="flex items-center">
-                    Laatste Lening
-                    <IoMdArrowDropdown className="size-4 text-Grijs" />
-                  </div>
-                </th>
-                
-                <th scope="col" className="text-right">
+            
+                <th scope="col" className="text-center">
                   Actie
                 </th>
               </tr>
             </thead>
             <tbody>
               {sortedGebruikers.map((gebruiker) => (
-                <tr key={gebruiker.gebruikerID} className="h-16 w-auto relative">
+                <tr key={gebruiker.gebruikerID} className="h-16 w-auto relative border">
                   <td className="text-center">
                     {gebruiker.gebruikerID}
                   </td>
@@ -190,16 +174,14 @@ const titelColor = (titel) => {
                       </h2>
                     </div>
                   </td>
-                  <td className="ml-2">
-                    <div className={`flex w-3/5 border h-10 items-center justify-center rounded-md ${titelColor(gebruiker.titel)}`}>
+                  <td className="ml-2 flex items-center justify-center">
+                    <div className={`flex w-3/5 border mt-3 h-10 items-center justify-center rounded-md ${titelColor(gebruiker.titel)}`}>
                       <p>{gebruiker.titel}</p>
                     </div>
                   </td>
-                  <td className="">{gebruiker.beschikbaar}</td>
-                  <td className="">{gebruiker.uitgeleend}</td>
 
                   <td className="">
-                    <div className="flex justify-end items-center gap-2">
+                    <div className="flex justify-center items-center gap-2">
                       <button
                         className="bg-Grijs text-white py-1 px-1 rounded-xl flex items-center justify-center hover:bg-black"
                         title="Edit"
