@@ -249,7 +249,6 @@ const Dashboard = () => {
     setShowOpmerkingen(false);
   };
   const handleTerugbreng = (id, producten) => {
-    useAuth();
 
     console.log(id);
 
@@ -278,7 +277,6 @@ const Dashboard = () => {
   };
 
   const handleUitleen = (id, producten) => {
-    useAuth();
 
     console.log(id);
 
@@ -307,7 +305,6 @@ const Dashboard = () => {
   };
 
   const handleProductStatus = (id, status) => {
-    useAuth();
     axios
       .put(
         `http://localhost:8080/product/${id}/bewerk-status?newStatus=${status}`,
