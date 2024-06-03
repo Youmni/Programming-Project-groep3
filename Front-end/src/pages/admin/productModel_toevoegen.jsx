@@ -65,7 +65,6 @@ const ProductModelToevoegen = () => {
   }
 
   const onSubmit = (event) => {
-    useAuth();
     event.preventDefault();
     const token = localStorage.getItem('authToken');
     const updatedFormData = {
