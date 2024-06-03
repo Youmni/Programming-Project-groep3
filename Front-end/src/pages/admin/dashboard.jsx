@@ -2,7 +2,7 @@ import react, { useEffect, useReducer, useState } from "react";
 import { RxDashboard } from "react-icons/rx";
 import { FaCheck, FaComment } from "react-icons/fa";
 import axios from "axios";
-import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCheckCircle, FaEye, FaCircleNotch ,FaEyeSlash } from "react-icons/fa";
 import { FaBox, FaTags, FaClipboardList, FaUsers } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -48,6 +48,7 @@ const Dashboard = () => {
     bezig: "...",
     teLaat: "...",
     voorboeking: "...",
+    onvolledig: "..."
   });
 
   const [algemeneStatistieken, setAlgemeneStatistieken] = useState({
@@ -140,6 +141,7 @@ const Dashboard = () => {
           bezig: 0,
           teLaat: 0,
           voorboeking: 0,
+          onvolledig: 0
         };
 
         data.forEach((item) => {
@@ -151,6 +153,9 @@ const Dashboard = () => {
             nieuweAantallen.teLaat = item.aantal;
           } else if (item.status.toLowerCase() === "voorboeking") {
             nieuweAantallen.voorboeking = item.aantal;
+          }
+          else if (item.status.toLowerCase() === "onvolledig") {
+            nieuweAantallen.onvolledig = item.aantal;
           }
         });
 
@@ -381,6 +386,14 @@ const Dashboard = () => {
       },
     });
   };
+  const leningOnvolledig = () => {
+    const status = "Onvolledig";
+    navigate("/admin/leningen", {
+      state: {
+        url: `http://localhost:8080/reservatie/status?status=${status}`,
+      },
+    });
+  };
 
   const handleOpmerking = (reservatie) => {
     setSelectedReservatie(reservatie);
@@ -568,6 +581,21 @@ const Dashboard = () => {
                   <br />
                   <span className="text-2xl text-black font-bold">
                     {leningAantallen.voorboeking}
+                  </span>
+                </h1>
+              </figure>
+              <figure
+                onClick={() => leningOnvolledig()}
+                className="flex h-full w-[120px] cursor-pointer border rounded-lg items-start border-gray-300 bg-orange-100 flex-col justify-center gap-4"
+              >
+                <FaCircleNotch className="size-16 ml-4 text-orange-700" />
+                <h1 className="flex flex-col -space-y-7 ml-4">
+                  <span className="text-base text-Grijs font-nm text-">
+                    Onvolledig
+                  </span>
+                  <br />
+                  <span className="text-2xl text-black font-bold">
+                    {leningAantallen.onvolledig}
                   </span>
                 </h1>
               </figure>
