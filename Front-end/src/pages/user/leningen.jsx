@@ -105,7 +105,7 @@ const UserLeningen = () => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  }, []);
+  }, [voorboekingen]);
 
   useEffect(() => {
     const decodedToken = jwtDecode(token).sub;
@@ -135,13 +135,10 @@ const UserLeningen = () => {
   };
 
   const handleAnnuleren = (id) => {
-    useAuth();
-    const status = "In orde";
-
     axios
-      .put(
-        `http://localhost:8080/reservatie/${id}/status?newStatus=${status}`,
-        {},
+      .delete(
+        `http://localhost:8080/reservatie/verwijder/id=${id}`,
+        
         {
           headers: {
             Authorization: `Bearer ${token}`,
