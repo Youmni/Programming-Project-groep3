@@ -108,21 +108,28 @@ const UserLeningen = () => {
   }, [token , shouldUpdate]);
 
   useEffect(() => {
-    const decodedToken = jwtDecode(token).sub;
-
-    axios
-      .get(`http://localhost:8080/reservatie/gebruikerId=${decodedToken}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchAllReservaties = async () => {
+      try {
+        const decodedToken = jwtDecode(token).sub;
+        const response = await axios.get(
+          `http://localhost:8080/reservatie/gebruikerId=${decodedToken}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setAllReservaties(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-  }, []);
+      } catch (error) {
+        console.error('Error fetching all reservaties data: ', error);
+      }
+    };
+
+    if (token) {
+      fetchAllReservaties();
+    }
+  }, [token, shouldUpdate]);
+
 
   const openModal = (reservatie) => {
     setSelectedReservatie(reservatie);
