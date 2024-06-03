@@ -1,20 +1,12 @@
-import react, { useEffect, useReducer, useState } from "react";
-import { RxDashboard } from "react-icons/rx";
+import react, { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaFilter } from "react-icons/fa6";
-import { json } from "react-router-dom";
-import { MdOutlineAddCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
 import { data } from "autoprefixer";
-import canonFoto from "../../assets/canon-eos-200d.jpg";
 import Spinner from "../../components/Spinner";
-import { HiMiniPencilSquare } from "react-icons/hi2";
 import { FaCircleInfo } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import {enqueueSnackbar} from "notistack";
 import PopupUser from "../../components/PopupUser";
 import { useAuth } from "../../components/AuthToken";
 
@@ -25,9 +17,7 @@ const Gebruikers = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedGebruiker, setSelectedGebruiker] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('authToken'));
-  console.log(gebruikers);
 
-  const navigate = useNavigate();
   useAuth();
 
 
@@ -42,7 +32,6 @@ const Gebruikers = () => {
       })
       .then((response) => {
         setGebruikers(response.data);
-        console.log(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -71,7 +60,8 @@ const Gebruikers = () => {
   const filteredGebruikers = gebruikers.filter(
     (gebruiker) =>
       gebruiker.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(gebruiker.gebruikerID).toLowerCase().includes(searchQuery.toLowerCase())
+      String(gebruiker.gebruikerID).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      gebruiker.titel.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const sortedGebruikers = filteredGebruikers.sort((a, b) => a.gebruikerID - b.gebruikerID);
 

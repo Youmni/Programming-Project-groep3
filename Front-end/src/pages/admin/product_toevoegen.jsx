@@ -35,13 +35,9 @@ const ProductToevoegen = () => {
       })
       .then((response) => {
         setProductModellen(response.data);
-        enqueueSnackbar("Product Modellen opgehaald", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar("Error: ProductModellen niet opgehaald", {
-          variant: "error",
-        });
       });
   }, []);
 
@@ -61,7 +57,6 @@ const ProductToevoegen = () => {
     })
     .then(response => {
       enqueueSnackbar("Product toegevoegd", { variant: "success" });
-      console.log("Product Toegevoegd",response.data);
       navigate("/admin/inventaris");
     })
     .catch(error => {

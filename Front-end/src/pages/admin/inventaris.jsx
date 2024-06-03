@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { TbBoxSeam } from "react-icons/tb";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaFilter } from "react-icons/fa6";
 import { MdOutlineAddCircle } from "react-icons/md";
-import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
 import Spinner from "../../components/Spinner";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { enqueueSnackbar } from "notistack";
 import KeuzePopup from "../../components/keuzePopup";
 import { FaCircleInfo } from "react-icons/fa6";
 import PopupProduct from "../../components/PopupProduct";
 import BackupImage from "../../assets/backup.jpg";
-import ProductDetailsReservatie from "../../components/ProductDetailsReservatie";
 import { useAuth } from "../../components/AuthToken";
 
 const Inventaris = () => {

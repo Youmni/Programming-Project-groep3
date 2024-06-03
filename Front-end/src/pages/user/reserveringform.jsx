@@ -79,7 +79,6 @@ const reserveringForm = ({ closeModal, product }) => {
       ...formData,
       product: product,
     };
-    console.log(productData);
     addToWinkelmandje(productData);
     closeModal();
     enqueueSnackbar("Product toegevoegd aan winkelmandje", {
@@ -229,7 +228,6 @@ const reserveringForm = ({ closeModal, product }) => {
       .then((data) => {
         const formattedDates = data.map((date) => new Date(date));
         setExcludeDates(formattedDates);
-        console.log("Dates fetched:", formattedDates);
       })
       .catch((error) => console.error("Error fetching dates:", error));
   }, []);
@@ -247,10 +245,7 @@ const reserveringForm = ({ closeModal, product }) => {
   const handleNuReserveren = async () => {
     try {
       const authToken = localStorage.getItem("authToken");
-      console.log(formData.gebruikerId);
-      console.log("formData:", formData);
-
-      console.log("Sending formData:", formData);
+      
 
       const response = await axios.post(
         `http://localhost:8080/reservatie/toevoegen`,

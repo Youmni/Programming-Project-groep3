@@ -25,10 +25,8 @@ import ProductModel_wijzigen from "./pages/admin/productModel_wijzigen";
 const App = () => {
   const location = useLocation();
   
-  console.log("Current location:", location.pathname);
 
   if (location.pathname === "/"){
-    console.log("Navigating to /login because current path is /");
     return <Login />;
   } 
 
@@ -61,7 +59,6 @@ const App = () => {
 
 const AdminRoutes = () => {
 
-  console.log("Rendering AdminRoutes");
   return (
     <div className="flex">
       <AdminSideBar />
@@ -86,7 +83,6 @@ const AdminRoutes = () => {
 };
 
 const UserRoutes = () => {
-  console.log("Rendering UserRoutes");
   return (
     <WinkelMandjeProvider>
       <div className="flex flex-col flex-grow">
@@ -106,7 +102,6 @@ const UserRoutes = () => {
 };
 
 const InventarisRoutes = () => {
-  console.log("Rendering InventarisRoutes");
   return (
     <div>
       <Routes scrollRestoration={true}>
@@ -118,7 +113,6 @@ const InventarisRoutes = () => {
 };
 
 const Forbidden = () => {
-  console.log("Rendering Forbidden");
   return <div className="flex justify-center items-center h-screen"><p className="text-5xl">403 Forbidden</p></div>;
 };
 

@@ -2,12 +2,10 @@ import React, { useEffect } from "react";
 import { SiAudioboom } from "react-icons/si";
 import axios from "axios";
 import { useState } from "react";
-import { enqueueSnackbar } from "notistack";
 import { IoIosArrowForward } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import ProductInfoStudent from "../../components/ProductInfoStudent";
-import { IoInformationCircleSharp } from "react-icons/io5";
 import { useAuth } from "../../components/AuthToken";
 
 import {
@@ -40,11 +38,9 @@ const Home = () => {
       })
       .then((response) => {
         setCategories(response.data);
-        enqueueSnackbar("Categorieën opgehaald", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar("Error", { variant: "error" });
         if (error.response && error.response.status === 401) {
           localStorage.removeItem("authToken");
           navigate("/login");
@@ -63,7 +59,6 @@ const Home = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setActieveReservaties(response.data);
       })
       .catch((error) => {
@@ -84,7 +79,6 @@ const Home = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
         setTeLaatReservaties(response.data);
       })
       .catch((error) => {

@@ -64,7 +64,6 @@ const Register = () => {
       const hashedPassword = bcrypt.hashSync(wachtwoord, salt);
       const updatedData = { ...registerData, wachtwoord: hashedPassword};
 
-      console.log(updatedData);
       const response = await axios.post(
         "http://localhost:8080/gebruiker/toevoegen",
         updatedData

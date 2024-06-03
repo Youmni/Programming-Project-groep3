@@ -87,7 +87,6 @@ const Dashboard = () => {
           }
         });
 
-        console.log(response.data);
         setAlgemeneStatistieken(nieuweAantallen);
       })
       .catch((error) => {
@@ -120,7 +119,6 @@ const Dashboard = () => {
           }
         });
 
-        console.log(response.data);
         setInventarisAantallen(nieuweAantallen);
       })
       .catch((error) => {
@@ -250,7 +248,6 @@ const Dashboard = () => {
   };
   const handleTerugbreng = (id, producten) => {
 
-    console.log(id);
 
     axios
       .put(
@@ -278,7 +275,6 @@ const Dashboard = () => {
 
   const handleUitleen = (id, producten) => {
 
-    console.log(id);
 
     axios
       .put(

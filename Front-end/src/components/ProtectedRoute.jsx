@@ -22,7 +22,6 @@ const ProtectedRoute = ({ component: Component, allowedRoles }) => {
             Authorization: `Bearer ${token}`
           }
         });
-        console.log(response.data.titel);
         const role = response.data.titel;
         if (allowedRoles.includes(role)) {
           setIsAuthorized(true);

@@ -32,7 +32,6 @@ const CategorieToevoegen = ({ onClose }) => {
         }
       );
       enqueueSnackbar("Categorie toegevoegd", { variant: "success" });
-      console.log("Catgorie succesvol toegevoegd", response.data);
       onClose();
     } catch (error) {
       console.error("Error adding product categorie: ", error);

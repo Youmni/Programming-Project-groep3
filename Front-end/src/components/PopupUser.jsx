@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import canonFoto from "../assets/canon-eos-200d.jpg";
-import { FaCheckCircle } from "react-icons/fa";
-import { TiDelete } from "react-icons/ti";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
-import { enqueueSnackbar } from "notistack";
 import {FaRegUserCircle} from "react-icons/fa";
 import { useAuth } from "./AuthToken";
 
@@ -25,7 +21,6 @@ const PopupUser = ({ onClose, gebruiker }) => {
   };
 
   const naam = formatNameFromEmail(gebruiker.email);
-  console.log(naam);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -33,7 +28,6 @@ const PopupUser = ({ onClose, gebruiker }) => {
 
   const handleStatusChange = (e) => { 
     setSelectedStatus(e.target.value);
-    console.log(selectedStatus)
   };
 
   const filteredReservaties = reservaties.filter((reservatie) =>
@@ -59,14 +53,9 @@ const PopupUser = ({ onClose, gebruiker }) => {
       )
       .then((response) => {
         setReservaties(response.data);
-        enqueueSnackbar("Reservaties opgehaald", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar(
-          "Er is iets fout gegaan bij het ophalen van de reservaties",
-          { variant: "error" }
-        );
       });
   }, []);
 

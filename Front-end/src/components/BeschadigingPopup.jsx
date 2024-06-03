@@ -17,7 +17,6 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
     useState(false);
 
   useAuth();
-  console.log(beschadigingen);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -33,7 +32,6 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
       )
       .then((response) => {
         setBeschadigingen(response.data);
-        console.log("Beschadigingen succesvol opgehaald", response.data);
       })
       .catch((error) => {
         console.error(
@@ -61,7 +59,6 @@ const BeschadigingPopup = ({ productObject, onClose }) => {
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase()
     setSearchQuery(query);
-    console.log(searchQuery )
   };
 
   const beschadigingToevoegen = (product) => {

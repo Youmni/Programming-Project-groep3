@@ -32,16 +32,10 @@ const PopupProduct = ({ onClose, model }) => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setProducten(response.data);
-        enqueueSnackbar("Producten opgehaald", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar(
-          "Er is iets fout gegaan bij het ophalen van de producten",
-          { variant: "error" }
-        );
       });
   };
 
@@ -55,7 +49,6 @@ const PopupProduct = ({ onClose, model }) => {
 
   const handleStatusChange = (e) => { 
     setSelectedStatus(e.target.value);
-    console.log(selectedStatus)
   };
 
   const filteredProducten = producten.filter(
@@ -83,7 +76,6 @@ const PopupProduct = ({ onClose, model }) => {
       )
       .then((response) => {
         enqueueSnackbar(`Product is ${newStatus}`, { variant: "success" });
-        console.log(response.data);
         fetchProducten();
       })
       .catch((error) => {

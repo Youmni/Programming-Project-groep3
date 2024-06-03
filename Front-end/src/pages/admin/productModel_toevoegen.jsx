@@ -23,8 +23,7 @@ const ProductModelToevoegen = () => {
 
   useEffect(() => {
 
-    const fetchCategories = () => {
-      axios
+        axios
         .get("http://localhost:8080/categorie", {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -32,15 +31,12 @@ const ProductModelToevoegen = () => {
         })
         .then((response) => {
           setCategories(response.data);
-          enqueueSnackbar("Categorieën opgehaald", {variant: "success"});
         })
         .catch((error) => {
           console.error("Error fetching data: ", error);
-          enqueueSnackbar("Error: Categorieën niet opgehaald", {variant: "error"});
         });
-    };
-    fetchCategories();
-  }, []);
+
+  }, [categories]);
 
   const handlechange = (event) => {
     const { name, value, type, files } = event.target;
@@ -54,7 +50,6 @@ const ProductModelToevoegen = () => {
         const selectedCategory = categories.find(categorie => categorie.categorieNaam === value);
         setFormData({ ...formData, [name]: selectedCategory ? String(selectedCategory.categorieNr) : "" });
       } else {
-        console.log(name, value); 
         setFormData({ ...formData, [name]: value});
       }
     }
@@ -79,7 +74,6 @@ const ProductModelToevoegen = () => {
       })
       .then(response => {
         enqueueSnackbar("Product Model toegevoegd", { variant: "success" });
-        console.log("Product Model Toegevoegd", response.data);
         setFormData({
           productModelNaam: "",
           productModelMerk: "",
@@ -99,7 +93,6 @@ const ProductModelToevoegen = () => {
 
   const categorieToevoegen = () => {
     setOpenCategoriePopup(true);
-    console.log("Categorie toevoegen")
   }
 
   const closeCategoriePopup = () => {
@@ -116,11 +109,9 @@ const ProductModelToevoegen = () => {
       })
       .then((response) => {
         setCategories(response.data);
-        enqueueSnackbar("Categorieën opgehaald", {variant: "success"});
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar("Error: Categorieën niet opgehaald", {variant: "error"});
       });
   }
 

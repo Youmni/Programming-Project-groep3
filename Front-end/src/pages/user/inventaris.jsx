@@ -37,12 +37,9 @@ const inventarisCategorie = () => {
       })
       .then((response) => {
         setProductModels(response.data);
-        console.log(response.data);
-        enqueueSnackbar("Productmodellen opgehaald", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar("Error", { variant: "error" });
         if (error.response && error.response.status === 401) {
           localStorage.removeItem("authToken");
           navigate("/login");

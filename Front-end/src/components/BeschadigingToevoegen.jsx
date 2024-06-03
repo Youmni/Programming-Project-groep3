@@ -31,7 +31,6 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
       })
       .then((response) => {
         setGebruikers(response.data);
-        console.log("Gebruikers succesvol opgehaald", response.data);
       })
       .catch((error) => {
         console.error(
@@ -68,7 +67,6 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
       beschadigingsDatum: beschadigingdDatum,
       beschadigingsFoto: "default.jpg",
     };
-    console.log(updatedFormData);
     try {
       const response = await axios.post(
         "http://localhost:8080/beschadiging/toevoegen",
@@ -80,7 +78,6 @@ const BeschadigingToevoegen = ({ onClose, product }) => {
         }
       );
       enqueueSnackbar("Beschadiging toegevoegd", { variant: "success" });
-      console.log("Categorie succesvol toegevoegd", response.data);
       onClose();
     } catch (error) {
       console.error("Error adding beschadiging: ", error);

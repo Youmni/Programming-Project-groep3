@@ -43,7 +43,6 @@ const OpmerkingenToevoegen = ({ reservatie, closeModal }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((response) => {
-        console.log("Opmerking opgeslagen:", response.data);
         statusUpdate(reservatie.reservatieNr, "Onvolledig");
         closeModal();
       })
@@ -60,7 +59,6 @@ const OpmerkingenToevoegen = ({ reservatie, closeModal }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((response) => {
-        console.log("Status gewijzigd:", response.data);
       })
       .catch((error) => {
         console.error("Error bij wijzigen status:", error);

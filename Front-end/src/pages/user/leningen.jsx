@@ -60,7 +60,6 @@ const UserLeningen = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setActieveReservaties(response.data);
       })
       .catch((error) => {
@@ -81,7 +80,6 @@ const UserLeningen = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
         setTeLaatReservaties(response.data);
       })
       .catch((error) => {
@@ -99,7 +97,6 @@ const UserLeningen = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setVoorboekingen(response.data);
       })
       .catch((error) => {
@@ -117,7 +114,6 @@ const UserLeningen = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setAllReservaties(response.data);
       })
       .catch((error) => {

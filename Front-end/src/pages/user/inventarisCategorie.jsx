@@ -3,10 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaFilter } from "react-icons/fa6";
 import { FaBox } from "react-icons/fa";
-import { enqueueSnackbar } from "notistack";
-import ReserveringForm from "./reserveringform";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseProduct from "../../components/ChooseProduct";
 import BackUpImage from "../../assets/backup.jpg";
@@ -34,11 +31,9 @@ const inventarisCategorie = () => {
       })
       .then((response) => {
         setProductModels(response.data);
-        enqueueSnackbar("Productmodellen opgehaald", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        enqueueSnackbar("Error", { variant: "error" });
         if (error.response && error.response.status === 401) {
           localStorage.removeItem("authToken");
           navigate("/login");

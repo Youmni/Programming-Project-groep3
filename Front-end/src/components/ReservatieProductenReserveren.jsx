@@ -12,14 +12,11 @@ const ReservatieProductReserveren = ({ reservatie, closeModal }) => {
   useAuth();
 
   const openReserveren = (product) => {
-    console.log("Product clicked reservatie: ", product)
     setSelectedProduct(product);
     setReserverenOpen(true);
-    console.log(reserverenOpen)
   };
 
   const handleProductClick = (product) => {
-    console.log("Product clicked: ", product)
     openReserveren(product);
   };
 

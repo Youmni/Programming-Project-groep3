@@ -62,8 +62,6 @@ const Leningen = () => {
   const handleTerugbreng = (id, producten) => {
     useAuth();
 
-    console.log(id);
-
     axios
       .put(
         `http://localhost:8080/reservatie/${id}/status?newStatus=In orde`,
@@ -91,7 +89,6 @@ const Leningen = () => {
   const handleUitleen = (id, producten) => {
     useAuth();
 
-    console.log(id);
 
     axios
       .put(
@@ -202,15 +199,6 @@ const Leningen = () => {
     setShowOpmerkingen(true);
   };
 
-  const formatDateToDutch = (dateStr) => {
-    const date = new Date(dateStr);
-    const options = {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric'
-    };
-    return new Intl.DateTimeFormat('nl-NL', options).format(date);
-  };
 
   
   return (
@@ -282,7 +270,7 @@ const Leningen = () => {
                       </td>
                     </tr>
                   ) : (
-                    reservaties.map((reservatie) => (
+                    sortedReservaties.map((reservatie) => (
                       <tr
                         key={reservatie.reservatieNr}
                         className="text-center space-y-4 border-2"
@@ -297,9 +285,7 @@ const Leningen = () => {
                           </div>
                         </td>
                         <td className="px-2">
-                          {`${reservatie.gebruiker.email
-                            .split("@")[0]
-                            .replace(".", " ")}`}
+                          {`${formatName(reservatie.gebruiker.email)}`}
                         </td>
                         <td className="px-2 flex justify-center">
                           <div>

@@ -37,13 +37,9 @@ const ProductModelWijzigen = () => {
         })
         .then((response) => {
           setCategories(response.data);
-          enqueueSnackbar("Categorieën opgehaald", { variant: "success" });
         })
         .catch((error) => {
           console.error("Error fetching data: ", error);
-          enqueueSnackbar("Error: Categorieën niet opgehaald", {
-            variant: "error",
-          });
         });
     };
     fetchCategories();
@@ -57,13 +53,9 @@ const ProductModelWijzigen = () => {
         })
         .then((response) => {
           setFormData(response.data[0]);
-          enqueueSnackbar("Product Model opgehaald", { variant: "success" });
         })
         .catch((error) => {
           console.error("Error fetching data: ", error);
-          enqueueSnackbar("Error: Product Model niet opgehaald", {
-            variant: "error",
-          });
         });
     };
     fetchProductModel();
@@ -110,8 +102,6 @@ const ProductModelWijzigen = () => {
       productModelBeschrijving: formData.productModelBeschrijving || "",
       productModelFoto: formData.productModelFoto || "",
     };
-    console.log("Dit is de productModelNr", productModelNr);
-    console.log("Dit is de data dat wordt doorgestuurd", updatedFormData);
     axios
       .put(
         `http://localhost:8080/productmodel/${productModelNr}/wijzig`,
@@ -124,7 +114,6 @@ const ProductModelWijzigen = () => {
       )
       .then((response) => {
         enqueueSnackbar("Product Model Gewijzigd", { variant: "success" });
-        console.log("Product Model gewijzigd", response.data);
         setFormData({
           productModelNaam: "",
           productModelMerk: "",
@@ -148,7 +137,6 @@ const ProductModelWijzigen = () => {
 
   const categorieToevoegen = () => {
     setOpenCategoriePopup(true);
-    console.log("Categorie toevoegen");
   };
 
   const closeCategoriePopup = () => {

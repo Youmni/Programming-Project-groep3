@@ -1,4 +1,3 @@
-import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 import { MdOutlineBrokenImage } from "react-icons/md";
 import BeschadigingPopup from "./BeschadigingPopup";

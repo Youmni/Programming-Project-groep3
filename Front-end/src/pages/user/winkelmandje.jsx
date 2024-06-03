@@ -12,7 +12,6 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
   const { winkelmandje, removeFromWinkelmandje, clearWinkelmandje } =
     useContext(WinkelMandjeContext);
 
-  console.log(winkelmandje);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -45,7 +44,6 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
     });
 
     const groupRequests = Object.values(groupedProducts).map(async (group) => {
-      console.log("Group:", group);
       try {
         const response = await axios.post("http://localhost:8080/reservatie/toevoegen", group, {
           headers: {
@@ -67,7 +65,6 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
     const individualRequests = winkelmandje
       .filter((product) => !groupedProducts[product.retourDatum])
       .map(async (product) => {
-        console.log("Individual:", product);
         try {
           const response = await axios.post(
             "http://localhost:8080/reservatie/toevoegen",
