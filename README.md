@@ -10,13 +10,20 @@ Een platform voor het eenvoudig reserveren van producten en efficiënte administ
 
 ## Installatie
 
-1. **Clone de repo:**
+### Vereisten
+
+- [Oracle OpenJDK](https://www.oracle.com/java/technologies/javase-downloads.html)
+- [Node.js](https://nodejs.org/)
+
+### Stappen
+
+1. Clone de repository en navigeer naar de projectdirectory.
 
 ### Back-end
 
 1. Ga naar /Back-end
-2. Build gradle
-3. Selecteer onder "project structure" je SDK. Oracle OpenJDK version 21 is vereist: [Oracle OpenJDK](https://www.oracle.com/java/technologies/javase-downloads.html)
+2. Build Gradle
+3. Selecteer onder "project structure" in de settings je SDK. Oracle OpenJDK version 21 is vereist: [Oracle OpenJDK](https://www.oracle.com/java/technologies/javase-downloads.html)
 4. Voeg een applictation.properties file toe onder Programming-Project-groep3\Back-end\src\main\resources --> de inhoud van deze file is terug te vinden op de Teams van groep 3
 5. Als deze application.properties file is toegevoegd en Gradle is ingeladen, kan de BackEndApplication gestart worden en dan draait de server (Indien u zich niet op Campus Kaai (Erasmushogeschool Brussel) bevindt, dient u een vpn connectie aan te zetten)
 
