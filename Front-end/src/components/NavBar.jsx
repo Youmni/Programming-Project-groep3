@@ -1,104 +1,236 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import ehbLogo from "../assets/ehb-logo.jpg";
-import { IoIosMenu } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
-
+import { BiShoppingBag } from "react-icons/bi";
+import WinkelMandje from "../pages/user/winkelmandje";
+import axios from "axios";
+import { IoLogOut } from "react-icons/io5";
+import ChooseProduct from "./ChooseProduct";
+import { WinkelMandjeContext } from "../contexts/winkelmandjeContext";
 
 const NavBar = () => {
-
-  // For clicking inside and outside of the box --->>
   const [clicked, setClicked] = useState(false);
+  const [winkelMandje, setWinkelMandje] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const { winkelmandje } = useContext(WinkelMandjeContext);
+  const [search, setSearch] = useState("");
+  const [productModellen, setProductModellen] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProductModel, setSelectedProductModel] = useState(null);
   const node = useRef();
+  const navigate = useNavigate();
+  const nodeSearchResults = useRef();
 
-  const handleClickOutside = e => {
-    if (node.current.contains(e.target)) {
-      // inside click
+  const handleClickOutside = (e) => {
+    if (
+      (node.current && node.current.contains(e.target)) ||
+      (nodeSearchResults.current &&
+        nodeSearchResults.current.contains(e.target))
+    ) {
       return;
     }
-    // outside click 
     setClicked(false);
+    setSearch("");
   };
 
   useEffect(() => {
-    if (clicked) {
-      // add when mounted
+    if (clicked || search.length > 0) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
-      // return function to be called when unmounted
       document.removeEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      // cleanup
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [clicked]);
+  }, [clicked, search]);
 
   const handleButtonClick = () => {
     setClicked(!clicked);
-  }
-  //<<--
-  // fetch categories
+  };
+
+  const openWinkelMandje = () => {
+    setWinkelMandje(true);
+  };
+
+  const closeWinkelMandje = () => {
+    setWinkelMandje(false);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    axios
+      .get("http://localhost:8080/categorie", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+
+    axios
+      .get("http://localhost:8080/productmodel", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setProductModellen(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("winkelmandje");
+    localStorage.removeItem("formData");
+    navigate("/login");
+  };
+
+  const handleSearch = (e) => {
+    const zoekTerm = e.target.value.toLowerCase();
+    if (zoekTerm === "") {
+      setSearch([]);
+      return;
+    }
+    setSearch(
+      productModellen.filter(
+        (productModel) =>
+          productModel.productModelNaam
+            .toLowerCase()
+            .includes(zoekTerm.toLowerCase()) ||
+          productModel.productModelMerk
+            .toLowerCase()
+            .includes(zoekTerm.toLowerCase())
+      )
+    );
+  };
+
+  const openModal = (productModel) => {
+    setSelectedProductModel(productModel);
+    setShowModal(true);
+    setSearch("");
+    navigate("/inventaris");
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
-  <>
-    <nav className="border flex items-center gap-7 flex-grow justify-between">
-      <a href="/home">
-        <header className="flex w-full h-20 gap-x-3 items-center ">
+    <nav className="border flex flex-col lg:flex-row justify-center items-center h-auto gap-7 w-full shadow-lg">
+      <div className="flex items-center justify-center gap-2 w-full lg:w-auto">
+        <a href="/home">
           <img
             src={ehbLogo}
             alt="ehb Logo"
-            className="h-full ml-2 items-center object-cover flex"
+            className="h-16 ml-2 object-contain cursor-pointer"
           />
-          <div className="flex border h-12 border-red-500"></div>
-          <h1 className="flex flex-col -space-y-8">
-            <span className="text-2xl text-red-500">Medialab</span>
-            <br />
-            <span className="text-xs text-Lichtgrijs}">Uitleendienst</span>
-          </h1>
-        </header>
-      </a>
+        </a>
 
-      {/* Categorie button + pop up */}
-      <div className="border w-auto " ref={node} >
-        <button onClick={handleButtonClick}>
-          <IoIosMenu className="flex h-full size-12 text-black hover:bg-gray-200 p-2" />
+        <div className="relative z-50" ref={node}>
+          <div
+            onClick={handleButtonClick}
+            className="flex items-center justify-center hover:bg-zinc-200 cursor-pointer rounded-lg  p-2"
+          >
+            <span className="text-Grijs font-semibold">Categorieën</span>
+            <IoIosArrowDown className="size-4 text-Grijs " />
+          </div>
           {clicked && (
-            <div className="origin-top-right absolute -right-1/2 transform translate-x-1/2 mt-4 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
-              <h3 className='text-lg'>Categoriën</h3>
-              <ul>
-                <li className='hover:bg-blue-500 hover:text-white'>Audio</li>
-                <li className='hover:bg-blue-500 hover:text-white'>Video</li>
-                <li className='hover:bg-blue-500 hover:text-white'>XR</li>
-                <li className='hover:bg-blue-500 hover:text-white'>Tools</li>
-                <li className='hover:bg-blue-500 hover:text-white'>Belichting</li>
-                <li className='hover:bg-blue-500 hover:text-white'>Varia</li>
-              </ul>
+            <div className="origin-bottom absolute left-0 mt-4 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
+              <h3 className="text-lg">Categorieën</h3>
+              <div className="flex flex-col">
+                {categories.map((categorie, index) => (
+                  <Link
+                    to={`/inventaris/${categorie.categorieNr}`}
+                    onClick={() => setClicked(false)}
+                    key={index}
+                    className="hover:bg-blue-500 p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    {categorie.categorieNaam}
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
-        </button>
+        </div>
       </div>
-      
-      <div className="flex">
-        <div className="flex flex-grown h-12  border items-center gap-1 mr-5">
-          <IoSearchOutline className="size-7 text-Grijs ml-2" />
+
+      <div className="flex lg:flex-grow w-full lg:w-auto justify-center items-center">
+        <div className="flex lg:flex-grow sm:w-[350px]  h-12 border-2 items-center lg:justify-between rounded-lg gap-1 relative">
+          <IoSearchOutline className="size-7 text-Grijs ml-2 transform transition-transform duration-250 hover:scale-110" />
           <input
             type="search"
             name="search-bar"
             id=""
-            placeholder="Zoek hier..."
-            className="h-full w-full  rounded-lg border-Lichtgrijs p-2"
+            placeholder="Zoek hier naar een productmodel..."
+            className="h-full w-full rounded-lg border-Lichtgrijs p-2 overflow-hidden"
+            onChange={handleSearch}
           />
+
+          {search.length > 0 && (
+            <div
+              ref={nodeSearchResults}
+              className="absolute top-16 p-4 bg-white text-black w-full max-h-[600px] overflow-auto rounded-xl flex flex-col z-10 border"
+            >
+              <label className="font-semibold mb-2">Product Modellen</label>
+              {search.map((productModel, index) => (
+                <span
+                  onClick={() => openModal(productModel)}
+                  className="cursor-pointer p-2 hover:bg-blue-500 hover:text-white rounded-lg flex gap-4"
+                  key={index}
+                >
+                  <p>{productModel.productModelMerk}</p>
+                  <p>{productModel.productModelNaam}</p>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-        <FaUser className="flex h-full size-12 text-black hover:bg-gray-200 p-2" />
-        <FaShoppingCart className="flex h-full size-12 text-black hover:bg-gray-200 p-2 mx-5" />
+
+        <div className="flex h-full w-1/5 ml-5 items-center justify-evenly">
+          <Link to={"/leningen"}>
+            <FaUser className="size-14 text-Grijs p-2 transform transition-transform duration-250 hover:scale-110" />
+          </Link>
+
+          <button
+            className="flex relative cursor-pointer transform transition-transform duration-250 hover:scale-110 "
+            onClick={openWinkelMandje}
+          >
+            <BiShoppingBag className="text-5xl text-Grijs" />
+            <div className="absolute w-5 h-5 rounded-full z-10 right-[-3px] bottom-[-3px] flex items-center justify-center text-[14px] bg-red-500 text-white">
+              <span>{winkelmandje.length}</span>
+            </div>
+          </button>
+          <div
+            className="flex h-full items-center justify-evenly"
+            style={{ width: "60px" }}
+          >
+            <IoLogOut
+              className="size-14 text-Grijs p-2 cursor-pointer rounded-xl hover:text-rood transform transition-transform duration-250 hover:scale-110"
+              onClick={handleLogout}
+            />
+          </div>
+        </div>
       </div>
+      {winkelMandje && <WinkelMandje closeWinkelMandje={closeWinkelMandje} />}
+      {showModal && (
+        <ChooseProduct
+          productModelNr={selectedProductModel.productModelNr}
+          productModelFoto={selectedProductModel.productModelFoto}
+          closeModal={closeModal}
+        />
+      )}
     </nav>
-  </>
   );
 };
 
 export default NavBar;
-
-// test

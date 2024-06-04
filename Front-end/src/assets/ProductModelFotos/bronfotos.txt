@@ -1,0 +1,68 @@
+isense: https://www.3dnatives.com/3D-compare/en/3d-scanners/isense/
+Prime lens 7,5mm F/2.8: https://www.kamera-express.be/7artisans-7-5mm-f-2-8-mft-mark-ii
+Mega Tripar Profile Plus: https://www.adj.com/mega-tripar-profile-plus
+akai apc40 mkii: https://www.bax-shop.be/nl/midi-studio-controllers/akai-apc40-mkii-performance-controller-voor-ableton
+akai MIDI Pad Controller MPD 232: https://www.bax-shop.be/nl/midi-studio-controllers/akai-mpd232-usb-midi-controller
+akg C 451 B: https://www.thomann.de/be/akg_c451b.htm
+akg k-55: https://www.amazon.nl/-/en/AKG-K-55-Traditional-Headphones/dp/B0002DEZL0
+akg K 271 MK II: https://www.thomann.de/be/akg_k271_mkii.htm
+adafruit ESP32 Feather: https://www.distrelec.be/en/huzzah32-esp32-feather-board-adafruit-3591/p/30129233
+anatari Z-1200II Fog Machine: https://antari.com/products/z-1200ii/
+Apple iPad Air 2 Wifi 16 GB Space Gr: https://niwzi.be/nl/apple-ipad-air-2-cell-16gb-space-gray-mggx2nf-a-142443
+apple iPad Air Wifi 32GB Silver: https://www.refurbed.be/p/ipad-air-1/29c/?co=be&utm_cluster=gradeC&utm_content=ipad-air-1-29c&utm_group=ipad-air-1&gad_source=1&gclid=Cj0KCQjw0ruyBhDuARIsANSZ3wrK9YQ396jfVthiqSlhsfxbpkbVrMGCNivGwtefEqaM4jdln6leaugaAg5hEALw_wcB
+Apple iPad pro silver: https://www.mediamarkt.be/nl/product/_apple-ipad-pro-11-128-gb-wi-fi-silver-2022-mnxe3nf-a-2039944.html?utm_source=google&utm_medium=cpc&utm_campaign=&utm_term=&utm_content=2039944&gclsrc=aw.ds&gad_source=1&gclid=Cj0KCQjw0ruyBhDuARIsANSZ3wqvlgiOSYMYcaoubbubLdhBBO0Z0CEufWKMfTIrvks9qidzxYCZvPwaAtDHEALw_wcB
+Apple pencil: https://www.apple.com/be-nl/shop/product/MQLY3ZM/A/apple-pencil-1e-generatie
+Apple Magic Mouse: https://www.apple.com/shop/product/MK2E3AM/A/magic-mouse-white-multi-touch-surface
+Apple Keyboard: https://www.apple.com/be-nl/shop/product/MK293MG/A/magic-keyboard-with-touch-id-for-mac-models-with-apple-silicon-hungarian
+Arduino UNO R3: https://www.amazon.com.be/-/nl/Arduino-A000066-UNO-Rev3/dp/B008GRTSV6?language=nl_BE
+Artec Eva: https://www.artec3d.com/portable-3d-scanners/artec-eva
+Audio Technica ATR 3350: https://vsystem.bg/en/audio-technica-atr3350-microphone
+Behringer NOX101: https://www.musicstore.com/nl_BE/EUR/Behringer-NOX101-2-kanaal-Battle-DJ-mixer/art-DJE0004724-000
+benro kh25p: https://www.kamera-express.be/benro-kh25p-video-statiefkit
+beyerdynamic DT 770 PRO: https://www.bax-shop.be/nl/studio-koptelefoons/beyerdynamic-dt-770-pro-250-ohm-gesloten-studio-hoofdtelefoon
+birddog PTZ keyboard: http://shop.vianto.be/nl/ptz-range/3831-birddog-ptz-keyboard-controller-wndi-visca-rs-232-rs422-birddog-comms-compatible.html
+birddog Eyes P100: https://birddog.tv/p100-overview/
+Blackmagic ATEM Television Studio HD: https://www.blackmagicdesign.com/media/release/20170206-01
+Blackmagic Cinema Camera 1: https://www.redsharknews.com/production/item/5402-the-blackmagic-design-pocket-cinema-camera-was-a-design-classic
+Blackmagic Micro Converter BiDirectional: http://shop.vianto.be/en/converters/3960-blackmagic-design-micro-converter-bidirectional-sdihdmi-12g-power-supply-included.html
+Blackmagic Atem Mini Pro: https://www.thomann.de/be/blackmagic_design_atem_mini_pro.htm
+BlueYetiX: https://www.networkhardwares.com/products/blue-yeti-x-professional-usb-condenser-microphone-988-000105
+breadboard: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.indiamart.com%2Fproddetail%2Fbreadboard-400-tie-points-21680092912.html&psig=AOvVaw0cowGEcrzbuRgr7FCLOVbI&ust=1717161173624000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOibhPy5tYYDFQAAAAAdAAAAABAV
+BresserBR12BBi-colorLedPaneel6: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bol.com%2Fbe%2Fnl%2Fp%2Fbresser-led-studiolamp-br-12b-bi-color-24w-met-touch-screen%2F9200000114746328%2F&psig=AOvVaw0NhTaFg-y7rdZZ33VfA3S1&ust=1717161299885000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJCBl7i6tYYDFQAAAAAdAAAAABAE
+BresserLedPt-15BMetTas: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bol.com%2Fbe%2Fnl%2Fp%2Fbresser-pt-15b-ii-led-bi-color-set-met-tas%2F9200000106967597%2F&psig=AOvVaw0nsZ0tRxznhvSdHUXzxIYy&ust=1717161342157000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMCNkNO6tYYDFQAAAAAdAAAAABAK
+BresserBr2240: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.kamera-express.be%2Fbresser-br-2240-1875w-daglichtset-&psig=AOvVaw2l8Q2PfkVefH1V77ACplXu&ust=1717161394669000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCPCHp-a6tYYDFQAAAAAdAAAAABAJ
+BresserBrCr1: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.kamera-express.be%2Fbresser-br-cr1-video-crane-statief-op-wiele&psig=AOvVaw1IRmoIX0ScF81tVkSWvjaf&ust=1717161442595000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNDw__-6tYYDFQAAAAAdAAAAABAE
+CanonM50: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.kamera-express.be%2Fcanon-eos-m50-zwart15-45mm-is-stm&psig=AOvVaw03RFvHy9QMXveyhHmXybNz&ust=1717161474020000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLib_Yq7tYYDFQAAAAAdAAAAABAU
+CanonXa35: https://www.google.com/imgres?q=CanonXa35&imgurl=https%3A%2F%2Fi1.adis.ws%2Fi%2Fcanon%2Fxa35-hand-grip-fsl_07151cc851a6430fa95b6afbb7e213b4%3F%24block-hero-header-3by2-dt-jpg%24&imgrefurl=https%3A%2F%2Fnl.canon.be%2Ffor_home%2Fproduct_finder%2Fcamcorders%2Fprofessional%2Fxa35%2F&docid=NC2A1y5NIVK65M&tbnid=pVXOYf982iZPbM&vet=12ahUKEwj836afu7WGAxUKRKQEHbSFB_UQM3oECBkQAA..i&w=800&h=534&hcb=2&ved=2ahUKEwj836afu7WGAxUKRKQEHbSFB_UQM3oECBkQAA
+CanonEos700d: https://www.google.com/url?sa=i&url=https%3A%2F%2Fnl.canon.be%2Ffor_home%2Fproduct_finder%2Fcameras%2Fdigital_slr%2Feos_700d%2F&psig=AOvVaw0_D2xRFQQXaVwp0FDhkVNd&ust=1717162082306000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMiwla29tYYDFQAAAAAdAAAAABAE
+CanonZoomlensEfM5520: https://www.google.com/url?sa=i&url=https%3A%2F%2Fnl.canon.be%2Flenses%2Fef-s-55-250mm-f-4-5-6-is-stm-lens%2F&psig=AOvVaw3lCwj4LLUfPG_vzUsuiojm&ust=1717162152956000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLjqzNG9tYYDFQAAAAAdAAAAABAK
+CanonEosR1: https://www.google.com/url?sa=i&url=https%3A%2F%2Fnl.canon.be%2Fcameras%2Feos-r1%2F&psig=AOvVaw3s9cqstIfNRnAxIunflT0M&ust=1717162189534000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCPDK2-C9tYYDFQAAAAAdAAAAABAE
+CanonsStandaarlensRf24: https://www.google.com/imgres?q=CanonsStandaarlensRf24&imgurl=https%3A%2F%2Fi1.adis.ws%2Fi%2Fcanon%2F6347C005_RF%252024-105mm%2520F2.8L%2520IS%2520USM%2520Z_PK_01%2Fcanon-rf-24-105mm-f2-8l-is-usm-z-lens-vooraanzicht-van-product%3Fw%3D1500%26bg%3Dgray95&imgrefurl=https%3A%2F%2Fstore.canon.be%2Fcanon-rf-24-105mm-f2-8l-is-usm-z-lens%2F6347C005%2F&docid=nUWRaMkx3YMZnM&tbnid=G1zjUUfp2StnzM&vet=12ahUKEwjdmobxvbWGAxWxRqQEHaHaD-MQM3oECBEQAA..i&w=1500&h=1500&hcb=2&ved=2ahUKEwjdmobxvbWGAxWxRqQEHaHaD-MQM3oECBEQAA
+CanonEfM1545f35:  https://www.google.com/imgres?q=CanonEfM1545f35&imgurl=https%3A%2F%2Fi1.adis.ws%2Fi%2Fcanon%2F0597C005_EF-M-15-45MM-Silver_1%2Fcanon-ef-m-15-45mm-f-3-5-6-3-is-stm-lens-zilver-product-vooraanzicht%3Fw%3D1500%26bg%3Dgray95&imgrefurl=https%3A%2F%2Fstore.canon.be%2Fcanon-ef-m-15-45mm-f-3-5-6-3-is-stm-lens-zilver%2F0597C005%2F&docid=wn7Z3Ip1-5NrRM&tbnid=neZAoTzZAn_i4M&vet=12ahUKEwiDtoK3vrWGAxUbRKQEHeAoAwkQM3oECBYQAA..i&w=1500&h=1500&hcb=2&ved=2ahUKEwiDtoK3vrWGAxUbRKQEHeAoAwkQM3oECBYQAA
+CokinNisiNdVario: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.aliexpress.com%2Fi%2F4001217026208.html&psig=AOvVaw39piSRf2-BSOQgWwdkh7kh&ust=1717162398835000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOjC78W-tYYDFQAAAAAdAAAAABAE
+
+sony ECM-NV1: https://www.ebay.com/itm/186108260748
+sony Handycam HDR-CX210: https://www.cnet.com/reviews/sony-handycam-hdr-cx210-review/
+sony Alpha 7 III: https://www.sony.be/nl/interchangeable-lens-cameras/products/ilce-7m3-body-kit
+sony Playstation Eye: https://en.wikipedia.org/wiki/PlayStation_Eye
+sony Zoomlens FE 24-105MM F/4.0G OS: https://www.kamera-express.be/sony-fe-24-105mm-f-4-0g-oss
+sony Prime Lens FE 28MM F/2.0 (SEL2: https://www.kamera-express.be/sony-fe-28mm-f-2-0
+sony VCT-R640: https://www.sony.be/nl/electronics/handycam-camcorders-statieven-afstandsbedieningen/vct-r640
+sony E-mount 24-105mm: https://www.kamera-express.be/sony-fe-24-105mm-f-4-0g-oss
+SteamVR tracker: https://www.amazon.com/HTC-Tracker-TrackBelt-TrackStraps-Tracking/dp/B095JWMKGT
+steelseries Tobii Eye Tracking: https://steelseries.com/press/2-future-streaming-unveiled-steelseries-sentry-eye-tracker
+stereolabs Zed 2i: https://store.stereolabs.com/en-eu/products/zed-2i
+tiffen 77mm Variable ND Filter: https://www.bhphotovideo.com/c/product/813278-REG/Tiffen_77VND_77mm_Variable_Neutral_Density.html
+tiffen 82mm Variable ND Filter: https://www.bhphotovideo.com/c/product/821128-REG/Tiffen_82VND_82mm_Variable_Neutral_Density.html
+viltrox AF 85/1.8 RF lens: https://www.grobet.be/nl/viltrox-rf-85-f-1-8-af-canon-rf-mount-foto-grobet-fle101-001202
+Vive Pro 2: https://www.alternate.be/HTC/Vive-Pro-2-vr-bril/html/product/1745889
+vive tracker: https://www.amazon.com.be/-/en/99HASS001-00/dp/B08WFS5BMY
+Vuze 360: https://www.bhphotovideo.com/c/product/1290531-REG/vuze_vuze_1_blk_4k_3d_360_spherical.html
+westcott X Drop green screen: https://www.fjwestcott.com/products/x-drop-wrinkle-resistant-backdrop-kit-chroma-key-green-screen-5-x-7
+westcott X Drop White screen: https://www.fjwestcott.com/products/x-drop-wrinkle-resistant-backdrop-kit-high-key-white-5-x-7
+xsens motion capture suit product: https://www.knoxlabs.com/products/mvn-link-suit
+Yamaha HS5: https://www.bax-shop.be/nl/studio-monitor/yamaha-hs5-actieve-studiomonitor-per-stuk
+Yamaha MG12 XU: https://www.musicstore.com/nl_BE/EUR/Yamaha-MG12XU-12-kanaal-mixer/art-PAH0015350-000
+Zoom H1: https://www.thomann.de/be/zoom_h1n.htm
+Zoom H4n Pro Recorder: https://www.thomann.de/be/zoom_h4n_pro_black.htm
+Zoom F1: https://www.kamera-express.be/zoom-f1-lp-field-recorder-met-lavalier-microfoon?hic_camp=google_ads%3A18245099718%3A142552623284%3A619944940531&gad_source=1&gclid=CjwKCAjwx-CyBhAqEiwAeOcTdVZVjmrAcxjkGwI65SbEaCZYhQT-tppmE_3VTMvqmauJjQWnUpBOHhoCCZIQAvD_BwE
