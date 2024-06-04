@@ -12,7 +12,7 @@ Een platform voor het eenvoudig reserveren van producten en efficiënte administ
 
 ### Vereisten
 
-- [Oracle OpenJDK](https://www.oracle.com/java/technologies/javase-downloads.html)
+- [Oracle OpenJDK](https://www.oracle.com/java/technologies/javase-downloads.html) versie 21
 - [Node.js](https://nodejs.org/)
 
 ### Stappen
