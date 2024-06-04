@@ -89,7 +89,7 @@ const PopupUser = ({ onClose, gebruiker }) => {
 
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-10 rounded-2xl h-[100%] w-[60%] relative shadow-md">
+      <div className="bg-white p-10 rounded-2xl h-[95%] w-[60%] relative shadow-md">
         <section className="flex gap-3 items-start">
           <div className="flex flex-col items-center text-black justify-center gap-2">
             <FaRegUserCircle className="size-24" />
@@ -106,7 +106,7 @@ const PopupUser = ({ onClose, gebruiker }) => {
         <section className="flex justify-start flex-wrap gap-5 mt-4">
           {statusCounts["In orde"] && (
             <div className="bg-green-500 px-2 py-1 rounded-3xl text-white font-semibold flex items-center text-sm">
-              Beschikbaar ({statusCounts["In orde"]})
+              In orde ({statusCounts["In orde"]})
             </div>
           )}
           {statusCounts["Bezig"] && (
@@ -126,7 +126,7 @@ const PopupUser = ({ onClose, gebruiker }) => {
           )}
         </section>
         <h2 className="font-bold mt-4 text-gray-700 text-xl">Overzicht</h2>
-        <section className="mt-2 border-2 flex flex-col max-h-[380px] overflow-y-auto border-gray rounded-lg p-3">
+        <section className="mt-2 border-2 flex flex-col max-h-[60%] overflow-y-auto border-gray rounded-lg p-3">
           <section className="flex justify-start gap-6 sticky top-0 z-50 bg-white">
             <div className="flex items-center bg-white border border-gray-700 rounded-lg p-3 gap-2 w-[40%]">
               <CiSearch className="text-gray-500 font-bold" size={18} />{" "}

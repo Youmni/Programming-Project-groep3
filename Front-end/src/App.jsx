@@ -15,7 +15,6 @@ import Footer from "./pages/footer";
 import FAQ from "./pages/user/FAQ";
 import UserLeningen from "./pages/user/leningen";
 import InventarisCategorie from "./pages/user/inventarisCategorie";
-import Winkelmandje from "./pages/user/winkelmandje";
 import { WinkelMandjeProvider } from "./contexts/winkelmandjeContext";
 import Register from "./components/Register";
 import ProductModel_toevoegen from "./pages/admin/productModel_toevoegen";
