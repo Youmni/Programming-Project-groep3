@@ -78,6 +78,7 @@ public class ProductModelController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductModel met ID " + id + " niet gevonden");
         }
     }
+    @CrossOrigin
     @PutMapping("/{id}/wijzig")
     public ResponseEntity<String> updateProductModel(@PathVariable int id, @RequestBody ProductModelDTO modelDTO) {
 
@@ -95,6 +96,7 @@ public class ProductModelController {
             Categorie categorieObject = categorie.getFirst();
 
             ProductModel productModel = productmodel.getFirst();
+            
             productModel.setProductModelBeschrijving(modelDTO.getProductModelBeschrijving());
             productModel.setCategorie(categorieObject);
             productModel.setProductModelFoto(modelDTO.getProductModelFoto());

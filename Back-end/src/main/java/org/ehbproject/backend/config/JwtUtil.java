@@ -19,7 +19,7 @@ public class JwtUtil {
 
     public String generateToken(int id) throws JOSEException {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, 12);
+        cal.add(Calendar.HOUR, 1);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(String.valueOf(id))
