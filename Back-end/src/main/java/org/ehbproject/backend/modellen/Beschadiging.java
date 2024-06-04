@@ -1,8 +1,7 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 
 import java.time.LocalDate;
 @Entity
@@ -12,7 +11,7 @@ public class Beschadiging {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Beschadigingid")
-    private int BeschadigingId;
+    private int beschadigingId;
 
     @ManyToOne
     @JoinColumn(name = "Gebruikerid", nullable = false)
@@ -23,26 +22,30 @@ public class Beschadiging {
     private Product product;
 
     @Column(name="Beschrijving", nullable = false)
-    private String Beschrijving;
+    private String beschrijving;
 
     @Column(name="Beschadigingsdatum", nullable = false)
-    private LocalDate Beschadigingsdatum;
+    private LocalDate beschadigingsDatum;
 
-    public Beschadiging(Gebruiker gebruiker, Product product, String beschrijving, LocalDate beschadigingsdatum) {
+    @Column(name="Beschadigingfoto", nullable = false)
+    private String beschadigingFoto;
+
+    public Beschadiging(Gebruiker gebruiker, Product product, String beschrijving, LocalDate beschadigingsDatum, String beschadigingFoto) {
         this.gebruiker = gebruiker;
         this.product = product;
-        Beschrijving = beschrijving;
-        Beschadigingsdatum = beschadigingsdatum;
+        this.beschrijving = beschrijving;
+        this.beschadigingsDatum = beschadigingsDatum;
+        this.beschadigingFoto = beschadigingFoto;
     }
 
     protected Beschadiging(){}
 
     public int getBeschadigingId() {
-        return BeschadigingId;
+        return beschadigingId;
     }
 
     public void setBeschadigingId(int beschadigingId) {
-        BeschadigingId = beschadigingId;
+        this.beschadigingId = beschadigingId;
     }
 
     public Gebruiker getGebruiker() {
@@ -62,18 +65,26 @@ public class Beschadiging {
     }
 
     public String getBeschrijving() {
-        return Beschrijving;
+        return beschrijving;
     }
 
     public void setBeschrijving(String beschrijving) {
-        Beschrijving = beschrijving;
+        this.beschrijving = beschrijving;
     }
 
     public LocalDate getBeschadigingsdatum() {
-        return Beschadigingsdatum;
+        return beschadigingsDatum;
     }
 
     public void setBeschadigingsdatum(LocalDate beschadigingsdatum) {
-        Beschadigingsdatum = beschadigingsdatum;
+        this.beschadigingsDatum = beschadigingsdatum;
+    }
+
+    public String getBeschadigingFoto() {
+        return beschadigingFoto;
+    }
+
+    public void setBeschadigingFoto(String beschadigingFoto) {
+        this.beschadigingFoto = beschadigingFoto;
     }
 }

@@ -1,6 +1,7 @@
 package org.ehbproject.backend.services.verificatie;
 
 
+import org.ehbproject.backend.dao.GebruikerCrudRepository;
 import org.ehbproject.backend.dao.ProductCrudRepository;
 import org.ehbproject.backend.dao.ProductReservatieCrudRepository;
 import org.ehbproject.backend.dao.ReservatieCrudRepository;
@@ -25,29 +26,30 @@ public class ProductReservationVerifier {
     ProductReservatieCrudRepository repoProductReservatie;
     @Autowired
     ProductCrudRepository repoProduct;
+    @Autowired
+    GebruikerCrudRepository repoGebruiker;
+
 
     private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
-    public boolean isProductGereserveerd(LocalDate datum,int aantalWeken, int[] products){
+    public boolean isProductGereserveerd(LocalDate begindatum ,LocalDate einddatum, int[] products){
 
-        LocalDate eindDatum = datum.plusWeeks(aantalWeken);
+        if(begindatum.isAfter(einddatum)){
+            // zorgt ervoor dat het bij deze fout wordt teruggestuurd
+            return true;
+        }
 
         for(int product : products){
-            List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductID(product);
-            logger.info(product+": "+"komt tot hier");
+            List<ProductReservatie> productReservaties = repoProductReservatie.findByProduct_ProductId(product);
             if(productReservaties.isEmpty()){
-                logger.info("beschikbaar");
                 return false;
             }
+
             for(ProductReservatie reservatie : productReservaties){
                 LocalDate afhaalDatumVorig = reservatie.getReservatie().getAfhaalDatum();
                 LocalDate terugbrengDatumVorig = reservatie.getReservatie().getRetourDatum();
-
-                logger.info(product+": "+afhaalDatumVorig+" datum om nu uit te lenen:"+ datum);
-                logger.info(product+": "+terugbrengDatumVorig+" datum om nu uit te lenen:"+ eindDatum);
                 boolean isOverlapping  =
-                        !(((eindDatum.isBefore(afhaalDatumVorig) &&  datum.isBefore(eindDatum))||
-                        (datum.isAfter(terugbrengDatumVorig) && eindDatum.isAfter(datum))));
-                logger.info("overlapping: "+isOverlapping);
+                        !(((einddatum.isBefore(afhaalDatumVorig) &&  begindatum.isBefore(einddatum))||
+                                (begindatum.isAfter(terugbrengDatumVorig) && einddatum.isAfter(begindatum))));
                 if (isOverlapping ) {
                     return true;
                 }

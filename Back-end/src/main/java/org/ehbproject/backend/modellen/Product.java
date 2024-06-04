@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "PRODUCTEN")
@@ -16,7 +14,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="Productid" )
-    private int productID;
+    private int productId;
 
     @ManyToOne
     @JoinColumn(name = "Productmodelnr", nullable = false)
@@ -34,7 +32,7 @@ public class Product {
 
     @Column(name = "ISBESCHADIGT")
     @Size(max = 40)
-    private String productbeschrijving;
+    private String isBeschadigt;
 
 
     @ManyToMany(mappedBy = "producten")
@@ -52,11 +50,11 @@ public class Product {
 
 
     public int getProductID() {
-        return productID;
+        return productId;
     }
 
     public void setProductID(int productID) {
-        this.productID = productID;
+        this.productId = productID;
     }
 
     public ProductModel getProductModelNr() {
@@ -83,7 +81,11 @@ public class Product {
         this.status = status;
     }
 
+    public String getIsBeschadigt() {
+        return isBeschadigt;
+    }
 
-
-
+    public void setIsBeschadigt(String isBeschadigt) {
+        this.isBeschadigt = isBeschadigt;
+    }
 }

@@ -38,8 +38,29 @@ public class ProductStatusUpdate {
         }
 
         for(Product product : productenLijst){
-            product.setStatus("Niet beschikbaar");
+            product.setStatus("Gereserveerd");
             repoProduct.save(product);
         }
     }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void downgradeProductStatus(){
+        List<Product> productenLijst = new ArrayList<>();
+        List<Reservatie> reservatiesRetour = repoReservatie.findByRetourDatum(LocalDate.now());
+
+        for (Reservatie reservatie : reservatiesRetour){
+            int reservatieNr = reservatie.getReservatieNr();
+            List<ProductReservatie> productReservaties = repoProductReservatie.findByReservatie_ReservatieNr(reservatieNr);
+            for (ProductReservatie productReservatie : productReservaties){
+                productenLijst.add(productReservatie.getProduct());
+            }
+        }
+
+        for (Product product : productenLijst){
+            product.setStatus("Beschikbaar");
+            repoProduct.save(product);
+        }
+
+    }
+
 }

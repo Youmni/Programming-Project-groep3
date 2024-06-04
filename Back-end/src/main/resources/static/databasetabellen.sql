@@ -13,7 +13,7 @@
 -- Categorienr NUMBER(3),
 -- Productmodelnaam VARCHAR2(30) NOT NULL,
 -- Productmodelmerk VARCHAR2(20) NOT NULL,
--- Productmodelfoto VARCHAR2(20),
+-- Productmodelfoto VARCHAR2(50),
 -- Productmodelbeschrijving VARCHAR2(100),
 -- CONSTRAINT pk_productmodellen_productnr PRIMARY KEY (Productmodelnr),
 -- CONSTRAINT fk_productmodellen_categorienr_categorieën FOREIGN KEY (Categorienr) REFERENCES CATEGORIEËN
@@ -55,7 +55,7 @@
 -- Retourdatum DATE NOT NULL,
 -- Boekingdatum DATE NOT NULL,
 -- Reservatiereden VARCHAR2(100) NOT NULL,
--- Reservatieopmerking VARCHAR2(100),
+-- Reservatieopmerking VARCHAR2(255),
 -- Status VARCHAR2(20),
 -- Gebruikerid NUMBER(6),
 -- CONSTRAINT pk_reservaties_reservatienr PRIMARY KEY (Reservatienr),
@@ -76,6 +76,8 @@
 --     Productid NUMBER(5),
 --     Beschrijving VARCHAR2(255),
 --     beschadigingsdatum DATE,
+--     Beschadigingfoto VARCHAR2(50),
+--     Status VARCHAR2(20),
 --     CONSTRAINT pk_beschadigingen_beschadigingid PRIMARY KEY (Beschadigingid),
 --     CONSTRAINT fk_beschadigingen_gebruikers_gebruikerid FOREIGN KEY (Gebruikerid) REFERENCES GEBRUIKERS,
 --     CONSTRAINT fk_beschadigingen_producten_productid FOREIGN KEY (Productid) REFERENCES PRODUCTEN

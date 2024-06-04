@@ -9,39 +9,41 @@ import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/Beschadiging")
+@RequestMapping(value = "/beschadiging")
 public class BeschadigingsController {
 
     @Autowired
-    BeschadigingCrudRepository beschadigingrepo;
+    BeschadigingCrudRepository beschadigingRepo;
 
     @Autowired
-    GebruikerCrudRepository gebruikerrepo;
+    GebruikerCrudRepository gebruikerRepo;
 
     @Autowired
-    ProductCrudRepository productrepo;
+    ProductCrudRepository productRepo;
 
     @CrossOrigin
     @PostMapping (value = "/toevoegen")
     public ResponseEntity<String> addBeschadiging (@Validated @RequestBody BeschadigingDTO beschadigingDTO){
         try {
             System.out.println("Inkomende BeschadigingDTO: " + beschadigingDTO.getGebruikerId() + beschadigingDTO.getProductId() + beschadigingDTO.getBeschrijving() + beschadigingDTO.getBeschadigingsDatum());
-            List<Gebruiker> gebruikers = gebruikerrepo.findByGebruikerID(beschadigingDTO.getGebruikerId());
+            List<Gebruiker> gebruikers = gebruikerRepo.findByGebruikerId(beschadigingDTO.getGebruikerId());
             if (gebruikers.isEmpty()) {
-                throw new RuntimeException("Gebruiker met ID " + beschadigingDTO.getGebruikerId() + " niet gevonden.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(beschadigingDTO.getGebruikerId() + " niet gevonden.");
+
             }
             Gebruiker gebruiker = gebruikers.getFirst();
-            List<Product> producten = productrepo.findByProductID(beschadigingDTO.getProductId());
+            List<Product> producten = productRepo.findByProductId(beschadigingDTO.getProductId());
             if (producten.isEmpty()) {
-                throw new RuntimeException("product met ID " + beschadigingDTO.getProductId() + " niet gevonden.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(beschadigingDTO.getProductId() + " niet gevonden.");
             }
             Product product= producten.getFirst();
 
@@ -49,9 +51,14 @@ public class BeschadigingsController {
                     gebruiker,
                     product,
                     beschadigingDTO.getBeschrijving(),
-                    beschadigingDTO.getBeschadigingsDatum()
+                    beschadigingDTO.getBeschadigingsDatum(),
+                    beschadigingDTO.getBeschadigingFoto()
             );
-            beschadigingrepo.save(beschadiging);
+            beschadigingRepo.save(beschadiging);
+
+            product.setIsBeschadigt("True");
+            productRepo.save(product);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Beschadiging successvol toegevoegd " + beschadiging);
         }
         catch (Exception e){
@@ -59,9 +66,38 @@ public class BeschadigingsController {
         }
     }
 
-//    @CrossOrigin
-//    @GetMapping(value = "/id={id}")
-//    public List<Beschadiging> getBeschadigingByBeschadigingId (@PathVariable(name = "id") int id){
-//        return beschadigingrepo.findByBeschadigingId(id);
-//    }
+
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Beschadiging> getAllBeschadigingen(){
+        ArrayList<Beschadiging> beschadigingen = new ArrayList<>();
+        beschadigingRepo.findAll().forEach(beschadigingen::add);
+       return beschadigingen;
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/id={id}")
+    public List<Beschadiging> getBeschadigingByBeschadigingId (@PathVariable(name = "id") int id){
+        return beschadigingRepo.findBeschadigingByBeschadigingId(id);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/gebruikerid={gebruikerid}")
+    public List<Beschadiging> getBeschadigingByGebruikerId (@PathVariable(name = "gebruikerid") Gebruiker gebruikerid){
+        return beschadigingRepo.findByGebruiker(gebruikerid);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/productid={productid}")
+    public List<Beschadiging> getBeschadigingByProductId (@PathVariable(name = "productid") Product productid){
+        return beschadigingRepo.findByProduct(productid);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/beschadigingsdatum={beschadigingsdatum}")
+    public List<Beschadiging> getBeschadigingByBeschadigingsDatum (@PathVariable(name = "beschadigingsdatum")LocalDate beschadigingsdatum){
+        return beschadigingRepo.findBeschadigingByBeschadigingsDatum(beschadigingsdatum);
+    }
+
+
 }

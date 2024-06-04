@@ -2,27 +2,27 @@ package org.ehbproject.backend.dto;
 
 public class ProductReservatieDTO {
 
-    int productID;
-    int reservatieID;
+    int productId;
+    int reservatieId;
 
     public ProductReservatieDTO(int productID, int reservatieID) {
-        this.productID = productID;
-        this.reservatieID = reservatieID;
+        this.productId = productID;
+        this.reservatieId = reservatieID;
     }
 
     public int getProductID() {
-        return productID;
+        return productId;
     }
 
     public void setProductID(int productID) {
-        this.productID = productID;
+        this.productId = productID;
     }
 
     public int getReservatieID() {
-        return reservatieID;
+        return reservatieId;
     }
 
     public void setReservatieID(int reservatieID) {
-        this.reservatieID = reservatieID;
+        this.reservatieId = reservatieID;
     }
 }

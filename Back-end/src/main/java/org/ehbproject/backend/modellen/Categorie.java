@@ -1,8 +1,7 @@
 package org.ehbproject.backend.modellen;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,8 +19,6 @@ public class Categorie {
     private Set<ProductModel> productModellen = new HashSet<>();
 
     @Column(name= "Categorienaam")
-    @NotBlank
-    @Size(max = 30)
     private String categorieNaam;
     protected Categorie(){}
 

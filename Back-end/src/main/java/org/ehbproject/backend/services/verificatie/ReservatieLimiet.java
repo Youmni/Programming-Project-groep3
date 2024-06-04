@@ -6,8 +6,6 @@ import org.ehbproject.backend.dao.ReservatieCrudRepository;
 import org.ehbproject.backend.modellen.Gebruiker;
 import org.ehbproject.backend.modellen.ProductReservatie;
 import org.ehbproject.backend.modellen.Reservatie;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +26,9 @@ public class ReservatieLimiet {
     @Autowired
     ProductReservatieCrudRepository repoProductReservatie;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductReservationVerifier.class);
     public List<Gebruiker> getGebruikerObject(int studentId) {
 
-        return repoGebruiker.findByGebruikerID(studentId);
+        return repoGebruiker.findByGebruikerId(studentId);
     }
 
     public List<Reservatie> getReservatie(int studentId) throws Exception {
@@ -50,7 +47,6 @@ public class ReservatieLimiet {
 
         int aantalProductenDezeWeek = 0;
         for (Reservatie reservatie : reservaties) {
-            logger.info(String.valueOf(reservatie));
             LocalDate reservatieDatum = reservatie.getBoekingDatum();
             int reservatieWeekNummer = reservatieDatum.get(weekFields.weekOfWeekBasedYear());
             if (reservatieWeekNummer == huidigeWeekNummer) {
@@ -58,7 +54,6 @@ public class ReservatieLimiet {
                 aantalProductenDezeWeek += productReservaties.size();
             }
         }
-        logger.info(String.valueOf(aantalProductenDezeWeek));
         return aantalProductenDezeWeek;
     }
 

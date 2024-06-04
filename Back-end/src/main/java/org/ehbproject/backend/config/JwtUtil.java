@@ -17,15 +17,12 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(String email, int id, String titel) throws JOSEException {
+    public String generateToken(int id) throws JOSEException {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, 12);
+        cal.add(Calendar.HOUR, 1);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(String.valueOf(id))
-                .claim("UserId", id)
-                .claim("Email", email)
-                .claim("Titel", titel)
                 .expirationTime(cal.getTime())
                 .build();
 

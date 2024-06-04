@@ -14,24 +14,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/productmodel")
 public class ProductModelController {
 
     @Autowired
-    ProductModelCrudRepository repoModellen;
+    ProductModelCrudRepository productmodelRepo;
     @Autowired
-    ProductCrudRepository repoProducten;
+    ProductCrudRepository productRepo;
     @Autowired
-    CategorieCrudRepository repoCategorie;
+    CategorieCrudRepository categorieRepo;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<ProductModel> getAllProductModellen() {
         List<ProductModel> productModelMandje = new ArrayList<>();
-        repoModellen.findAll().forEach(productModelMandje::add);
+        productmodelRepo.findAll().forEach(productModelMandje::add);
         return productModelMandje;
     }
 
@@ -39,12 +41,14 @@ public class ProductModelController {
     @PostMapping(value="/toevoegen")
     public ResponseEntity<String> addProductModel(@RequestBody ProductModelDTO productModelDTO) {
         try {
-            List <Categorie> categories = repoCategorie.findByCategorieNr(productModelDTO.getCategorieNr());
+            List<Categorie> categories = categorieRepo.findByCategorieNr(productModelDTO.getCategorieNr());
 
             if (categories.isEmpty()) {
-                throw new RuntimeException("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categorie met nummer " + productModelDTO.getCategorieNr() + " niet gevonden.");
             }
+
             Categorie categorie = categories.getFirst();
+
             ProductModel productModel = new ProductModel(
                     categorie,
                     productModelDTO.getProductModelNaam(),
@@ -52,9 +56,7 @@ public class ProductModelController {
                     productModelDTO.getProductModelFoto(),
                     productModelDTO.getProductModelBeschrijving()
             );
-
-
-            repoModellen.save(productModel);
+            productmodelRepo.save(productModel);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("ProductModel succesvol toegevoegd");
         } catch (Exception e) {
@@ -65,28 +67,59 @@ public class ProductModelController {
     @CrossOrigin
     @PutMapping("/{id}/beschrijving")
     public ResponseEntity<String> updateBeschrijving(@PathVariable int id, @RequestParam String beschrijving) {
-        List<ProductModel> productmodel = repoModellen.findByProductModelNr(id);
+        List<ProductModel> productmodel = productmodelRepo.findByProductModelNr(id);
 
         if (!productmodel.isEmpty()) {
                 ProductModel productModel = productmodel.getFirst();
                 productModel.setProductModelBeschrijving(beschrijving);
-                repoModellen.save(productModel);
+            productmodelRepo.save(productModel);
                 return ResponseEntity.ok("Beschrijving van het productModel met ID " + id + " is succesvol bijgewerkt naar " + beschrijving);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductModel met ID " + id + " niet gevonden");
         }
     }
+    @CrossOrigin
+    @PutMapping("/{id}/wijzig")
+    public ResponseEntity<String> updateProductModel(@PathVariable int id, @RequestBody ProductModelDTO modelDTO) {
+
+        try {
+            List<ProductModel> productmodel = productmodelRepo.findByProductModelNr(id);
+            List<Categorie> categorie = categorieRepo.findByCategorieNr(modelDTO.getCategorieNr());
+
+            if (productmodel.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id + " niet gevonden van het productmodel");
+            }
+            if (categorie.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id + " niet gevonden van de categorie");
+            }
+
+            Categorie categorieObject = categorie.getFirst();
+
+            ProductModel productModel = productmodel.getFirst();
+            
+            productModel.setProductModelBeschrijving(modelDTO.getProductModelBeschrijving());
+            productModel.setCategorie(categorieObject);
+            productModel.setProductModelFoto(modelDTO.getProductModelFoto());
+            productModel.setProductModelMerk(modelDTO.getProductModelMerk());
+            productModel.setProductModelNaam(modelDTO.getProductModelNaam());
+
+            productmodelRepo.save(productModel);
+            return ResponseEntity.ok("Product model succesvol geupdate");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Er is iets mis gegaan bij het opslaan: "+e.getMessage());
+        }
+}
 
 
     //  Moet nog getest worden wanneer we nieuwe productModellen kunnen toevoegen!!
     @CrossOrigin
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable int id) {
-        List<ProductModel> productModel = repoModellen.findByProductModelNr(id);
+        List<ProductModel> productModel = productmodelRepo.findByProductModelNr(id);
         if (!productModel.isEmpty()) {
-            List<Product> productenResterend = repoProducten.findByProductID(id);
+            List<Product> productenResterend = productRepo.findByProductId(id);
             if (productenResterend.isEmpty()) {
-                repoModellen.deleteById(id);
+                productmodelRepo.deleteById(id);
                 return ResponseEntity.ok("ProductModel met ID " + id + " is succesvol verwijderd");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kan ProductModel met ID " + id + " niet verwijderen omdat er nog producten aan zijn gekoppeld");
@@ -100,30 +133,43 @@ public class ProductModelController {
 
     @CrossOrigin
     @GetMapping(value = "/id={id}")
-    public List<ProductModel> getAllProductenById(@PathVariable(name = "id") int id) {
-        return repoModellen.findByProductModelNr(id);
+    public List<ProductModel> getAllProductModellenById(@PathVariable(name = "id") int id) {
+        return productmodelRepo.findByProductModelNr(id);
     }
 
     @CrossOrigin
     @GetMapping(value = "/naam={naam}")
-    public List<ProductModel> getAllProductenByNaam(@PathVariable(name = "naam") String naam) {
-        return repoModellen.findByProductModelNaamContainingIgnoreCase(naam);
+    public List<ProductModel> getAllProductModellenByNaam(@PathVariable(name = "naam") String naam) {
+        return productmodelRepo.findByProductModelNaamContainingIgnoreCase(naam);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/product/status={status}")
+    public List<ProductModel> getAllProductModellenByStatusOfProduct(@PathVariable(name = "status") String status) {
+        List<Product> producten = productRepo.findByStatusIgnoreCase(status);
+        Set<ProductModel> productModels = new HashSet<>();
+
+        for(Product product: producten){
+            productModels.add(product.getProductModelNr());
+        }
+
+        return new ArrayList<>(productModels);
     }
 
     @CrossOrigin
     @GetMapping("/merk={merk}")
-    public List<ProductModel> getAllProductenByMerk(@PathVariable(name = "merk") String merk) {
-        return repoModellen.findByProductModelMerkContainingIgnoreCase(merk);
+    public List<ProductModel> getAllProductModellenByMerk(@PathVariable(name = "merk") String merk) {
+        return productmodelRepo.findByProductModelMerkContainingIgnoreCase(merk);
     }
     @CrossOrigin
     @GetMapping("/categorienr={categorienr}")
-    public List<ProductModel> getAllProductmodellenByCategorie(@PathVariable(name = "categorienr") int categorieNr) {
-        List<Categorie> categorie = repoCategorie.findByCategorieNr(categorieNr);
+    public List<ProductModel> getAllProductModellenByCategorie(@PathVariable(name = "categorienr") int categorieNr) {
+        List<Categorie> categorie = categorieRepo.findByCategorieNr(categorieNr);
         if (categorie.isEmpty()){
             return new ArrayList<>(0);
         }
         Categorie categorieObject = categorie.getFirst();
 
-        return repoModellen.findByCategorie(categorieObject);
+        return productmodelRepo.findByCategorie(categorieObject);
     }
 }
