@@ -102,6 +102,7 @@ const ProductModelWijzigen = () => {
       productModelBeschrijving: formData.productModelBeschrijving || "",
       productModelFoto: formData.productModelFoto || "",
     };
+    console.log(updatedFormData)
     axios
       .put(
         `http://localhost:8080/productmodel/${productModelNr}/wijzig`,

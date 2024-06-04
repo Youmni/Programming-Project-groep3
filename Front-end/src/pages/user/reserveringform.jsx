@@ -245,7 +245,6 @@ const reserveringForm = ({ closeModal, product }) => {
   const handleNuReserveren = async () => {
     try {
       const authToken = localStorage.getItem("authToken");
-      enqueueSnackbar("Reservering wordt verwerkt...", {
         variant: "info",
       });
 
