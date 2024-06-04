@@ -16,16 +16,18 @@ Een platform voor het eenvoudig reserveren van producten en efficiënte administ
 
 1. Ga naar /Back-end
 2. Build gradle
-3. Voeg een applictation.properties file toe onder Programming-Project-groep3\Back-end\src\main\resources --> de inhoud van deze file is terug te vinden op de Teams van groep 3
-4. Als deze application.properties file is toegevoegd en Gradle is ingeladen, kan de BackEndApplication gestart worden en dan draait de server (Indien u zich niet op Campus Kaai (Erasmushogeschool Brussel) bevindt, dient u een vpn connectie aan te zetten)
+3. Selecteer onder "project structure" je SDK. Oracle OpenJDK version 21 is vereist: [Oracle OpenJDK](https://www.oracle.com/java/technologies/javase-downloads.html)
+4. Voeg een applictation.properties file toe onder Programming-Project-groep3\Back-end\src\main\resources --> de inhoud van deze file is terug te vinden op de Teams van groep 3
+5. Als deze application.properties file is toegevoegd en Gradle is ingeladen, kan de BackEndApplication gestart worden en dan draait de server (Indien u zich niet op Campus Kaai (Erasmushogeschool Brussel) bevindt, dient u een vpn connectie aan te zetten)
 
 ### Front-end
 
 1. Ga naar /Front-end
-2. Open de terminal
-3. Type: npm install
-4. Type: npm run dev
-5. U kan nu via het gegeven domein het project bekijken
+2. Node.js is vereist: [Node.js](https://nodejs.org/)
+3. Open de terminal
+4. Type: npm install
+5. Type: npm run dev
+6. U kan nu via het gegeven domein het project bekijken
 
 ## Hoe werkt het?
 
