@@ -5,8 +5,8 @@ Een platform voor het eenvoudig reserveren van producten en efficiënte administ
 
 ## Functies
 - **Reservatie van producten**: We bieden aan de gebruikers een vlotte, simpele en duidelijke manier van reserveren.
-- **Efficiente manier van werken voor de administartor**: De admin krijgt een 
-- **Beveiliging en privacy**: Uw gegevens worden met de grootste zorg behandeld en beveiligd.
+- **Efficiente manier van werken voor de administartor**: De admin krijgt een centrale plaats voor het beheren.
+- **Overzicht van het inventaris**: De student/docent krijgt een overzicht van het inventaris.
 
 ## Installatie
 
