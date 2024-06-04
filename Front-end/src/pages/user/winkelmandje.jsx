@@ -45,6 +45,7 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
 
     const groupRequests = Object.values(groupedProducts).map(async (group) => {
       try {
+        enqueueSnackbar("Reservatie wordt verwerkt, even geduld aub! (Maximaal 15 seconden)", {
           variant: "info",
           });
         const response = await axios.post("http://localhost:8080/reservatie/toevoegen", group, {
@@ -68,8 +69,10 @@ const Winkelmandje = ({ closeWinkelMandje }) => {
       .filter((product) => !groupedProducts[product.retourDatum])
       .map(async (product) => {
         try {
+          enqueueSnackbar("Reservatie wordt verwerkt, even geduld aub! (Maximaal 15 seconden)", {
             variant: "info",
             });
+
           const response = await axios.post(
             "http://localhost:8080/reservatie/toevoegen",
             {

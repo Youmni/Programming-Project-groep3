@@ -268,6 +268,7 @@ const Dashboard = () => {
         enqueueSnackbar("Reservatie is succesvol afgerond", {
           variant: "success",
         });
+        for (let product in producten) {
           handleProductStatus(product.productID, "Beschikbaar");
         }
       })
